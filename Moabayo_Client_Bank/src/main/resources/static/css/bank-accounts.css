@@ -1,0 +1,202 @@
+@charset "UTF-8";
+/* ================================
+   MoaNyangz | Bank Accounts (SCOPED)
+   - 상세 패널 우측 확장
+   - 다크모드 페이지 배경 오버라이드
+   - 중복/오타/중첩 미디어쿼리 제거
+================================== */
+
+.bank-accounts{
+  --maxw: 1160px;
+
+  /* Light tokens */
+  --ink:#1f2937;
+  --sub:#6b7280;
+  --muted:#f8fafc;
+  --card:#ffffff;
+  --line:#e5e7eb;
+  --accent:#7c3aed;       /* 포인트(보라) */
+  --accent-ink:#111;
+  --pill:#F2C14E;         /* cat amber */
+  --shadow:0 10px 24px rgba(15,23,42,.08);
+
+  color:var(--ink);
+  padding:18px 0 28px;
+}
+
+/* Dark tokens */
+html[data-theme="dark"] .bank-accounts,
+body.dark .bank-accounts{
+  --ink:#e5e7eb;
+  --sub:#9aa5b1;
+  --muted:#0e141b;
+  --card:#0f151c;
+  --line:#1f2937;
+  --accent:#a78bfa;
+  --accent-ink:#0c0f14;
+  --pill:#d9b24a;
+  --shadow:0 12px 26px rgba(0,0,0,.45);
+}
+
+/* 페이지 배경(레이아웃이 흰 배경을 고정할 때 덮어씀) */
+html[data-theme="dark"] body,
+body.dark{ background:#0e141b !important; }
+/* (선택) 레이아웃 래퍼가 따로 있으면 주석 해제해서 사용
+html[data-theme="dark"] .site-layout,
+html[data-theme="dark"] .site-content{ background:#0e141b !important; }
+*/
+
+/* 공통 래핑: 중앙 고정폭 */
+.bank-accounts .nx-hero,
+.bank-accounts .acc-grid{
+  width:100%; max-width:var(--maxw);
+  margin:0 auto; padding:0 18px; box-sizing:border-box;
+}
+
+/* ---------------- Hero ---------------- */
+.bank-accounts .nx-hero{
+  display:grid; grid-template-columns:1.1fr .9fr;
+  gap:18px; align-items:center; margin-bottom:14px;
+}
+.bank-accounts .nx-hero__copy .hello{ color:var(--sub); font-size:.9rem; }
+.bank-accounts .nx-hero__copy .username{ font-size:clamp(1.8rem,1.2rem + 1.8vw,2.4rem); margin:.2rem 0 .3rem; }
+.bank-accounts .nx-hero__copy .lead{ color:var(--sub); margin-bottom:12px; }
+.bank-accounts .nx-hero__stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.bank-accounts .nx-hero__stats .stat{
+  background:var(--card); border:1px solid var(--line);
+  border-radius:14px; padding:12px 14px; box-shadow:var(--shadow);
+}
+.bank-accounts .nx-hero__stats .label{ color:var(--sub); font-size:.85rem; }
+.bank-accounts .nx-hero__stats .value{ font-weight:800; margin-top:2px; }
+
+/* ---------------- Buttons ---------------- */
+.bank-accounts .btn{
+  display:inline-flex; align-items:center; gap:8px;
+  border-radius:12px; padding:10px 14px; font-weight:700;
+  text-decoration:none; border:1px solid transparent; transition:.2s;
+}
+.bank-accounts .btn-sm{ padding:8px 10px; font-size:.9rem; }
+.bank-accounts .btn:focus{ outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent); }
+.bank-accounts .btn-accent{ background:var(--accent); color:var(--accent-ink); }
+.bank-accounts .btn-accent:hover{ filter:brightness(1.06); transform:translateY(-1px); }
+.bank-accounts .btn-ghost{ background:transparent; border:1px solid var(--line); color:var(--ink); }
+.bank-accounts .btn-ghost:hover{ background:color-mix(in srgb, var(--accent) 10%, transparent); }
+.bank-accounts .btn-dark{ background:#111827; color:#fff; }
+.bank-accounts .btn-dark:hover{ filter:brightness(1.05); }
+.bank-accounts .btn-outline{ background:transparent; color:var(--ink); border:1px solid var(--line); }
+.bank-accounts .btn-outline:hover{ border-color:var(--ink); }
+
+/* ---------------- Grid (중요: 상세 패널 넓힘) ---------------- */
+.bank-accounts .acc-grid{
+  display:grid;
+  grid-template-columns:0.8fr 1.2fr;   /* ← 기본 데스크톱: 오른쪽(상세) 넓게 */
+  gap:18px;
+}
+/* 선택 상태에서 더 과감하게 넓히고 싶으면 JS로 .detail-wide 추가 */
+.bank-accounts.detail-wide .acc-grid{ grid-template-columns:0.7fr 1.3fr; }
+
+/* ---------------- Panels ---------------- */
+.bank-accounts .panel{
+  background:var(--card); border:1px solid var(--line);
+  border-radius:16px; box-shadow:var(--shadow); padding:18px;
+}
+.bank-accounts .panel-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.bank-accounts .panel-head h3{ font-size:1.05rem; font-weight:800; }
+.bank-accounts .pill{ background:var(--pill); color:#1d1d1d; padding:4px 10px; border-radius:999px; font-weight:700; }
+.bank-accounts .pill-dark{ background:#111827; color:#fff; }
+
+/* ---------------- Filters ---------------- */
+.bank-accounts .filters{
+  display:grid; grid-template-columns:1fr 160px 160px 110px; gap:10px; margin-bottom:10px;
+}
+.bank-accounts .filters input,
+.bank-accounts .filters select{
+  padding:10px 12px; border-radius:12px; border:1px solid var(--line);
+  background:var(--card); color:var(--ink);
+}
+.bank-accounts .filters input::placeholder{ color:var(--sub); }
+
+/* ---------------- Account list ---------------- */
+.bank-accounts .acc-list{ display:grid; grid-template-columns:1fr; gap:10px; }
+
+.bank-accounts .acc-card{
+  appearance:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  border:1px solid var(--line); border-radius:12px; padding:12px 12px;
+  text-decoration:none; color:var(--ink);
+  background:linear-gradient(0deg, color-mix(in srgb, var(--muted) 6%, var(--card) 94%), var(--card));
+}
+.bank-accounts .acc-card:hover{ border-color:var(--ink); transform:translateY(-1px); }
+.bank-accounts .acc-card:focus-visible{ outline:3px solid color-mix(in srgb, var(--accent) 35%, transparent); outline-offset:2px; }
+.bank-accounts .acc-card.is-active{
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+  background:linear-gradient(0deg, color-mix(in srgb, var(--accent) 8%, var(--card) 92%), var(--card));
+}
+
+.bank-accounts .acc-left{ display:flex; align-items:center; gap:12px; }
+.bank-accounts .acc-ico{
+  width:36px; height:36px; border-radius:9px; display:grid; place-items:center; font-size:18px;
+  background:color-mix(in srgb, var(--accent) 20%, var(--card));
+}
+.bank-accounts .acc-meta .name{ font-weight:800; }
+.bank-accounts .acc-meta .sub{ color:var(--sub); font-size:.9rem; }
+
+.bank-accounts .badge{ display:inline-block; padding:4px 10px; border-radius:999px; font-weight:700; font-size:.85rem; }
+.bank-accounts .b-dep{  background:#10b98120; color:#0f8b67; border:1px solid #10b98155; }
+.bank-accounts .b-sav{  background:#3b82f620; color:#1e40af; border:1px solid #3b82f655; }
+.bank-accounts .b-loan{ background:#f59e0b25; color:#b45309; border:1px solid #f59e0b55; }  /* ← 오타 수정됨 */
+
+/* 오른쪽 영역 */
+.bank-accounts .acc-right{ display:flex; align-items:center; gap:10px; }
+.bank-accounts .acc-right .bal{ font-weight:800; }
+.bank-accounts .view-btn{ white-space:nowrap; }
+
+/* ---------------- Detail ---------------- */
+.bank-accounts .acc-detail-panel{ position:sticky; top:16px; height:max-content; }
+.bank-accounts .detail-empty{ text-align:center; color:var(--sub); padding:40px 6px; }
+.bank-accounts .detail-empty .cat{ font-size:40px; margin-bottom:6px; }
+
+.bank-accounts .detail-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.bank-accounts .detail-top .name{ font-size:1.2rem; font-weight:800; }
+.bank-accounts .detail-top .sub{ color:var(--sub); }
+.bank-accounts .bal-wrap .label{ color:var(--sub); text-align:right; }
+.bank-accounts .bal-wrap .balance{ font-size:1.6rem; font-weight:800; text-align:right; }
+
+.bank-accounts .detail-actions{ display:flex; gap:8px; margin:10px 0 6px; }
+
+/* ---------------- Table ---------------- */
+.bank-accounts .table-wrap{ overflow:auto; border-radius:12px; border:1px solid var(--line); }
+.bank-accounts .ny-table{ width:100%; border-collapse:separate; border-spacing:0; }
+.bank-accounts .ny-table thead th{
+  background: color-mix(in srgb, var(--muted) 70%, #fff 30%);
+  border-bottom:1px solid var(--line);
+  text-align:left; padding:12px 14px; font-weight:800; color:var(--ink);
+}
+.bank-accounts .ny-table td{ padding:12px 14px; border-top:1px solid var(--line); }
+.bank-accounts .t-right{ text-align:right; }
+
+/* ---------------- Dark fine-tune ---------------- */
+html[data-theme="dark"] .bank-accounts .panel{
+  border-color:#1e293b; box-shadow:0 12px 26px rgba(0,0,0,.55);
+}
+html[data-theme="dark"] .bank-accounts .ny-table thead th{ background:#131b25; }
+
+/* ---------------- Transitions ---------------- */
+.bank-accounts *, .bank-accounts .btn, .bank-accounts .panel, .bank-accounts .acc-card,
+.bank-accounts .ny-table th, .bank-accounts .ny-table td{
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease,
+              transform .18s ease, box-shadow .2s ease, opacity .2s ease;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 960px){
+  .bank-accounts .nx-hero{ grid-template-columns:1fr; }
+  .bank-accounts .acc-grid,
+  .bank-accounts.detail-wide .acc-grid{ grid-template-columns:1fr; }
+  .bank-accounts .acc-detail-panel{ position:static; }
+  .bank-accounts .filters{ grid-template-columns:1fr 1fr 1fr 110px; }
+}
+@media (max-width: 560px){
+  .bank-accounts .filters{ grid-template-columns:1fr 1fr; }
+}

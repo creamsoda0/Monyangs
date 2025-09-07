@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- download disable 에러는 무시하세요!! -->
+
+
+<mapper namespace="com.sboot.moabayo.mapper.UserMapper">
+    <!-- 여기에 필요한 SQL 태그들 작성 예정 -->
+</mapper>

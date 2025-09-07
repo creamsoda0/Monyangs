@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sboot.moabayo.dao.RegisterMapper">
+
+    <!-- 사용자 등록 -->
+    <insert id="insertUser" parameterType="com.sboot.moabayo.vo.UserVO">
+        <selectKey keyProperty="userId" resultType="long" order="BEFORE">
+            SELECT user_seq.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO users (
+            user_id,
+            create_date,
+            address,
+            address_detail,
+            zip_code,
+            email,
+            name,
+            login_id,
+            password,
+            phone,
+            gender,
+            birth_date
+        ) VALUES (
+            #{userId, jdbcType=NUMERIC},
+            SYSDATE,
+            #{address, jdbcType=VARCHAR},
+            #{addressDetail, jdbcType=VARCHAR},
+            #{zipCode, jdbcType=VARCHAR},
+            #{email, jdbcType=VARCHAR},
+            #{name, jdbcType=VARCHAR},
+            #{loginId, jdbcType=VARCHAR},
+            #{password, jdbcType=VARCHAR},
+            #{phone, jdbcType=VARCHAR},
+            #{gender, jdbcType=VARCHAR},
+            TO_DATE(#{birthDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+        )
+    </insert>
+
+    <!-- 아이디 중복 확인 -->
+    <select id="countByLoginId" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM users WHERE login_id = #{loginId}
+    </select>
+
+</mapper>

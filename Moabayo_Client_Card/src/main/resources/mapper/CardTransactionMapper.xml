@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sboot.moabayo.dao.CardTransactionMapper">
+
+	<!-- 이번 달 사용자 카드 결제 금액 총합 -->
+	<select id="sumApprovedAmountThisMonth" parameterType="long"
+		resultType="double">
+		SELECT NVL(SUM(ct.approved_amount), 0)
+		FROM card_transaction
+		ct
+		JOIN user_card uc ON ct.user_card_id = uc.user_card_id
+		WHERE
+		uc.user_id = #{userId}
+		AND TO_CHAR(ct.date_time, 'YYYYMM') =
+		TO_CHAR(SYSDATE, 'YYYYMM')
+	</select>
+
+	<select id="countAlerts" parameterType="long" resultType="int">
+		SELECT
+		COUNT(*) FROM card_transaction ct
+		JOIN user_card uc ON ct.user_card_id
+		= uc.user_card_id
+		WHERE uc.user_id = #{userId} AND ct.category = '해외'
+	</select>
+
+	<select id="estimateReward" resultType="double"
+		parameterType="long">
+		SELECT NVL(SUM(approved_amount) * 0.01, 0)
+		FROM
+		card_transaction ct
+		JOIN user_card uc ON ct.user_card_id =
+		uc.user_card_id
+		WHERE uc.user_id = #{userId}
+	</select>
+</mapper>

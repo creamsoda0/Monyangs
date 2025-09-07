@@ -1,0 +1,48 @@
+<section id="analytics" class="page">
+  <div class="section-title"><i class='bx bxs-doughnut-chart'></i><h2>분석</h2></div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>고객 분포</h3>
+      <p class="muted">우편번호 Top 50</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>우편번호</th><th class="right">인원</th></tr></thead>
+          <tbody data-bind="users-by-zip"><!-- JS 바인딩 --></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>은행상품 월별 순증액</h3>
+      <p class="muted">최근 6개월</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>월</th><th>상품</th><th class="right">순증액</th></tr></thead>
+          <tbody data-bind="bank-monthly"><!-- JS 바인딩 --></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>카드 매출(월별)</h3>
+      <p class="muted">최근 6개월</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>월</th><th>카드</th><th class="right">매출</th></tr></thead>
+          <tbody data-bind="card-monthly"><!-- JS 바인딩 --></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem;">
+    <div class="section-title"><i class='bx bxs-bullseye'></i><h3>캠페인 효과 분석</h3></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>캠페인</th><th>기간</th><th>타겟</th><th class="right">신규계좌</th><th class="right">카드발급</th><th class="right">전환율</th><th>상태</th></tr></thead>
+        <tbody data-bind="campaigns"><!-- JS 바인딩 --></tbody>
+      </table>
+    </div>
+  </div>
+</section>

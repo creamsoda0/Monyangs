@@ -1,0 +1,73 @@
+<section id="bank" class="page">
+  <div class="section-title"><i class='bx bxs-bank'></i><h2>은행 관리</h2></div>
+
+  <div class="grid-2">
+    <!-- 고객/계좌 -->
+    <div class="card">
+      <div class="section-title"><i class='bx bxs-user-detail'></i><h3>고객/계좌</h3></div>
+      <div class="toolbar">
+        <input class="input" type="text" placeholder="이름/계좌번호 검색" data-hook="acct-q">
+        <button class="btn" data-hook="acct-search">검색</button>
+        <button class="btn">신규 계좌 개설</button>
+      </div>
+      <div class="table-wrap" style="margin-top:.5rem;">
+        <table>
+          <thead><tr><th>고객명</th><th>계좌번호</th><th>상품</th><th class="right">잔액</th><th>상태</th><th>관리</th></tr></thead>
+          <tbody data-bind="accounts"><!-- JS 바인딩 --></tbody>
+        </table>
+      </div>
+      <div class="help">※ 상세에서 KYC/신용등급/연체정보 표출</div>
+    </div>
+
+    <!-- 카드 상품 -->
+    <div class="card">
+      <div class="section-title"><i class='bx bxs-credit-card'></i><h3>카드 상품/발급</h3></div>
+      <div class="toolbar">
+        <button class="btn">신규 카드상품 등록</button>
+        <button class="btn">혜택 편집</button>
+        <span class="chip" id="issuance-waiting">발급대기 0건</span>
+      </div>
+      <div class="table-wrap" style="margin-top:.5rem;">
+        <table>
+          <thead><tr><th>카드명</th><th>브랜드</th><th>연이율</th><th>주요혜택</th></tr></thead>
+          <tbody data-bind="card-products"><!-- JS 바인딩 --></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 거래 모니터링 -->
+    <div class="card">
+      <div class="section-title"><i class='bx bx-transfer'></i><h3>거래 모니터링</h3></div>
+      <div class="toolbar">
+        <input class="input" type="date" data-hook="tx-from">
+        <input class="input" type="date" data-hook="tx-to">
+        <select class="input" data-hook="tx-cat">
+          <option value="">전체</option><option>입금</option><option>출금</option><option>카드결제</option><option>해외송금</option>
+        </select>
+        <button class="btn" data-hook="tx-search">필터 적용</button>
+      </div>
+      <div class="table-wrap" style="margin-top:.5rem;">
+        <table>
+          <thead><tr><th>시간</th><th>유형</th><th class="right">금액</th><th>채널</th><th>위험</th></tr></thead>
+          <tbody data-bind="txns"><!-- JS 바인딩 --></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 지점/ATM -->
+    <div class="card">
+      <div class="section-title"><i class='bx bxs-map-pin'></i><h3>지점 · ATM</h3></div>
+      <div class="toolbar">
+        <input class="input" type="text" placeholder="지점명/코드 검색" data-hook="branch-q">
+        <button class="btn" data-hook="branch-search">검색</button>
+        <span class="chip" id="atm-issues">ATM 장애 0건</span>
+      </div>
+      <div class="table-wrap" style="margin-top:.5rem;">
+        <table>
+          <thead><tr><th>코드</th><th>지점명</th><th>담당자</th><th>ATM</th><th>상태</th></tr></thead>
+          <tbody data-bind="branches"><!-- JS 바인딩 --></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

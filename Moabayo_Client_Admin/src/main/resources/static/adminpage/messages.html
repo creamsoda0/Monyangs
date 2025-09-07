@@ -1,0 +1,36 @@
+<section id="messages" class="page">
+  <div class="section-title"><i class='bx bxs-message-dots'></i><h2>메시지 센터</h2></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="section-title"><h3>고객 문의함</h3></div>
+      <div class="toolbar">
+        <select class="input" data-hook="inq-status">
+          <option value="">전체</option><option>미응답</option><option>처리중</option><option>완료</option>
+        </select>
+        <input class="input" type="text" placeholder="고객명/제목 검색" data-hook="inq-q">
+        <button class="btn" data-hook="inq-search">검색</button>
+      </div>
+      <div class="table-wrap" style="margin-top:.5rem;">
+        <table>
+          <thead><tr><th>접수일</th><th>고객</th><th>제목</th><th>분류</th><th>상태</th><th>담당</th></tr></thead>
+          <tbody data-bind="inquiries"><!-- JS 바인딩 --></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><h3>공지 발송</h3></div>
+      <div class="toolbar" style="margin-bottom:.5rem;">
+        <select class="input" data-hook="send-seg"><option>전체 고객</option><option>신규고객(30일)</option><option>미사용 카드고객</option></select>
+        <select class="input" data-hook="send-chn"><option>이메일</option><option>SMS</option><option>푸시</option></select>
+      </div>
+      <textarea rows="6" class="input" style="width:100%; resize:vertical;" placeholder="공지 내용을 입력하세요." data-hook="send-body"></textarea>
+      <div class="actions" style="margin-top:.5rem;">
+        <button class="btn" data-hook="send-preview">미리보기</button>
+        <button class="btn primary" data-hook="send-submit">발송</button>
+      </div>
+      <div class="help">※ 대량 발송은 큐/배치 연동</div>
+    </div>
+  </div>
+</section>

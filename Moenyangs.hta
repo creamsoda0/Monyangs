@@ -1,0 +1,86 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Moabayo 서비스 로딩 중...</title>
+<HTA:APPLICATION
+  APPLICATIONNAME="MoabayoLoader"
+  BORDER="thin"
+  CAPTION="no"
+  SHOWINTASKBAR="yes"
+  SINGLEINSTANCE="yes"
+  WINDOWSTATE="normal">
+<style>
+  body {
+    font-family: sans-serif;
+    text-align: center;
+    padding-top: 50px;
+  }
+  #progress-container {
+    position: relative;
+    width: 80%;
+    height: 30px;
+    margin: 20px auto;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  #progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background-color: #4CAF50;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transition: width 0.3s ease;
+  }
+  #progress-text {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+</style>
+<script type="text/javascript">
+  var totalSteps = 6; // 서비스 총 개수
+  var currentStep = 0;
+
+  function updateProgress() {
+    currentStep++;
+    if(currentStep > totalSteps) currentStep = totalSteps;
+    var percent = Math.floor((currentStep / totalSteps) * 100);
+    document.getElementById("progress-bar").style.width = percent + "%";
+    document.getElementById("progress-text").innerText = "진행률: " + percent + "%";
+
+    if(currentStep == totalSteps) {
+      setTimeout(function() { window.close(); }, 1000);
+    }
+  }
+
+  function checkStepFiles() {
+    try {
+      var fso = new ActiveXObject("Scripting.FileSystemObject");
+      for(var i=1; i<=totalSteps; i++) {
+        var filePath = "E:\\moabayo\\step" + i + ".done";
+        if(fso.FileExists(filePath)) {
+          fso.DeleteFile(filePath);
+          updateProgress();
+        }
+      }
+    } catch(e) {
+      // 무시
+    }
+  }
+
+  setInterval(checkStepFiles, 1000);
+</script>
+</head>
+<body>
+  <h2>Moabayo 서비스를 시작하는 중입니다...</h2>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+  <div id="progress-text">진행률: 0%</div>
+</body>
+</html>

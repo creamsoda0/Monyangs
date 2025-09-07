@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Boxicons -->
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+<!-- Project Assets -->
+<link rel="stylesheet" href="/css/admin.css" />
+<script defer src="/js/admin.js"></script>
+<title>모으냥즈 관리자</title>
+</head>
+<body>
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="http://localhost:8812/mainpage" class="brand">
+			<i class='bx bxs-smile'></i> <span class="text">모으냥즈</span>
+		</a>
+
+		<ul class="side-menu top">
+			<li class="active"><a href="#/dashboard">
+					<i class='bx bxs-dashboard bx-sm'></i><span class="text">Dashboard</span>
+				</a></li>
+			<li><a href="#/bank">
+					<i class='bx bxs-shopping-bag-alt bx-sm'></i><span class="text">Bank</span>
+				</a></li>
+			<li><a href="#/analytics">
+					<i class='bx bxs-doughnut-chart bx-sm'></i><span class="text">Analytics</span>
+				</a></li>
+			<li><a href="#/messages">
+					<i class='bx bxs-message-dots bx-sm'></i><span class="text">Messages</span>
+				</a></li>
+			<li><a href="#/team">
+					<i class='bx bxs-group bx-sm'></i><span class="text">Team</span>
+				</a></li>
+		</ul>
+
+		<ul class="side-menu bottom">
+			<li><a href="#/settings">
+					<i class='bx bxs-cog bx-sm bx-spin-hover'></i><span class="text">Settings</span>
+				</a></li>
+			<li><a href="#/logout" class="logout">
+					<i class='bx bx-power-off bx-sm bx-burst-hover'></i><span class="text">Logout</span>
+				</a></li>
+		</ul>
+	</section>
+	<!-- /SIDEBAR -->
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu bx-sm' id="menuToggle"></i>
+			<a href="#/dashboard" class="nav-link">Overview</a>
+
+			<form action="#" onsubmit="return false;">
+				<div class="form-input">
+					<input type="search" id="globalSearch" placeholder="계정, 고객, 거래 검색..." />
+					<button type="button" class="search-btn">
+						<i class='bx bx-search'></i>
+					</button>
+				</div>
+			</form>
+
+			<!-- 스위치: admin.js가 상태 동기화 -->
+			<input type="checkbox" class="checkbox" id="switch-mode" hidden /> <label class="swith-lm" for="switch-mode" title="다크/라이트 전환"> <i class="bx bxs-moon"></i> <i class="bx bx-sun"></i>
+				<div class="ball"></div>
+			</label>
+
+			<!-- (선택) 아이콘 버튼 토글도 지원 -->
+			<!-- <button type="button" class="btn" data-hook="toggle-theme" aria-label="다크 모드"><i class="bx bx-moon"></i></button> -->
+
+			<a href="#/messages" class="notification" id="notificationIcon">
+				<i class='bx bxs-bell bx-tada-hover'></i><span class="num">8</span>
+			</a>
+
+			<a href="#" class="profile" id="profileIcon">
+				<img src="https://placehold.co/64x64/png" alt="Profile" />
+			</a>
+		</nav>
+		<!-- /NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1 id="pageTitle">Dashboard</h1>
+					<ul class="breadcrumb" id="breadcrumb">
+						<li><a href="#/dashboard">Dashboard</a></li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li><a class="active" href="#/dashboard">Home</a></li>
+					</ul>
+				</div>
+				<!-- 
+				<a href="https://codepen.io/saglik216/pen/LEVjwBV" class="btn-download" target="_blank">
+					<i class='bx bxs-cloud-download bx-fade-down-hover'></i> <span class="text">V2.5 Released</span>
+				</a>
+				 -->
+			</div>
+
+			<!-- 라우터가 여기에 파셜을 주입 -->
+			<div id="app"></div>
+		</main>
+		<!-- /MAIN -->
+	</section>
+	<!-- /CONTENT -->
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.dao.SettingsMapper">
+
+  <!-- 공휴일 목록 -->
+  <select id="listHolidays" resultType="map">
+    SELECT id, holiday_date, note
+    FROM system_holiday
+    ORDER BY holiday_date
+  </select>
+
+  <!-- 공휴일 추가 -->
+  <insert id="addHoliday">
+    INSERT INTO system_holiday(holiday_date, note)
+    VALUES(#{date}, #{note})
+  </insert>
+
+  <!-- 공휴일 삭제 -->
+  <delete id="deleteHoliday">
+    DELETE FROM system_holiday WHERE id = #{id}
+  </delete>
+
+  <!-- 설정 로드 -->
+  <select id="loadConfig" resultType="map">
+    SELECT config_key, config_value
+    FROM system_config
+  </select>
+
+  <!-- 설정 저장 -->
+  <update id="saveConfig">
+    UPDATE system_config
+    SET config_value = #{value}
+    WHERE config_key = #{key}
+  </update>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 다운로드 엑박은 무시할것. -->
+<mapper namespace="com.sboot.moabayo.dao.CardProductMapper">
+
+<select id="selectAll" resultType="com.sboot.moabayo.vo.CardProductVO">
+  SELECT
+    card_id      AS cardId,
+    img          AS img,
+    name         AS name,
+    brand        AS brand,
+    description  AS description,
+    category     AS category,
+    benefits     AS benefits,    
+    interest     AS interest,
+    limit		 AS limit, -- 카드 한도
+    type         AS type
+  FROM card_product
+  ORDER BY card_id
+</select>
+
+
+</mapper>

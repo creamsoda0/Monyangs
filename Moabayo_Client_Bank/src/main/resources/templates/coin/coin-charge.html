@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<head>
+<meta charset="UTF-8" />
+<title layout:fragment="title">모으냥즈 | 충전하기</title>
+
+<!-- 공용 리소스 (프로젝트 공통) -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css" />
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<script defer src="http://localhost:8810/js/theme.js"></script>
+
+<!-- 페이지 전용 -->
+<link rel="stylesheet" href="/css/coin/charge.css" />
+<script defer src="/js/coin/charge.js"></script>
+</head>
+
+<body>
+	<div id="header"></div>
+
+	<section layout:fragment="content">
+		<main class="ny-charge">
+
+			<!-- 진행 단계 -->
+			<nav class="c-stepper" aria-label="충전 단계">
+				<ol>
+					<li class="is-active"><span>1</span><em>금액입력</em></li>
+					<li><span>2</span><em>결제진행</em></li>
+					<li><span>3</span><em>완료</em></li>
+				</ol>
+			</nav>
+
+			<!-- 카드 -->
+			<form id="chargeForm" class="c-card" action="/bank/ready" method="post" novalidate>
+				<!-- CSRF: 있을 때만 렌더 -->
+				<input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+				<header class="c-head">
+					<h1>충전하기</h1>
+					<p class="sub">카카오페이로 모의 충전을 진행합니다.</p>
+				</header>
+
+				<!-- 금액 입력 -->
+				<section class="c-field">
+					<label for="amount">충전 금액</label>
+					<div class="c-amount">
+						<span class="prefix" aria-hidden="true">₩</span> <input id="amount" name="amount" inputmode="numeric" autocomplete="off" placeholder="0" aria-describedby="amount-help" required />
+					</div>
+					<p id="amount-help" class="help">1회 최대 1,000,000원 · 1일 최대 3,000,000원 · 수수료 0원(토이)</p>
+
+					<div class="c-chips" role="group" aria-label="빠른 금액 선택">
+						<button type="button" class="chip" data-amount="10000">+ 1만</button>
+						<button type="button" class="chip" data-amount="30000">+ 3만</button>
+						<button type="button" class="chip" data-amount="50000">+ 5만</button>
+						<button type="button" class="chip" data-amount="100000">+ 10만</button>
+						<button type="button" class="chip" data-all="true">전액</button>
+					</div>
+
+					<p class="c-error" id="amount-error" role="alert" hidden>올바른 금액을 입력해주세요.</p>
+				</section>
+
+				<!-- 결제 수단 -->
+				<section class="c-field">
+					<span class="label">결제 수단</span> <label class="c-pay"> <input type="radio" name="payMethod" value="KAKAOPAY" checked /> <span class="box"> <span class="kakao-logo" aria-hidden="true">kakao<span>pay</span></span> <span class="desc">카카오페이로 안전하게 결제합니다.</span>
+					</span>
+					</label>
+				</section>
+
+				<!-- 요약 -->
+				<section class="c-summary">
+					<div>
+						<span>충전 금액</span><strong id="sum-amount">0원</strong>
+					</div>
+					<div>
+						<span>수수료</span><strong>0원</strong>
+					</div>
+					<div>
+						<span>충전 후 잔액</span> <strong id="sum-balance" th:text="${nyang != null ? #numbers.formatInteger(nyang.balance, 3, 'COMMA') : 0} + '원'"> 0원 </strong>
+					</div>
+				</section>
+
+				<!-- 동의 -->
+				<section class="c-agree">
+					<label class="chk"><input type="checkbox" id="agree1" required /><span>전자금 결제에 동의합니다(필수)</span></label> <label class="chk"><input type="checkbox" id="agree2" required /><span>충전 취소·환불 정책을 확인했습니다(필수)</span></label>
+				</section>
+
+				<!-- CTA -->
+				<div class="c-cta">
+					<button id="payBtn" class="btn-accent with-kakao" type="submit" disabled>
+						<i class="kakao-bullet" aria-hidden="true"></i> 카카오페이로 충전 <span class="spinner" aria-hidden="true"></span>
+					</button>
+				</div>
+			</form>
+
+			<!-- 안내 -->
+			<aside class="c-card c-info" aria-label="충전 안내">
+				<strong>유의사항</strong>
+				<ul>
+					<li>실제 결제가 아닌 모의 충전입니다.</li>
+					<li>충전 승인 후 취소는 거래 내역에서만 가능합니다.</li>
+					<li>시스템 점검 시간에는 결제가 지연될 수 있습니다.</li>
+				</ul>
+			</aside>
+
+		</main>
+	</section>
+
+	<div id="footer"></div>
+</body>
+</html>

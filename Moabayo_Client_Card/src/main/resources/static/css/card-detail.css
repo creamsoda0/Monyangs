@@ -1,0 +1,107 @@
+@charset "UTF-8";
+
+/* ===== Design Tokens ===== */
+:root{
+  /* Light */
+  --bg:#ffffff; --ink:#111827; --sub:#6b7280; --line:#e5e7eb;
+  --muted:#f8fafc; --card:#ffffff; --shadow:0 16px 40px rgba(2,6,23,.12);
+  --accent:#7c3aed;
+  /* Dynamic backdrop from JS (fallbacks) */
+  --bg1: #f5f3ff; --bg2: #eef2ff;
+}
+html[data-theme="dark"]{
+  --bg:#0b0f14; --ink:#e5e7eb; --sub:#9aa5b1;
+  --line:#1f2937;            /* 밝은 보더 금지 */
+  --muted:#0b1016; --card:#0f151c; --shadow:0 18px 48px rgba(0,0,0,.45);
+  --accent:#a78bfa;
+  --bg1:#0c121a; --bg2:#0f1722;
+}
+
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0; color:var(--ink); background:var(--bg);
+  font: 15px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, sans-serif;
+}
+
+/* ===== Layout ===== */
+.page{ max-width:1200px; margin:0 auto; padding:24px 16px 48px }
+.hero{
+  display:grid; grid-template-columns: 1.1fr .9fr; gap:28px;
+  background: linear-gradient(135deg, var(--bg1), var(--bg2));
+  border-radius:24px; padding:24px; box-shadow: var(--shadow);
+}
+@media (max-width: 980px){
+  .hero{ grid-template-columns: 1fr; padding:16px }
+}
+
+/* ===== Left: Card Preview ===== */
+.card-hero{ margin:0; display:grid; grid-template-rows: auto auto; gap:16px }
+.card-stage{
+  position:relative; aspect-ratio: 3 / 2; border-radius:20px;
+  background: radial-gradient(120% 120% at 80% 10%, color-mix(in srgb, var(--accent) 25%, transparent) 0%, transparent 60%), var(--card);
+  box-shadow: var(--shadow);
+  overflow:hidden; transform: perspective(1200px) rotateX(0) rotateY(0);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card-stage:hover{ transform: perspective(1200px) rotateX(3deg) rotateY(-3deg) }
+.card-stage img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  filter: saturate(1.05) contrast(1.02);
+}
+.card-stage .gloss{
+  position:absolute; inset:0;
+  background: linear-gradient(115deg, rgba(255,255,255,.12), rgba(255,255,255,0) 35%, rgba(0,0,0,.15) 85%);
+  mix-blend-mode: soft-light; pointer-events:none;
+}
+.card-caption .brand{ font-weight:700; letter-spacing:.3px; color:var(--accent) }
+.card-caption .title{ font-size:28px; margin:2px 0 4px }
+.card-caption .subtitle{ color:var(--sub); margin:0 }
+
+/* ===== Right: Summary Panel ===== */
+.summary{ position:relative }
+.summary .panel{
+  position: sticky; top: 18px;
+  background: var(--card); border:1px solid var(--line);
+  border-radius:16px; padding:18px; box-shadow: var(--shadow);
+}
+.pill-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px }
+.pill{
+  font-size:12px; padding:4px 10px; border-radius:999px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: color-mix(in srgb, var(--accent) 85%, #fff);
+  border:1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+}
+
+.stats{ list-style:none; padding:0; margin:0 0 14px; display:grid; gap:8px }
+.stats li{
+  display:flex; align-items:center; justify-content:space-between;
+  border:1px dashed var(--line); border-radius:12px; padding:8px 10px;
+}
+.stats li span{ color:var(--sub) }
+
+.h2{ font-size:16px; margin:10px 0 8px }
+.benefits{ list-style:none; padding:0; margin:0 0 16px; display:grid; gap:8px }
+.benefits li{
+  border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:var(--muted);
+}
+.cta-row{ display:flex; gap:10px }
+.btn{
+  appearance:none; border:1px solid var(--line); background:var(--card);
+  color:var(--ink); padding:10px 14px; border-radius:12px; cursor:pointer;
+}
+.btn.primary{
+  background: var(--accent); color:#fff; border-color: color-mix(in srgb, var(--accent) 65%, #000);
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.btn.primary:active{ transform: translateY(1px) }
+.btn.ghost{ background:transparent }
+.note{ color:var(--sub); font-size:12px; margin-top:8px }
+
+/* ===== Bottom Details ===== */
+.details{ max-width:980px; margin:28px auto 0; }
+.box{
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  padding:18px; box-shadow: var(--shadow);
+}
+.bullets{ margin:8px 0 0 18px; color:var(--sub) }

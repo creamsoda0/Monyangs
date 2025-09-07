@@ -1,0 +1,76 @@
+<!-- resources/mapper/TransactionMapper.xml -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.dao.TransactionMapper">
+
+  <!-- 전체 거래 (사용자 기준 전부) -->
+  <select id="findHistory" parameterType="long" resultType="com.sboot.moabayo.vo.TxnRowVO">
+    SELECT
+      t.account_transaction_id AS id,
+      t.user_account_id        AS userAccountId,
+      TO_CHAR(t.date_time, 'YYYY-MM-DD HH24:MI') AS ts,
+
+      -- 표시용 타입(프로젝트 코드에 맞게 조정)
+      LOWER(
+        CASE
+          WHEN UPPER(t.account_type) IN ('DEPOSIT','INCOME','TRANSFER_IN','REFUND','입금','이체수신','환불') THEN 'income'
+          WHEN UPPER(t.account_type) IN ('FEE','수수료') THEN 'fee'
+          WHEN UPPER(t.account_type) LIKE 'CARD%' THEN 'card'
+          WHEN UPPER(t.account_type) IN ('TRANSFER_OUT','WITHDRAW','출금','이체송금') THEN 'expense'
+          ELSE 'expense'
+        END
+      ) AS type,
+
+      t.category                                  AS category,
+
+      -- 결제수단(없으면 추론 규칙; 필요시 실제 컬럼으로 대체)
+      LOWER(
+        CASE
+          WHEN UPPER(t.account_type) LIKE 'CARD%' THEN 'card'
+          WHEN UPPER(t.account_type) IN ('TRANSFER_IN','TRANSFER_OUT','이체수신','이체송금') THEN 'transfer'
+          WHEN UPPER(t.account_type) IN ('AUTO','자동이체') THEN 'auto'
+          WHEN UPPER(t.account_type) IN ('FEE','수수료') THEN 'fee'
+          WHEN UPPER(t.account_type) IN ('REFUND','환불') THEN 'refund'
+          ELSE 'cash'
+        END
+      ) AS method,
+
+      t.shop_name                                AS merchant,
+      t.approved_num                             AS approvedNum,
+
+      -- 부호 있는 금액: 수입(+) / 지출(-)
+      TRUNC(
+        CASE
+          WHEN UPPER(t.account_type) IN ('DEPOSIT','INCOME','TRANSFER_IN','REFUND','입금','이체수신','환불')
+            THEN t.approved_amount
+          ELSE -t.approved_amount
+        END
+      ) AS amount,
+
+      -- 계좌별 러닝 밸런스
+      TRUNC(SUM(
+        CASE
+          WHEN UPPER(t.account_type) IN ('DEPOSIT','INCOME','TRANSFER_IN','REFUND','입금','이체수신','환불')
+            THEN t.approved_amount
+          ELSE -t.approved_amount
+        END
+      ) OVER (
+        PARTITION BY t.user_account_id
+        ORDER BY t.date_time, t.account_transaction_id
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+      )) AS balance,
+
+      -- 추가 표시용(계좌/상품)
+      NVL(ua.account_name, '내 통장') AS accountName,
+      ua.account_number              AS accountNumber,
+      bp.name                        AS product,
+      t.memo						 AS memo
+
+    FROM account_transaction t
+    JOIN user_account ua ON ua.user_account_id = t.user_account_id
+    JOIN bank_product  bp ON bp.account_id     = ua.account_id
+    WHERE ua.user_id = #{userId}
+    ORDER BY t.date_time DESC, t.account_transaction_id DESC
+  </select>
+
+</mapper>

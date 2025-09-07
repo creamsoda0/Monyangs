@@ -1,0 +1,270 @@
+@charset "UTF-8";
+
+/* ─────────────────────────────────────────────
+   Base / Tokens
+   ───────────────────────────────────────────── */
+html, body, body.dark { margin: 0; }
+
+.bank-products{
+  --maxw: 1160px;
+
+  /* Light */
+  --ink:#1f2937; --sub:#6b7280; --muted:#f8fafc;
+  --card:#ffffff; --line:#e5e7eb;
+  --accent:#7c3aed; --accent-ink:#111;
+  --pill:#F2C14E;
+  --shadow:0 10px 24px rgba(15,23,42,.08);
+
+  color:var(--ink);
+  background: var(--muted);
+  padding:18px 0 28px;
+}
+
+html[data-theme="dark"] .bank-products,
+body.dark .bank-products{
+  --ink:#e5e7eb; --sub:#9aa5b1; --muted:#0e141b;
+  --card:#0f151c; --line:#171e28;
+  --accent:#a78bfa; --accent-ink:#0c0f14; --pill:#d9b24a;
+  --shadow:0 12px 26px rgba(0,0,0,.50);
+}
+
+/* 공용 래핑 (Hero / Grid) */
+.bank-products .nx-hero,
+.bank-products .grid{
+  width:100%;
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:0 18px;
+  box-sizing:border-box;
+}
+
+/* ─────────────────────────────────────────────
+   Hero
+   ───────────────────────────────────────────── */
+.bank-products .nx-hero{
+  display:grid; grid-template-columns:1.1fr .9fr;
+  gap:18px; align-items:center; margin-bottom:12px;
+}
+.bank-products .hello{ color:var(--sub); font-size:.9rem; }
+.bank-products .title{ font-size:clamp(1.6rem,1.2rem + 1.6vw,2.2rem); margin:.2rem 0 .3rem; }
+.bank-products .lead{ color:var(--sub); }
+
+.bank-products .nx-hero__stats{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+}
+.bank-products .nx-hero__stats .stat{
+  background:var(--card); border:1px solid var(--line);
+  border-radius:14px; padding:12px 14px; box-shadow:var(--shadow);
+}
+.bank-products .nx-hero__stats .label{ color:var(--sub); font-size:.85rem; }
+.bank-products .nx-hero__stats .value{ font-weight:800; }
+
+/* ─────────────────────────────────────────────
+   Filter bar (완전 리팩토링)
+   - 컨테이너는 block + text-align:center
+   - 실제 레이아웃(.filters/.row)은 inline-* 로 내용폭만 차지
+   - 과거 규칙이 있어도 중앙정렬을 방해 못하도록 리셋
+   ───────────────────────────────────────────── */
+.bank-products section.filter-bar{
+  width:100%;
+  max-width:var(--maxw);
+  margin:10px auto 14px;
+  padding:0 18px;
+  box-sizing:border-box;
+  display:block !important;       /* 이전 flex/grid 잔재 리셋 */
+  text-align:center;              /* 자식 inline-*를 가운데로 */
+}
+
+/* .filters 버전 (권장) */
+.bank-products .filter-bar > .filters{
+  display:inline-grid;            /* 내용폭만 차지 → 중앙정렬 안정 */
+  grid-auto-flow: column;
+  grid-auto-columns: max-content; /* 칩/셀렉트 실제폭 */
+  gap: 8px 10px;
+  align-items: end;
+  vertical-align: top;
+  /* 필요 시 미세 좌우 보정 */
+  --filter-nudge-x: 0px;          /* -6px ~ +6px 조정 */
+  transform: translateX(var(--filter-nudge-x));
+}
+
+/* 부트스트랩 .row도 지원 (혼용 환경) */
+.bank-products .filter-bar > .row{
+  display:inline-flex;
+  align-items:flex-end;
+  gap:10px;
+  vertical-align: top;
+  margin:0 !important;            /* bootstrap 기본 마진 무시 */
+}
+.bank-products .filter-bar > .row > *{ margin:0 !important; }
+
+/* 필드 UI */
+.bank-products .filters input,
+.bank-products .filters select{
+  padding:10px 12px; border-radius:12px;
+  background:var(--card); color:var(--ink);
+  border:1px solid var(--line);
+}
+.bank-products .filters input::placeholder{ color:var(--sub); }
+
+/* 반응형: 모바일에서 여러 줄로 접기(가운데 유지) */
+@media (max-width: 960px){
+  .bank-products section.filter-bar{ text-align: initial; }
+  .bank-products .filter-bar > .filters{
+    display:grid;
+    width:100%;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-flow: row;
+    transform:none;               /* nudge 해제 */
+  }
+  .bank-products .filter-bar > .row{
+    display:flex; flex-wrap:wrap; width:100%; justify-content:center;
+  }
+}
+@media (max-width: 560px){
+  .bank-products .filter-bar > .filters{ grid-template-columns: 1fr 1fr; }
+}
+
+/* ─────────────────────────────────────────────
+   Buttons
+   ───────────────────────────────────────────── */
+.bank-products .btn{
+  display:inline-flex; align-items:center; gap:8px;
+  border-radius:12px; padding:10px 14px; font-weight:700;
+  border:1px solid transparent; background:transparent; color:var(--ink);
+  cursor:pointer;
+}
+.bank-products .btn-sm{ padding:8px 10px; font-size:.9rem; }
+.bank-products .btn:focus{ outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent); }
+.bank-products .btn-dark{ background:#111827; color:#fff; }
+.bank-products .btn-ghost{ border:1px solid var(--line); }
+.bank-products .btn-outline{ border:1px solid var(--line); }
+.bank-products .btn-accent{ background:var(--accent); color:var(--accent-ink); }
+.bank-products .btn:hover{ filter:brightness(1.05); transform:translateY(-1px); }
+
+/* ─────────────────────────────────────────────
+   Products grid
+   ───────────────────────────────────────────── */
+.bank-products .grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap:16px; align-items:stretch;
+}
+.bank-products .card-wrap{ grid-column:auto !important; }
+.bank-products .empty{ text-align:center; color:var(--sub); padding:48px 8px; }
+
+/* 카드 */
+.bank-products .product-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px; overflow:hidden; box-shadow:var(--shadow);
+  display:flex; flex-direction:column; height:100%;
+}
+.bank-products .product-card .img{
+  display:grid; place-items:center; padding:18px;
+  background:linear-gradient(180deg,
+    color-mix(in srgb, var(--muted) 25%, transparent),
+    color-mix(in srgb, var(--muted) 55%, transparent)
+  );
+}
+.bank-products .product-card img{ width:100%; max-height:140px; object-fit:contain; }
+.bank-products .product-card .body{ padding:14px 16px; display:flex; flex-direction:column; gap:6px; flex:1 1 auto; }
+.bank-products .product-card .top{ display:flex; align-items:center; justify-content:space-between; }
+.bank-products .pill{ background:var(--pill); color:#1d1d1d; padding:4px 10px; border-radius:999px; font-weight:700; font-size:.85rem; }
+.bank-products .rate{ font-weight:800; }
+.bank-products .name{ font-size:1.05rem; font-weight:800; margin:0; }
+.bank-products .cat,.bank-products .desc{ color:var(--sub); }
+.bank-products .benefits{ list-style:none; padding:0; margin:4px 0 0; display:grid; gap:4px; }
+.bank-products .benefits i{ margin-right:6px; }
+.bank-products .foot{ padding:14px 16px; display:flex; gap:8px; }
+.bank-products .flex{ flex:1; }
+
+/* ─────────────────────────────────────────────
+   Compare bar / Modal
+   ───────────────────────────────────────────── */
+.bank-products .compare{
+  position:fixed; left:0; right:0; bottom:0;
+  transform:translateY(100%); transition:transform .2s ease; z-index:60;
+}
+.bank-products .compare.show{ transform:translateY(0); }
+.bank-products .compare .inner{
+  width:100%; max-width:var(--maxw); margin:0 auto; padding:0 18px; box-sizing:border-box;
+  background:#111827; color:#fff; border-top-left-radius:16px; border-top-right-radius:16px;
+  padding:12px; box-shadow:0 -12px 24px rgba(0,0,0,.35); display:flex; align-items:center; gap:12px;
+}
+.bank-products .compare .chips{ display:flex; gap:8px; flex-wrap:wrap; }
+.bank-products .compare .chip{ background:#1f2937; color:#e5e7eb; border:1px solid #334155; border-radius:999px; padding:6px 10px; font-weight:700; cursor:pointer; }
+
+.bank-products .modal[hidden]{ display:none; }
+.bank-products .modal-dim{ position:fixed; inset:0; background:rgba(0,0,0,.5); }
+.bank-products .modal-box{
+  position:fixed; inset:auto 0 0 0; margin:auto; max-width:var(--maxw);
+  background:var(--card); color:var(--ink); border:1px solid var(--line);
+  border-top-left-radius:16px; border-top-right-radius:16px; box-shadow:var(--shadow);
+}
+.bank-products .modal-head{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:14px 16px; border-bottom:1px solid var(--line); }
+.bank-products .modal-body{ padding:14px 16px; }
+.bank-products .table-wrap{ overflow:auto; border-radius:12px; border:1px solid var(--line); }
+.bank-products .ny-table{ width:100%; border-collapse:separate; border-spacing:0; }
+.bank-products .ny-table thead th{
+  background: color-mix(in srgb, var(--muted) 70%, #fff 30%);
+  border-bottom:1px solid var(--line); text-align:left; padding:12px 14px; font-weight:800; color:var(--ink);
+}
+.bank-products .ny-table td{ padding:12px 14px; border-top:1px solid var(--line); }
+.bank-products .t-right{ text-align:right; }
+
+/* ─────────────────────────────────────────────
+   Transitions
+   ───────────────────────────────────────────── */
+.bank-products *,
+.bank-products .product-card,
+.bank-products .btn{
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease,
+              transform .18s ease, box-shadow .2s ease;
+}
+
+/* ─────────────────────────────────────────────
+   Responsive (Hero만 보정)
+   ───────────────────────────────────────────── */
+@media (max-width: 960px){
+  .bank-products .nx-hero{ grid-template-columns:1fr; }
+}
+
+/* ==== 중앙 모달: 컨테이너로 정중앙 정렬 (권장) ==== */
+.modal.modal--center{
+  position: fixed;           /* 화면 기준 */
+  inset: 0;                  /* 전체 덮기 */
+  display: flex;             /* 중앙 정렬 */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;             /* 비교바보다 위 */
+}
+
+/* 기존 바텀시트 규칙 무력화 + 박스 사이즈 */
+.modal.modal--center .modal-box{
+  position: relative;        /* fixed/absolute 금지 */
+  top: auto; left: auto; right: auto; bottom: auto;
+  inset: auto;               /* 잔여 inset 리셋 */
+  transform: none;           /* 이전 transform 리셋 */
+  margin: 0;                 /* 중앙정렬은 flex에 맡김 */
+  width: min(960px, calc(100% - 48px));
+  max-height: min(80vh, 720px);
+  overflow: auto;
+  border-radius: 16px;       /* 네 모서리 둥글게 */
+  z-index: 1001;
+}
+
+/* 오버레이 */
+.modal-dim{
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 1000;
+}
+
+/* (선택) 모바일 보정 */
+@media (max-width: 560px){
+  .modal.modal--center .modal-box{
+    width: calc(100% - 24px);
+    max-height: 82vh;
+  }
+}

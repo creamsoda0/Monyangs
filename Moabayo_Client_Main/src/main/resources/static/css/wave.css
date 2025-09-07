@@ -1,0 +1,218 @@
+/* ===== 색상 토큰: 주간(기본) ===== */
+:root{
+  --sky-0:#f4f0fa; --sky-1:#efe7ff; --sky-2:#d9c8ff;
+  --ocean:#7a63e6; --wave-1:#b79cff; --wave-2:#9e88ff;
+  --star-a:#ffffff; --star-b:#c9baff;
+  --moon-outer:#d9ccff; --moon-inner:#ffffff;
+}
+
+/* ===== 밤 테마 덮어쓰기 ===== */
+[data-theme="night"]{
+  --sky-0:#241c4f; --sky-1:#171136; --sky-2:#0d0a21;
+  --ocean:#2f2381; --wave-1:#6d59e8; --wave-2:#5743d3;
+  --star-a:#ffffff; --star-b:#b7a4ff;
+  --moon-outer:#cfc5ff; --moon-inner:#fff;
+}
+
+html,body{height:100%}
+body{
+  margin:0; overflow:hidden;
+  background:radial-gradient(ellipse at center,
+    var(--sky-0) 0%, var(--sky-1) 35%, var(--sky-2) 100%);
+  font-family: /* system-ui, sans-serif; */ "Nanum Pen Script", "Alex Brush", cursive; /
+}
+
+/* ===== 토글 스위치 ===== */
+/* ===== Sun/Moon Toggle ===== */
+.theme-toggle{
+  --track-w: 72px; --track-h: 40px; --pad: 4px; --thumb: 34px;
+  --shift: calc(var(--track-w) - var(--thumb) - var(--pad) * 2);
+
+  position: fixed; right: 16px; top: 16px; z-index: 1000;
+  width: var(--track-w); height: var(--track-h);
+  padding: var(--pad); border: 0; border-radius: 999px;
+  background: #eceaf6;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,.15);
+  cursor: pointer; display: inline-flex; align-items: center;
+}
+.theme-toggle__label{ position: absolute; left: -9999px; }
+
+[data-theme="night"] .theme-toggle{
+  background: #1e1840;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,.35);
+}
+
+/* thumb */
+.theme-toggle__thumb{
+  position: relative;
+  width: var(--thumb); height: var(--thumb);
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+  transform: translateX(0);
+  transition: transform .25s ease, background .25s ease;
+  display: grid; place-items: center; overflow: visible;
+}
+[data-theme="night"] .theme-toggle__thumb{
+  transform: translateX(var(--shift));
+  background: #2a235a;
+}
+
+/* Sun/Moon icons */
+.icon-sun, .icon-moon{
+  position: absolute; inset: 0; margin: auto;
+  width: 22px; height: 22px;
+  transition: opacity .25s ease, transform .35s ease;
+}
+
+/* ☀️ 해: 가운데 원 + 바깥 링에 광선 */
+.icon-sun{
+  opacity: 1; transform: scale(1);
+}
+.icon-sun::after{
+  content:""; position:absolute; inset:0; border-radius:50%;
+  background: #ffd86b;              /* 태양 원 */
+  box-shadow: 0 0 8px rgba(255,216,107,.9);
+}
+.icon-sun::before{
+  content:""; position:absolute; left:50%; top:50%;
+  width: 34px; height: 34px; transform: translate(-50%,-50%);
+  border-radius:50%;
+  background: repeating-conic-gradient(#ffd86b 0 14deg, transparent 14deg 30deg);
+  /* 링 영역만 보이도록 마스크 */
+  -webkit-mask: radial-gradient(circle 12px at center, transparent 0 12px, #000 12px);
+          mask: radial-gradient(circle 12px at center, transparent 0 12px, #000 12px);
+  opacity: .9;
+}
+
+/* 🌙 달: 하얀 원 + 어두운 원으로 초승달 만들기 */
+.icon-moon{
+  opacity: 0; transform: scale(.7) rotate(-20deg);
+}
+.icon-moon::after{
+  content:""; position:absolute; inset:0; border-radius:50%;
+  background: #fff; box-shadow: 0 0 8px rgba(255,255,255,.5);
+}
+.icon-moon::before{
+  content:""; position:absolute; top:0; left:6px; right:-6px; bottom:0;
+  border-radius:50%; background: #2a235a;   /* thumb 야간색과 맞춤 */
+}
+
+/* 상태 전환 */
+[data-theme="night"] .icon-sun{  opacity:0; transform: scale(.7) rotate(25deg); }
+[data-theme="night"] .icon-moon{ opacity:1; transform: scale(1) rotate(0deg); }
+
+
+/* ===== 하늘(별/달) ===== */
+.sky{ position:fixed; inset:0; pointer-events:none; z-index:0; }
+
+/* 별: 두 레이어 */
+.stars, .stars::before{
+  position:absolute; inset:0; content:"";
+  background:
+    radial-gradient(circle at 10% 20%, var(--star-a) 1.2px, transparent 1.6px) 0 0/6px 6px,
+    radial-gradient(circle at 70% 40%, var(--star-b) 1.2px, transparent 1.6px) 0 0/8px 8px,
+    radial-gradient(circle at 30% 80%, var(--star-a) 1.2px, transparent 1.6px) 0 0/7px 7px;
+  opacity:0; mix-blend-mode:screen;
+  animation: twinkle 6s ease-in-out infinite;
+}
+.stars--near{ filter:blur(.2px); animation-duration:8s; }
+[data-theme="night"] .stars,
+[data-theme="night"] .stars--near{ opacity:.75; }    /* 밤에 확실히 보이도록 강화 */
+[data-theme="night"] .stars::before{ opacity:.95; filter:blur(.4px); }
+
+/* 달 */
+.moon{
+  position:absolute; top:8vh; left:64vw; width:70px; height:70px; border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 35%, var(--moon-inner) 0 32%, transparent 33%),
+    radial-gradient(circle at center, var(--moon-outer), var(--moon-inner) 70%);
+  box-shadow:0 0 20px 6px rgba(255,255,255,.15);
+  opacity:0; transition:opacity .5s ease;
+}
+[data-theme="night"] .moon{ opacity:.9 }
+
+/* 유성(슈팅스타) */
+.meteor{
+  --dur: 1.2s;               /* 애니메이션 길이 */
+  position:fixed; z-index:1; /* 별 위, 파도 아래로 두고 싶으면 z-index 조절 */
+  top:0; left:0; width:2px; height:2px; pointer-events:none;
+  transform:translate3d(var(--x,0), var(--y,0), 0) rotate(315deg);
+  animation: meteor var(--dur) linear forwards;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,.9));
+}
+.meteor::after{
+  content:""; position:absolute; left:0; top:50%; transform:translateY(-50%);
+  width:160px; height:2px;
+  background:linear-gradient(90deg, rgba(255,255,255,.95), rgba(255,255,255,0));
+  border-radius:2px;
+}
+@keyframes meteor{
+  from { opacity:1; transform:translate3d(var(--x,0), var(--y,0), 0) rotate(315deg); }
+  to   { opacity:0; transform:translate3d(calc(var(--x,0) - 600px), calc(var(--y,0) + 600px), 0) rotate(315deg); }
+}
+
+/* 반짝임 */
+@keyframes twinkle{ 0%,100%{opacity:.3} 50%{opacity:.6} }
+
+/* ===== 바다 & 파도 (마스크 방식) ===== */
+.ocean{
+  position:absolute; left:0; bottom:0; width:100%; height:5%;
+  background:var(--ocean); z-index:2;
+}
+.wave{
+  position:absolute; top:-198px; width:6400px; height:198px; z-index:3;
+  background:var(--wave-1);
+  -webkit-mask-image:url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg);
+          mask-image:url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg);
+  -webkit-mask-repeat:repeat-x; mask-repeat:repeat-x;
+  -webkit-mask-size:1600px 198px; mask-size:1600px 198px;
+  animation: wave 7s cubic-bezier(.36,.45,.63,.53) infinite;
+  transform:translate3d(0,0,0);
+}
+.wave::after{
+  content:""; position:absolute; left:0; right:0; top:0; height:36px;
+  background:linear-gradient(to bottom, rgba(255,255,255,.18), rgba(255,255,255,0));
+  mix-blend-mode:screen; opacity:.6;
+}
+.wave:nth-of-type(2){
+  top:-175px; background:var(--wave-2);
+  animation: wave 7s cubic-bezier(.36,.45,.63,.53) -.125s infinite,
+             swell 7s ease -1.25s infinite;
+}
+
+@keyframes wave{ 0%{margin-left:0} 100%{margin-left:-1600px} }
+@keyframes swell{ 0%,100%{transform:translate3d(0,-25px,0)} 50%{transform:translate3d(0,5px,0)} }
+
+/* wave.css */
+[data-theme="night"]{
+  /* 기존 밤 하늘/바다 변수는 유지하고, 버튼용 팔레트만 추가/덮어쓰기 */
+  --color-gray-100: #3c3675;  /* 버튼 안쪽 밝은 면 */
+  --color-gray-200: #2a235a;  /* 버튼 바탕/패널 */
+  --color-gray-300: #6a59d9;  /* 보더/인셋 섀도우 */
+  --color-light:    #ffffff;  /* 하이라이트 */
+
+  --color-pink-100: #c8b8ff;  /* 아이콘/제목 기본 */
+  --color-pink-200: #e9dcff;  /* 액티브 시 더 밝게 */
+}
+
+/* (선택) 전환을 부드럽게 – 버튼/래퍼에 트랜지션 */
+.wrapper,
+.button,
+.button__face,
+.button .bx {
+  transition: background-color .25s ease, border-color .25s ease,
+              box-shadow .25s ease, color .25s ease;
+}
+
+/* (선택) 밤에 살짝 글로우 주기 */
+[data-theme="night"] .wrapper{
+  background-color: var(--color-gray-200);
+  box-shadow:
+    inset 0 0 16px var(--color-gray-300),
+    0 8px 20px rgba(0,0,0,.25);
+}
+[data-theme="night"] .button{
+  border-color: var(--color-gray-300);
+}
+

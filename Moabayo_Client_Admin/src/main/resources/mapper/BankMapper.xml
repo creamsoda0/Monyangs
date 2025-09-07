@@ -1,0 +1,55 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.dao.BankMapper">
+
+  <select id="searchAccounts" resultType="map">
+    SELECT ua.USER_ACCOUNT_ID, u.user_id, u.name,
+           ua.ACCOUNT_NUMBER, bp.NAME AS product_name,
+           COALESCE(SUM(
+             at.approved_amount *
+             CASE WHEN at.account_type='DEPOSIT' THEN 1
+                  WHEN at.account_type='WITHDRAW' THEN -1 ELSE 0 END
+           ),0) AS balance
+    FROM USER_ACCOUNT ua
+    JOIN users u ON u.user_id = ua.user_id
+    JOIN BANK_PRODUCT bp ON bp.ACCOUNT_ID = ua.account_id
+    LEFT JOIN account_transaction at ON at.account_id = ua.account_id
+    <where>
+      <if test="q != null and q != ''">
+        (u.name LIKE CONCAT('%',#{q},'%') OR ua.ACCOUNT_NUMBER LIKE CONCAT('%',#{q},'%'))
+      </if>
+    </where>
+    GROUP BY ua.USER_ACCOUNT_ID, u.user_id, u.name, ua.ACCOUNT_NUMBER, bp.NAME
+    ORDER BY ua.USER_ACCOUNT_ID DESC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <select id="listCardProducts" resultType="map">
+    SELECT c.CARD_ID, c.NAME, c.BRAND, c.BENEFITS, c.INTEREST, c.TYPE, c.IMG
+    FROM CARD_PRODUCT c
+    ORDER BY c.CARD_ID DESC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <select id="searchTransactions" resultType="map">
+    SELECT 'ACCOUNT' AS ttype, at.account_transaction_id AS id, at.user_id,
+           at.approved_amount, at.category, at.date_time, at.shop_name
+    FROM account_transaction at
+    <where>
+      <if test="from != null">at.date_time &gt;= #{from}</if>
+      <if test="to != null">AND at.date_time &lt;= #{to}</if>
+      <if test="category != null and category != ''">AND at.category = #{category}</if>
+    </where>
+    UNION ALL
+    SELECT 'CARD', ct.card_transaction_id, ct.user_id,
+           ct.approved_amount, ct.category, ct.date_time, ct.shop_name
+    FROM card_transaction ct
+    <where>
+      <if test="from != null">ct.date_time &gt;= #{from}</if>
+      <if test="to != null">AND ct.date_time &lt;= #{to}</if>
+      <if test="category != null and category != ''">AND ct.category = #{category}</if>
+    </where>
+    ORDER BY date_time DESC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+</mapper>

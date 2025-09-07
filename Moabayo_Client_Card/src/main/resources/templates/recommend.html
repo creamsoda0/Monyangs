@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>N09-01 | 모으냥즈 카드 추천</title>
+
+<!-- 기존 테마/헤더·푸터(네 환경 기준) -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css" />
+<script defer src="http://localhost:8810/js/theme.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+
+<!-- 프로젝트 공통 버튼 팩(이전 파일) -->
+<link rel="stylesheet" href="/css/ui-buttons.css" />
+
+<!-- 이 페이지 전용 -->
+<link rel="stylesheet" href="/css/card-reco.css" />
+
+<!-- 차트 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script defer src="/js/card-reco.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+	<div id="header"></div>
+
+	<main class="reco">
+		<!-- HERO: 이벤트 느낌, 안전한 글로우/입자 -->
+		<section class="hero">
+			<canvas id="fx"></canvas>
+			<div class="bg-glow"></div>
+			<div class="inner">
+				<div class="eyebrow">
+					<span class="pill pill-event">이번주 한정</span> <span class="pill pill-brand">모으냥즈 카드</span>
+				</div>
+				<h1 class="title">
+					소비패턴 기반<br> <span>맞춤 카드 추천</span>
+				</h1>
+				<p class="sub">ML 분석으로 혜택·적립·구독을 한 번에 최적화.</p>
+				<div class="cta">
+					<a href="#picks" class="mbtn mbtn--lg mbtn--primary is-pill">내 추천 보기</a>
+					<a href="#insights" class="mbtn mbtn--lg mbtn--outline is-pill">인사이트</a>
+				</div>
+				<div class="count">
+					<b id="dday">D-7</b> 이벤트 종료까지
+				</div>
+			</div>
+		</section>
+
+		<!-- 필터(세그먼트) -->
+		<section class="filters">
+			<div class="chips">
+				<button class="chip is-active" data-k="age" data-v="20">20대</button>
+				<button class="chip" data-k="age" data-v="30">30대</button>
+				<button class="chip" data-k="age" data-v="40">40대</button>
+				<button class="chip" data-k="age" data-v="50">50+</button>
+
+				<span class="spacer"></span>
+
+				<button class="chip is-active" data-k="sex" data-v="F">여성</button>
+				<button class="chip" data-k="sex" data-v="M">남성</button>
+
+				<span class="spacer"></span> <select class="select" id="region">
+					<option>서울</option>
+					<option>경기</option>
+					<option>부산</option>
+					<option>대구</option>
+				</select> <select class="select" id="timeband">
+					<option>점심(11–14)</option>
+					<option>저녁(18–21)</option>
+					<option>심야(22–02)</option>
+				</select> <span class="sample">유사 이용자 <b id="peer">7,582</b>명
+				</span>
+			</div>
+		</section>
+
+		<!-- 인사이트(도넛/바/라인) -->
+		<section id="insights" class="insights">
+			<article class="panel">
+				<h3>적합도</h3>
+				<div class="donut-wrap">
+					<canvas id="fitChart"></canvas>
+					<div class="donut-center">
+						<b id="fitVal">84</b><span>적합도</span>
+					</div>
+				</div>
+			</article>
+			<article class="panel">
+				<h3>시간대별 결제</h3>
+				<div class="mini">
+					<canvas id="timeBar"></canvas>
+				</div>
+			</article>
+			<article class="panel">
+				<h3>주간 소비 추이</h3>
+				<div class="mini">
+					<canvas id="weekLine"></canvas>
+				</div>
+			</article>
+		</section>
+
+		<!-- 추천 카드 슬라이더 -->
+		<section id="picks" class="picks">
+			<header class="picks-head">
+				<h2>이번 주 추천 카드</h2>
+				<span class="hint">혜택 이벤트 적용 중 · 스와이프/스크롤로 더 보기</span>
+			</header>
+
+			<div class="slider" id="slider">
+				<!-- 카드 1 -->
+				<article class="card3d">
+					<div class="poster poster--a"></div>
+					<div class="body">
+						<div class="badge">
+							적합도 <b>92</b>%
+						</div>
+						<h3 class="name">야식냥 체크카드</h3>
+						<ul class="pros">
+							<li>외식 7% 적립 (점심 추가 +3%)</li>
+							<li>배달앱 10% 캐시백</li>
+							<li>모으냥즈 페이 5% 적립</li>
+						</ul>
+						<div class="actions">
+							<button class="mbtn mbtn--primary is-pill apply-btn">혜택 받기</button>
+							<form action="/usercard/detail" method="post" style="display: inline">
+								<input type="hidden" name="cardId" value="C001">
+								<button class="mbtn mbtn--outline is-pill" type="submit">상세</button>
+							</form>
+
+						</div>
+					</div>
+				</article>
+
+				<!-- 카드 2 -->
+				<article class="card3d">
+					<div class="poster poster--b"></div>
+					<div class="body">
+						<div class="badge">
+							적합도 <b>88</b>%
+						</div>
+						<h3 class="name">커뮤냥 플래티넘</h3>
+						<ul class="pros">
+							<li>교통/편의점 10% 캐시백</li>
+							<li>OTT 구독 매월 3,000P</li>
+							<li>해외 2% 적립</li>
+						</ul>
+						<div class="actions">
+							<button class="mbtn mbtn--primary is-pill apply-btn">혜택 받기</button>
+							<form action="/usercard/detail" method="post" style="display: inline">
+								<input type="hidden" name="cardId" value="C002">
+								<button class="mbtn mbtn--outline is-pill" type="submit">상세</button>
+							</form>
+
+						</div>
+					</div>
+				</article>
+
+				<!-- 카드 3 -->
+				<article class="card3d">
+					<div class="poster poster--c"></div>
+					<div class="body">
+						<div class="badge">
+							적합도 <b>85</b>%
+						</div>
+						<h3 class="name">글로벌냥 카드</h3>
+						<ul class="pros">
+							<li>해외 결제 3% 적립</li>
+							<li>공항 라운지 연 2회</li>
+							<li>여행 보험 포함</li>
+						</ul>
+						<div class="actions">
+							<button class="mbtn mbtn--primary is-pill apply-btn">혜택 받기</button>
+							<form action="/usercard/detail" method="post" style="display: inline">
+								<input type="hidden" name="cardId" value="C003">
+								<button class="mbtn mbtn--outline is-pill" type="submit">상세</button>
+							</form>
+
+						</div>
+					</div>
+				</article>
+			</div>
+		</section>
+
+		<!-- 이벤트 배너 -->
+		<section class="event">
+			<div class="glow"></div>
+			<h3>이번 주 추가 적립 + 캐시백 부스트</h3>
+			<p>
+				추천 카드 신규/전환 시 최대 <b>12,000P</b> + 외식 <b>+3%</b> 추가적립 (D-<span id="dday2">7</span>)
+			</p>
+		</section>
+	</main>
+
+	<div id="footer"></div>
+</body>
+</html>

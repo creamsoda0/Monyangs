@@ -1,0 +1,131 @@
+<!-- src/main/resources/templates/coin/nyang-coin.html -->
+<!-- 
+! 냥코인이 입출금계좌로 통합되고, 내역이 거래내역 페이지로 연동됨
+! 따라서 이 냥코인 내역 페이지는 삭제해도 무방합니다.
+- 250821 KHS
+ -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>냥코인 내역</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS (예: 5.x) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .amount { font-variant-numeric: tabular-nums; }
+    .badge-deposit { background-color: #198754; }   /* green */
+    .badge-withdraw { background-color: #dc3545; }  /* red */
+  </style>
+</head>
+<body class="bg-light">
+
+<div class="container py-4">
+  <div class="d-flex align-items-center mb-3">
+    <h2 class="me-auto">🐾 냥코인</h2>
+    <form class="d-flex" method="get" th:action="@{|/coin/${user.userId}|}">
+      <input type="hidden" name="size" th:value="${size}">
+      <div class="input-group">
+        <label class="input-group-text" for="page">페이지</label>
+        <input id="page" class="form-control" type="number" min="1" th:max="${totalPages > 0 ? totalPages : 1}" name="page" th:value="${page}">
+        <button class="btn btn-primary" type="submit">이동</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 유저/코인 요약 -->
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">사용자 정보</h5>
+          <div class="mb-1"><strong>이름</strong> : <span th:text="${user != null ? user.name : 'N/A'}"></span></div>
+          <div class="mb-1"><strong>아이디</strong> : <span th:text="${user != null ? user.loginId : 'N/A'}"></span></div>
+          <div class="mb-1"><strong>이메일</strong> : <span th:text="${user != null ? user.email : 'N/A'}"></span></div>
+          <div class="mb-1"><strong>계정 생성일</strong> :
+            <span th:text="${#dates.format(user?.createDate, 'yyyy-MM-dd HH:mm')}">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">코인 잔액</h5>
+          <div th:if="${coin != null}">
+            <div class="display-6 amount" th:text="${#numbers.formatDecimal(coin.money, 0, 'COMMA', 2, 'POINT')}"></div>
+            <div class="text-muted">nyang_id: <span th:text="${coin.nyangId}"></span></div>
+            <div class="text-muted">생성일: <span th:text="${#dates.format(coin.createDate, 'yyyy-MM-dd HH:mm')}"></span></div>
+          </div>
+          <div th:if="${coin == null}">
+            <span class="text-muted">해당 유저의 냥코인 계정이 없습니다.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 거래 내역 -->
+  <div class="card mt-4 shadow-sm">
+    <div class="card-body">
+      <div class="d-flex align-items-center mb-2">
+        <h5 class="card-title mb-0">거래 내역</h5>
+        <div class="ms-auto small text-muted" th:text="'총 ' + ${total} + '건'">총 0건</div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+          <tr>
+            <th>일시</th>
+            <th>유형</th>
+            <th class="text-end">변동 금액</th>
+            <th class="text-end">거래 후 잔액</th>
+            <th>history_id</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="h : ${history}">
+            <td th:text="${#dates.format(h.createDate, 'yyyy-MM-dd HH:mm:ss')}">-</td>
+            <td>
+              <span th:classappend="${h.transType?.toUpperCase() == 'DEPOSIT'} ? 'badge badge-deposit' : 'badge badge-withdraw'"
+                    th:text="${h.transType}">-</span>
+            </td>
+            <td class="text-end amount" th:text="${#numbers.formatDecimal(h.transAmt, 0, 'COMMA', 2, 'POINT')}">0</td>
+            <td class="text-end amount" th:text="${#numbers.formatDecimal(h.totalAmt, 0, 'COMMA', 2, 'POINT')}">0</td>
+            <td th:text="${h.historyId}">-</td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(history)}">
+            <td colspan="5" class="text-center text-muted">표시할 거래 내역이 없습니다.</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 페이지네이션 -->
+      <nav th:if="${totalPages > 1}" aria-label="pagination">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" th:classappend="${page == 1} ? 'disabled'">
+            <a class="page-link" th:href="@{|/coin/${user.userId}?page=${page-1}&size=${size}|}">이전</a>
+          </li>
+          <li class="page-item"
+              th:each="p : ${#numbers.sequence(1, totalPages)}"
+              th:classappend="${p == page} ? 'active'">
+            <a class="page-link"
+               th:href="@{|/coin/${user.userId}?page=${p}&size=${size}|}"
+               th:text="${p}">1</a>
+          </li>
+
+          <li class="page-item" th:classappend="${page == totalPages} ? 'disabled'">
+            <a class="page-link" th:href="@{|/coin/${user.userId}?page=${page+1}&size=${size}|}">다음</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

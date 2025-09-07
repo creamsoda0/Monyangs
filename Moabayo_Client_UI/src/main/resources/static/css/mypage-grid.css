@@ -1,0 +1,119 @@
+/* ==============================
+   💎 mypage-grid.css
+   다이아 버튼 그리드 스타일
+============================== */
+
+.feature-grid {
+  --fg-bg: #29343d;         
+  --fg-text: #cedfe9;       
+  --fg-white: #ffffff;
+  --fg-focus: #3eabfa;
+
+  border-radius: 16px;
+  padding: 1.5rem 1rem 2rem;
+  background: var(--fg-bg);
+  color: var(--fg-text);
+  overflow: hidden;
+}
+
+/* 헤더 */
+.feature-grid .fg-header {
+  text-align: center;
+  margin: 0 1.5vw 1rem;
+}
+.feature-grid .fg-header h1 {
+  color: var(--fg-white);
+  font-size: 1.5rem;
+  padding-bottom: .25em;
+}
+.feature-grid .fg-header h2 {
+  font-weight: 400;
+  font-size: .875rem;
+  color: var(--fg-text);
+}
+
+@media (min-width: 750px) {
+  .feature-grid .fg-header h1 { font-size: 2.25rem; }
+  .feature-grid .fg-header h2 { font-size: 1rem; }
+}
+
+/* 그리드 레이아웃 */
+.feature-grid .grid {
+  display: grid;
+  grid-gap: 1.2rem;
+  padding: .25rem;
+}
+
+@supports (display: grid) {
+  .feature-grid .grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(120px, 26vh);
+    grid-template-areas:
+      "hero hero"
+      "big1 big1"
+      "med1 med2"
+      "small1 small2";
+  }
+  .feature-grid .grid .item:nth-child(1) { grid-area: hero;  }
+  .feature-grid .grid .item:nth-child(2) { grid-area: big1;  }
+  .feature-grid .grid .item:nth-child(3) { grid-area: med1;  }
+  .feature-grid .grid .item:nth-child(4) { grid-area: med2;  }
+  .feature-grid .grid .item:nth-child(5) { grid-area: small1;}
+  .feature-grid .grid .item:nth-child(6) { grid-area: small2;}
+}
+
+/* 버튼 공통 스타일 */
+.feature-grid .grid .item {
+  position: relative;
+  padding: 1rem;
+  background-position: left bottom;
+  background-size: 150% 100%;
+  background-repeat: no-repeat;
+  transition: background 450ms, outline 350ms, transform 100ms;
+  outline: transparent;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  color: var(--fg-white);
+  display: block;
+  text-align: left;
+}
+.feature-grid .grid .item:hover { background-position: top right; }
+
+/* 다이아 */
+.feature-grid .diamond {
+  display: flex; justify-content: center; align-items: center;
+  width: 96px; height: 96px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.9);
+  background-image: linear-gradient(to top left, #ddd 0%, #fff 100%);
+  transform: rotate(45deg);
+}
+.feature-grid .diamond span {
+  transform: rotate(-45deg);
+  color: #111;
+  font-weight: 700;
+}
+
+/* 말풍선 */
+.feature-grid .tooltip {
+  position: absolute; 
+  padding: .35rem .8rem;
+  border-radius: 6px;
+  background: #1f2a33;
+  opacity: 0;
+  font-size: .85rem;
+  transform: translateY(60px);
+}
+.feature-grid .grid .item:hover .tooltip {
+  opacity: 1;
+  transform: translateY(74px);
+}
+
+/* 배경 색상 */
+.feature-grid .grid .item:nth-child(1)  { background-image: linear-gradient(45deg, #cbabfb 0%, #fb7ef6 60%); }
+.feature-grid .grid .item:nth-child(2)  { background-image: linear-gradient(45deg, #fb7ef6 0%, #cbabfb 60%); }
+.feature-grid .grid .item:nth-child(3)  { background-image: linear-gradient(45deg, #70c1fb 0%, #79ebe0 60%); }
+.feature-grid .grid .item:nth-child(4)  { background-image: linear-gradient(45deg, #79ebe0 0%, #70c1fb 60%); }
+.feature-grid .grid .item:nth-child(5)  { background-image: linear-gradient(45deg, #feeeab 0%, #fb7eb3 60%); }
+.feature-grid .grid .item:nth-child(6)  { background-image: linear-gradient(45deg, #fb7eb3 0%, #feeeab 60%); }

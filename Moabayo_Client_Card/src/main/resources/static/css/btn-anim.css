@@ -1,0 +1,121 @@
+/* ===== 공통(다크 흰띠 방지) ===== */
+html, body { margin:0; background:var(--bg); color:var(--ink); }
+
+/* 페이지 테마 변수에 의존( card-landing.css 와 동일 ) */
+:root{
+  --brand:#7c3aed; --brand-ink:#f5f3ff; --ink:#111827; --line:#e5e7eb; --muted:#f8fafc; --bg:#ffffff;
+}
+[data-theme="dark"]{
+  --brand:#a78bfa; --brand-ink:#0b0f14; --ink:#e5e7eb; --line:#1f2937; --muted:#0b1016; --bg:#0b0f14;
+}
+
+/* ===== 버튼 베이스 ===== */
+.btnx{
+  --h: 42px;
+  --pad: 16px;
+  --radius: 12px;
+  --g1: var(--brand);
+  --g2: color-mix(in oklab, var(--brand) 70%, #3b82f6);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--h);
+  padding: 0 var(--pad);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(15,23,42,.08);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease, color .18s ease;
+}
+.btnx.small{ --h: 36px; --pad: 12px; --radius: 10px; font-weight: 700; font-size: 13px; }
+.btnx:focus-visible{ outline: 2px solid color-mix(in oklab, var(--g1) 60%, transparent); outline-offset: 2px; }
+.btnx:hover{ transform: translateY(-2px); }
+
+/* ===== 1) GLOW (원형 글로우 / btn-9 변형) ===== */
+.btn-glow{
+  color: var(--brand-ink);
+  border: none;
+  background: linear-gradient(0deg, var(--g1) 0%, var(--g2) 100%);
+  overflow: hidden;
+}
+.btn-glow::after{
+  content:"";
+  position:absolute; inset:0; z-index:-1;
+  background: linear-gradient(315deg, var(--g1) 0%, var(--g2) 74%);
+  transition: transform .35s ease;
+}
+.btn-glow:hover{ box-shadow: 0 12px 26px rgba(0,0,0,.18); }
+.btn-glow:hover::after{ transform: scale(1.6) rotate(180deg); }
+
+/* ===== 2) DRAW (테두리 그리기 / btn-3 변형) ===== */
+.btn-draw{
+  background: transparent;
+  color: var(--g2);
+  border: none;
+}
+.btn-draw::before, .btn-draw::after{
+  content:""; position:absolute; right:0; top:0; background: var(--g2); transition: all .25s ease;
+}
+.btn-draw::before{ height:0%; width:2px; }
+.btn-draw::after{ width:0%; height:2px; }
+.btn-draw span, .btn-draw{ position:relative; }
+.btn-draw span::before, .btn-draw span::after{
+  content:""; position:absolute; left:0; bottom:0; background: var(--g2); transition: all .25s ease;
+}
+.btn-draw span::before{ width:2px; height:0%; }
+.btn-draw span::after{ width:0%; height:2px; }
+.btn-draw:hover{ color: var(--g2); box-shadow:none; transform: translateY(-1px); }
+.btn-draw:hover::before{ height:100%; }
+.btn-draw:hover::after{ width:100%; }
+.btn-draw:hover span::before{ height:100%; }
+.btn-draw:hover span::after{ width:100%; }
+
+/* 사용 편의: <a class="btnx btn-draw"><span>텍스트</span></a> */
+.btn-draw:not(:has(span))::before,
+.btn-draw:not(:has(span))::after{ display:none; } /* span 없이 써도 레이아웃 깨지지 않게 */
+
+/* ===== 3) FLIP (3D 텍스트 플립 / btn-12 변형) ===== */
+.btn-flip{
+  border:none; perspective: 230px; background: transparent; box-shadow: none;
+}
+.btn-flip > span{
+  position:absolute; inset:0; display:grid; place-items:center; border-radius: inherit;
+  width:100%; height:100%;
+  background: linear-gradient(0deg, var(--g1) 0%, var(--g2) 100%);
+  color: var(--brand-ink);
+  transition: transform .3s ease, color .3s ease, box-shadow .3s ease;
+  backface-visibility: hidden;
+}
+.btn-flip > span:nth-child(1){
+  transform: rotateX(90deg);
+  transform-origin: 50% 50% -20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.15);
+}
+.btn-flip > span:nth-child(2){
+  transform: rotateX(0deg);
+  transform-origin: 50% 50% -20px;
+}
+.btn-flip:hover > span:nth-child(1){ transform: rotateX(0deg); }
+.btn-flip:hover > span:nth-child(2){ transform: rotateX(-90deg); }
+
+/* ===== 4) FILL (우→좌 그라데이션 채움 / btn-15 변형) ===== */
+.btn-fill{
+  border:none; color:#fff; background: var(--bg); overflow:hidden;
+}
+.btn-fill::after{
+  content:""; position:absolute; inset:0; width:0%; z-index:-1; right:0;
+  background: linear-gradient(315deg, var(--g1) 0%, var(--g2) 100%);
+  transition: width .28s ease;
+  border-radius: inherit;
+}
+.btn-fill:hover{ color: var(--brand-ink); }
+.btn-fill:hover::after{ left:0; width:100%; }
+
+/* ===== 네오모픽 느낌 보정(과도한 하이라이트 제거, 테마 일관성) ===== */
+.btnx{ box-shadow: 0 10px 20px rgba(15,23,42,.08); }
+[data-theme="dark"] .btnx{ box-shadow: 0 10px 24px rgba(0,0,0,.45); }

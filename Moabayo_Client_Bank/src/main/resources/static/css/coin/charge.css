@@ -1,0 +1,254 @@
+@charset "UTF-8";
+
+/* =========================
+   Scope + Tokens
+========================= */
+.ny-charge{
+  --maxw: 840px;
+
+  /* light */
+  --ink:#1f2937; --sub:#6b7280; --line:#e5e7eb; --card:#ffffff;
+  --accent:#7c3aed; --shadow:0 10px 24px rgba(15,23,42,.08);
+
+  color:var(--ink);
+  padding:18px 0 28px;
+
+  /* 전환 깜빡임 줄이기 */
+  color-scheme: light dark;
+}
+html[data-theme="dark"] .ny-charge{
+  --ink:#e5e7eb; --sub:#9aa5b1; --line:#1f2937; --card:#0f151c;
+  --accent:#a78bfa; --shadow:0 12px 26px rgba(0,0,0,.55);
+}
+.ny-charge, .ny-charge *{
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+/* =========================
+   Layout / Card
+========================= */
+.ny-charge{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 18px; box-sizing:border-box; }
+
+.c-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  padding:18px;
+  margin:0 0 16px;
+  background-clip:padding-box;  /* 흰 테두리 방지 */
+  overflow:hidden;              /* 포커스 링/유령 그림자 카드 밖 유출 차단 */
+  position:relative;
+}
+.c-card::before, .c-card::after{ content:none !important; } /* 공용 pseudo 차단 */
+.c-card:hover{ box-shadow:0 12px 28px rgba(15,23,42,.12); }
+html[data-theme="dark"] .c-card:hover{ box-shadow:0 10px 20px rgba(0,0,0,.55); }
+
+/* =========================
+   Stepper
+========================= */
+.c-stepper{ margin:8px 0 14px; }
+.c-stepper ol{ display:flex; gap:18px; list-style:none; padding:0; margin:0; }
+.c-stepper li{ display:flex; align-items:center; gap:8px; color:var(--sub); font-weight:600; }
+.c-stepper li span{
+  width:26px; height:26px; display:inline-grid; place-items:center;
+  border:1px solid var(--line); border-radius:999px; background:transparent; background-clip:padding-box;
+}
+.c-stepper li.is-active{ color:var(--ink); }
+.c-stepper li.is-active span{ background:var(--accent); border-color:var(--accent); color:#fff; }
+.c-stepper em{ font-style:normal; }
+
+/* =========================
+   Head
+========================= */
+.c-head h1{ font-size:1.25rem; margin:0 0 4px; }
+.c-head .sub{ color:var(--sub); margin:0 0 10px; }
+
+/* =========================
+   Field
+========================= */
+.c-field{ margin:16px 0 12px; }
+.c-field > label, .c-field .label{ display:block; font-weight:800; margin-bottom:6px; }
+.help{ color:var(--sub); margin:8px 0 10px; font-size:.95rem; }
+.c-error{ color:#b91c1c; margin-top:8px; }
+
+/* =========================
+   Amount (공용 CSS 완전 무시)
+========================= */
+.c-amount{ position:relative; contain:paint; }
+.c-amount::before, .c-amount::after{ content:none !important; }
+
+/* form control 하드 리셋 – 이 페이지 한정 */
+.ny-charge input,
+.ny-charge input[type="text"],
+.ny-charge input[type="number"],
+.ny-charge input[type="tel"]{
+  -webkit-appearance:none; appearance:none; box-sizing:border-box;
+  outline:none !important; filter:none !important;
+  box-shadow:none !important;            /* 공용 focus 그림자 제거 */
+  background:var(--card) !important;
+  border:1px solid var(--line) !important;
+  color:var(--ink) !important;
+  border-radius:12px !important;
+  height:auto; min-height:44px; line-height:1.25;
+}
+
+/* 실제 금액 입력 스타일 */
+.c-amount .prefix{
+  position:absolute; left:14px; top:50%; transform:translateY(-50%);
+  color:var(--sub); width:22px; text-align:center; pointer-events:none;
+}
+.c-amount input{
+  width:100%; font-size:1.35rem; font-weight:800;
+  padding:14px 14px 14px 44px;
+  background-clip:padding-box;
+}
+.c-amount input::placeholder{ color:color-mix(in srgb, var(--sub) 90%, transparent); }
+.c-amount input:focus{
+  border-color:var(--ink) !important;
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent) !important;
+}
+.c-amount input.is-error{
+  border-color:#ef4444 !important;
+  box-shadow:0 0 0 3px rgba(239,68,68,.15) !important;
+}
+
+/* 다크 입력 */
+html[data-theme="dark"] .c-amount input{
+  background:#1f2937 !important; border-color:#374151 !important; color:#e5e7eb !important;
+}
+html[data-theme="dark"] .c-amount input:focus{
+  border-color:#a78bfa !important; box-shadow:0 0 0 3px rgba(167,139,250,.25) !important;
+}
+
+/* Chrome autofill 노란/흰 배경 제거 */
+.ny-charge input:-webkit-autofill,
+.ny-charge input:-webkit-autofill:hover,
+.ny-charge input:-webkit-autofill:focus{
+  -webkit-text-fill-color: var(--ink);
+  -webkit-box-shadow: 0 0 0 1000px var(--card) inset !important;
+}
+
+/* =========================
+   Chips
+========================= */
+.c-chips{ display:flex; gap:8px; flex-wrap:wrap; }
+.chip{
+  border:1px solid var(--line); border-radius:999px; padding:8px 12px;
+  background:transparent; color:var(--ink); font-weight:700; cursor:pointer;
+  outline:none; box-shadow:none;
+}
+.chip:hover{ border-color:var(--ink); transform:translateY(-1px); }
+.chip:focus-visible{ box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); border-color:var(--accent); }
+html[data-theme="dark"] .chip{ border-color:#374151; }
+html[data-theme="dark"] .chip:hover{ border-color:var(--accent); }
+
+/* =========================
+   Pay option
+========================= */
+.c-pay{ display:block; }
+.c-pay input{ position:absolute; opacity:0; pointer-events:none; }
+.c-pay .box{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  border:1px solid var(--line); border-radius:12px; padding:12px 14px; cursor:pointer;
+  background:var(--card); background-clip:padding-box;
+}
+.c-pay input:checked + .box{ border-color:var(--ink); }
+html[data-theme="dark"] .c-pay .box{ background:#111827; border-color:#374151; }
+html[data-theme="dark"] .c-pay input:checked + .box{ border-color:var(--accent); }
+.c-pay .desc{ color:var(--sub); }
+
+.kakao-logo{
+  display:inline-flex; align-items:center; gap:4px;
+  font-weight:900; letter-spacing:-.01em; color:#111; background:#FEE500;
+  border-radius:8px; padding:8px 10px;
+}
+.kakao-logo span{ font-weight:700; }
+
+/* =========================
+   Summary
+========================= */
+.c-summary{
+  margin:6px 0 10px; border-top:1px dashed var(--line); padding-top:12px;
+  display:grid; grid-template-columns:1fr auto; row-gap:10px; column-gap:12px;
+  background-clip:padding-box;
+}
+.c-summary > div{ display:contents; }
+.c-summary span{ color:var(--sub); }
+.c-summary strong{ text-align:right; }
+html[data-theme="dark"] .c-summary{ border-top-color:#1f2937; }
+
+/* =========================
+   Agreements
+========================= */
+.c-agree .chk{ display:flex; align-items:center; gap:8px; margin:6px 0; }
+.c-agree input{ width:18px; height:18px; }
+
+/* =========================
+   CTA
+========================= */
+.c-cta{ margin-top:12px; }
+.btn-accent{
+  width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  background:var(--accent); color:#fff; border:none; border-radius:12px; padding:12px 16px;
+  font-weight:800; cursor:not-allowed; opacity:.6;
+  outline:none; box-shadow:none;
+}
+.btn-accent.enabled{ cursor:pointer; opacity:1; }
+.btn-accent:hover.enabled{ filter:brightness(1.05); transform:translateY(-1px); }
+html[data-theme="dark"] .btn-accent{ background:var(--accent); color:#0c0f14; }
+
+.with-kakao .kakao-bullet{
+  width:16px; height:16px; border-radius:50%; background:#FEE500; display:inline-block; vertical-align:-2px;
+}
+.spinner{
+  width:16px; height:16px; border-radius:50%;
+  border:2px solid rgba(255,255,255,.55); border-top-color:transparent;
+  display:none; animation:spin 1s linear infinite;
+}
+.btn-accent.loading .spinner{ display:inline-block; }
+@keyframes spin{ to{ transform:rotate(360deg);} }
+
+/* =========================
+   Info
+========================= */
+.c-info strong{ display:block; margin-bottom:6px; }
+.c-info ul{ margin:0; padding-left:18px; color:var(--sub); }
+
+/* =========================
+   Mobile
+========================= */
+@media (max-width:560px){
+  .c-amount input{ min-height:42px; padding-left:40px; }
+}
+
+/* =========================
+   Darkmode page background
+========================= */
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+  background-color: #0c0f14 !important; /* 은은한 진회색 배경 */
+}
+
+/* ===== Checkbox 복구 & 브랜드 색 적용 ===== */
+.ny-charge input[type="checkbox"]{
+  appearance: checkbox !important;
+  -webkit-appearance: checkbox !important;
+
+  width: 18px !important;
+  height: 18px !important;
+
+  /* 기본 체크박스로 표시: 기존 인풋 리셋 값들 무효화 */
+  border: initial !important;
+  background: initial !important;
+  box-shadow: none !important;
+  border-radius: 4px !important;
+  padding: 0 !important;
+
+  /* 테마 포인트 색 */
+  accent-color: var(--accent);
+  vertical-align: -2px;
+}
+.ny-charge .c-agree .chk{ cursor: pointer; }
+.ny-charge .c-agree .chk input{ margin-right: 6px; }
+

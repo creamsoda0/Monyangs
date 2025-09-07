@@ -1,0 +1,107 @@
+/* ===== 토큰 + 다크 흰테두리 방지 ===== */
+html,body{margin:0;background:var(--bg);color:var(--ink);}
+:root{
+  --bg:#ffffff; --ink:#111827; --sub:#6b7280; --line:#e5e7eb;
+  --card:#ffffff; --muted:#f8fafc; --shadow:0 10px 20px rgba(15,23,42,.08);
+  --brand:#7c3aed; --brand-ink:#f5f3ff; --accent:#f59e0b;
+}
+[data-theme="dark"]{
+  --bg:#0b0f14; --ink:#e5e7eb; --sub:#9aa5b1; --line:#1f2937;
+  --card:#0f151c; --muted:#0b1016; --shadow:0 10px 24px rgba(0,0,0,.45);
+  --brand:#a78bfa; --brand-ink:#0b0f14; --accent:#fbbf24;
+}
+.reco{font-family:"Pretendard",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR";}
+
+/* ===== HERO (이벤트 무드) ===== */
+.hero{position:relative;overflow:hidden;padding:64px 24px 84px;background:radial-gradient(1200px 600px at 10% -20%, rgba(124,58,237,.25), transparent 60%), radial-gradient(1000px 480px at 90% -10%, rgba(236,72,153,.22), transparent 60%);}
+.hero .bg-glow{position:absolute;inset:-20%;filter:blur(42px); pointer-events:none; background:radial-gradient(closest-side, rgba(59,130,246,.22), transparent 70%); animation:float 12s ease-in-out infinite alternate; z-index:0;}
+@keyframes float{to{transform:translateY(-16px)}}
+#fx{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hero .inner{position:relative;z-index:2;max-width:1160px;margin:0 auto}
+.eyebrow{display:flex;gap:8px;margin-bottom:10px}
+.pill{display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:999px;border:1px solid var(--line);background:var(--muted);color:var(--ink);font-size:12px;font-weight:800}
+.pill-event{background:#fff7ed;border-color:#fde68a;color:#b45309}
+.pill-brand{background:#f5f3ff;border-color:#ddd6fe;color:#6d28d9}
+.title{font-weight:800;font-size:clamp(28px,3.6vw,44px);margin:6px 0 10px;letter-spacing:-.02em}
+.title span{color:var(--brand)}
+.sub{color:var(--sub);max-width:760px;margin:0 0 14px}
+.cta{display:flex;gap:10px}
+.count{margin-top:10px;color:var(--sub)}
+.count b{color:var(--accent)}
+
+/* ===== 필터 ===== */
+.filters{max-width:1160px;margin:10px auto 12px;padding:0 24px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700}
+.chip.is-active{background:color-mix(in oklab,var(--brand) 12%, var(--card));border-color:color-mix(in oklab,var(--brand) 36%, var(--line));}
+.select{height:32px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:0 10px}
+.sample{margin-left:auto;color:var(--sub)}
+.spacer{width:6px}
+
+/* ===== 인사이트 ===== */
+.insights{max-width:1160px;margin:6px auto 22px;padding:0 24px;display:grid;grid-template-columns:320px 1fr 1fr;gap:16px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:16px;min-height:190px}
+.panel h3{font-weight:800;margin:2px 0 8px;letter-spacing:-.01em}
+.mini{height:140px}
+.mini canvas{height:100% !important;width:100% !important}
+
+/* 도넛 */
+.donut-wrap{position:relative;height:220px}
+.donut-wrap canvas{height:220px !important;width:100% !important}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center}
+.donut-center b{font-size:28px;line-height:1;font-weight:900;position:relative}
+.donut-center b::after{content:"%";margin-left:2px;font-size:14px;font-weight:800}
+.donut-center span{font-size:12px;color:var(--sub)}
+
+/* ===== 추천 카드 슬라이더 ===== */
+.picks{max-width:1160px;margin:6px auto 26px;padding:0 24px}
+.picks-head{display:flex;gap:10px;align-items:end;margin-bottom:10px}
+.picks-head h2{font-weight:900;letter-spacing:-.02em}
+.picks-head .hint{color:var(--sub)}
+.slider{display:grid;grid-auto-flow:column;grid-auto-columns: minmax(280px, 1fr);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.card3d{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);scroll-snap-align:start;transform-style:preserve-3d;transition:transform .15s ease, box-shadow .15s ease}
+.card3d:hover{transform:translateY(-4px) rotateX(2deg) rotateY(-2deg);box-shadow:0 16px 32px rgba(0,0,0,.18)}
+.poster{height:140px;border-radius:16px 16px 0 0; background:linear-gradient(120deg, rgba(167,139,250,.25), rgba(59,130,246,.25)); backdrop-filter: blur(2px)}
+.poster--a{background:radial-gradient(600px 200px at 20% 0%, rgba(167,139,250,.4), transparent 60%), radial-gradient(600px 200px at 90% 0%, rgba(236,72,153,.35), transparent 60%)}
+.poster--b{background:radial-gradient(600px 200px at 10% 0%, rgba(59,130,246,.4), transparent 60%), radial-gradient(600px 200px at 80% 0%, rgba(16,185,129,.35), transparent 60%)}
+.poster--c{background:radial-gradient(600px 200px at 10% 0%, rgba(245,158,11,.4), transparent 60%), radial-gradient(600px 200px at 80% 0%, rgba(96,165,250,.35), transparent 60%)}
+.card3d .body{padding:14px}
+.badge{display:inline-flex;align-items:baseline;gap:4px;height:24px;padding:0 8px;border:1px solid var(--line);border-radius:999px;background:var(--muted);font-size:12px;font-weight:800}
+.badge b{font-size:14px}
+.name{margin:8px 0 6px;font-size:18px;font-weight:900}
+.pros{margin:0 0 10px;padding-left:18px}
+.actions{display:flex;gap:8px}
+
+/* ===== 이벤트 배너 ===== */
+.event{position:relative;overflow:hidden;max-width:1160px;margin:10px auto 40px;padding:18px 24px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg, rgba(167,139,250,.12), transparent)}
+.event .glow{position:absolute;inset:-40%;filter:blur(30px);background:radial-gradient(closest-side, rgba(167,139,250,.25), transparent 70%);z-index:-1;animation:float 10s ease-in-out infinite alternate}
+.event h3{margin:0 0 4px;font-weight:900}
+.event p{margin:0;color:var(--sub)}
+@media (max-width:1100px){ .insights{grid-template-columns:1fr 1fr} .donut-wrap{height:200px} .donut-wrap canvas{height:200px !important} }
+@media (max-width:720px){ .insights{grid-template-columns:1fr} .mini{height:120px} .slider{grid-auto-columns:85%} }
+
+
+/* ==== Burst FX ==== */
+.fx-overlay{position:fixed;inset:0;pointer-events:none;z-index:9999}
+.fx-burst{position:absolute;left:0;top:0;transform:translate(-50%,-50%);}
+
+.fx-ripple{
+  position:absolute;left:0;top:0;transform:translate(-50%,-50%);
+  width:14px;height:14px;border:2px solid var(--brand);border-radius:999px;opacity:.7;
+  animation:ripple .7s ease-out forwards;
+}
+@keyframes ripple{
+  from{transform:translate(-50%,-50%) scale(.3); opacity:.7}
+  to  {transform:translate(-50%,-50%) scale(6);  opacity:0}
+}
+
+.fx-spark{
+  position:absolute;left:0;top:0;transform:translate(-50%,-50%);
+  width:8px;height:8px;border-radius:50%;
+  will-change: transform, opacity; filter: drop-shadow(0 0 6px rgba(0,0,0,.25));
+}
+.fx-spark.star{
+  width:10px;height:10px;background:currentColor;
+  clip-path:polygon(50% 0,61% 35%,100% 38%,69% 57%,80% 92%,50% 72%,20% 92%,31% 57%,0 38%,39% 35%);
+}
+.fx-spark.dot{ background:currentColor; border-radius:999px; }

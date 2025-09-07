@@ -1,0 +1,66 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.dao.AnalyticsMapper">
+
+  <!-- 1) 우편번호 TOP-N -->
+  <select id="usersByZip" resultType="map">
+    SELECT *
+    FROM (
+      SELECT
+        u.zip_code AS zip,
+        COUNT(1)  AS cnt
+      FROM users u
+      GROUP BY u.zip_code
+      ORDER BY cnt DESC
+    )
+    WHERE ROWNUM &lt;= #{limit}
+  </select>
+
+  <!-- 2) 은행 거래 월별 합계 -->
+  <select id="monthlyBankProduct" resultType="map">
+    SELECT
+      TO_CHAR(t.date_time, 'YYYY-MM') AS ym,
+      NVL(bp.category, t.category)    AS category,
+      SUM(NVL(t.approved_amount, 0))  AS amount
+    FROM account_transaction t
+      LEFT JOIN bank_product bp
+        ON bp.account_id = t.account_id
+    <where>
+      <if test="from != null and from != ''">
+        <![CDATA[
+          AND t.date_time >= TO_DATE(#{from}, 'YYYY-MM-DD')
+        ]]>
+      </if>
+      <if test="to != null and to != ''">
+        <![CDATA[
+          AND t.date_time <  TO_DATE(#{to},   'YYYY-MM-DD') + 1
+        ]]>
+      </if>
+    </where>
+    GROUP BY TO_CHAR(t.date_time, 'YYYY-MM'), NVL(bp.category, t.category)
+    ORDER BY ym, category
+  </select>
+
+  <!-- 3) 카드 매출 월별 합계 -->
+  <select id="monthlyCardSales" resultType="map">
+    SELECT
+      TO_CHAR(ct.date_time, 'YYYY-MM') AS ym,
+      SUM(NVL(ct.approved_amount, 0))  AS amount
+    FROM card_transaction ct
+    <where>
+      <if test="from != null and from != ''">
+        <![CDATA[
+          AND ct.date_time >= TO_DATE(#{from}, 'YYYY-MM-DD')
+        ]]>
+      </if>
+      <if test="to != null and to != ''">
+        <![CDATA[
+          AND ct.date_time <  TO_DATE(#{to},   'YYYY-MM-DD') + 1
+        ]]>
+      </if>
+    </where>
+    GROUP BY TO_CHAR(ct.date_time, 'YYYY-MM')
+    ORDER BY ym
+  </select>
+
+</mapper>

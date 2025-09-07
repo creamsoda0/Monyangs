@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.dao.BankMapper">
+	<!-- 유저 조회 -->
+	<select id="findUserByLoginId" parameterType="String"
+		resultType="com.sboot.moabayo.vo.UserVO">
+		SELECT
+		user_id AS userId,
+		create_date AS createDate,
+		account_num AS accountNum,
+		address,
+		address_detail AS addressDetail,
+		zip_code AS zipCode,
+		email,
+		name,
+		login_id AS loginId,
+		password,
+		phone,
+		refresh_token AS refreshToken,
+		simple_password AS simplePassword,
+		is_admin AS isAdmin
+		FROM users
+		WHERE login_Id = #{loginId}
+	</select>
+
+  <!-- 공통 SELECT 컬럼 -->
+  <sql id="AccountSelectColumns">
+    ua.user_account_id AS ID,
+
+    /* 아이콘은 type 기반 매핑 */
+    CASE UPPER(bp.type)
+      WHEN 'DEPOSIT' THEN '💳'
+      WHEN 'SAVINGS' THEN '🏦'
+      WHEN 'LOAN'    THEN '📄'
+      ELSE '💰'
+    END AS ICON,
+
+    NVL(ua.account_name, '내 통장') AS NAME,
+    ua.account_number AS ACCOUNT_NO,
+    bp.name AS PRODUCT,
+    bp.type AS TYPE,
+
+    /* 잔액: 입금계열 +, 출금계열 - */
+    NVL(ua.balance, 0) AS BALANCE,
+
+    /* 개설일: 첫 거래일자 (없으면 NULL) */
+    ua.create_date AS OPENED_AT
+  </sql>
+
+	<!-- 사용자 계좌 (내역 제외) -->
+	<resultMap id="AccountOnlyMap"
+		type="com.sboot.moabayo.vo.AccountVO">
+		<id column="ID" property="id" />
+		<result column="ICON" property="icon" />
+		<result column="NAME" property="name" />
+		<result column="ACCOUNT_NO" property="number" />
+		<result column="PRODUCT" property="product" />
+		<result column="TYPE" property="type" />
+		<result column="BALANCE" property="balance" />
+		<result column="OPENED_AT" property="openedAt" />
+	</resultMap>
+
+	<!-- 로그인 유저의 '냥코인 입출금통장'(account_id=100) 1건 조회 -->
+	<select id="findNyangcoinAccountByUserId"
+		resultMap="AccountOnlyMap" parameterType="long">
+		SELECT
+		<include refid="AccountSelectColumns" />
+		FROM user_account ua
+		JOIN bank_product bp ON bp.account_id = ua.account_id
+		WHERE ua.user_id = #{userId}
+		AND ua.account_id = 100
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+
+	<!-- ////////\\\\\\\ -->
+	
+  	 <!-- 유저 계좌 ID 조회 -->
+    <select id="findUserAccountId" resultType="long">
+        SELECT USER_ACCOUNT_ID
+        FROM USER_ACCOUNT
+        WHERE USER_ID = #{userId}
+          AND ACCOUNT_ID = #{accountId}
+    </select>
+    <!-- 잔액 충전 -->
+    <update id="updateBalancePlus">
+        UPDATE USER_ACCOUNT
+        SET BALANCE = BALANCE + #{amount}
+        WHERE USER_ACCOUNT_ID = #{userAccountId}
+    </update>
+    <!-- 잔액 차감 -->
+    <update id="updateBalanceMinus">
+        UPDATE USER_ACCOUNT
+        SET BALANCE = BALANCE - #{amount}
+        WHERE USER_ACCOUNT_ID = #{userAccountId}
+    </update>
+
+    <!-- 거래 로그 추가 -->
+<insert id="insertTransaction" parameterType="com.sboot.moabayo.vo.AccountTransactionVO">
+  INSERT INTO ACCOUNT_TRANSACTION (
+    ACCOUNT_TRANSACTION_ID,
+    USER_ACCOUNT_ID,
+    APPROVED_AMOUNT,
+    APPROVED_NUM,
+    ACCOUNT_TYPE,
+    CATEGORY,
+    DATE_TIME,
+    SHOP_NAME,
+    SHOP_NUMBER,
+    MEMO
+  ) VALUES (
+    acc_trns_seq.NEXTVAL,
+    #{userAccountId, jdbcType=NUMERIC},
+    #{approvedAmount, jdbcType=NUMERIC},
+    #{approvedNum,   jdbcType=VARCHAR},
+    #{accountType,   jdbcType=VARCHAR},
+    #{category,      jdbcType=VARCHAR},
+    SYSDATE,
+    #{shopName,      jdbcType=VARCHAR},
+    #{shopNumber,    jdbcType=VARCHAR},
+    #{memo,          jdbcType=VARCHAR}
+  )
+</insert>
+	<select id="findUserAccountByUsernameAccNum" resultType="Long">
+		SELECT ua.user_account_id
+		FROM users u
+		JOIN user_account ua
+		  ON ua.user_id = u.user_id
+		WHERE u.user_id = #{userId}
+		AND	 ua.account_number = #{accNum}
+	</select>
+
+</mapper>

@@ -1,0 +1,215 @@
+/* 
+오른쪽 섹션 - 닉네임 + 토큰 박스 + 메뉴
+.right-section {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start; 왼쪽 정렬
+	position: absolute;
+	right: 20px; 오른쪽 여백 조정 (기존 80px → 20px)
+	top: 50%;
+	transform: translateY(-50%);
+	gap: 12px;
+	z-index: 200; 닉네임과 UI 요소 항상 위로
+}
+
+닉네임은 항상 메뉴보다 위에 보이도록
+.user-nickname {
+	position: relative;
+	z-index: 201;
+}
+
+남은 시간 박스
+.token-box {
+	font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+	padding: 6px 10px;
+	border: 1px solid #eee;
+	border-radius: 10px;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background-color: #cce5ff;
+	margin-left: 10px;
+}
+
+#remainTime {
+	font-weight: 700;
+}
+
+햄버거 메뉴 컨테이너
+.menu {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	width: 60px;
+	height: 60px;
+	margin-left: 8px; 닉네임과 간격
+	z-index: 100; 닉네임보다 아래
+}
+
+버튼 기본
+.menu .btn {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background: transparent; 배경 제거
+	opacity: 1; 아이콘 보이게 설정
+	z-index: 0; 아이콘이 보이도록 z-index 조정
+	cursor: pointer;
+	transition: opacity 1s, z-index 0.3s, transform 1s;
+	padding: 0;
+	border-radius: 0; 원형 테두리 제거
+	border: none; 테두리 제거
+}
+
+버튼 아이콘 스타일
+.menu .btn-icon {
+	opacity: 1; 아이콘 항상 보이게
+	transition: transform 0.5s ease, opacity 0.5s ease;
+	background-color: transparent; 배경 제거
+	border-radius: 0; 원형 모양 제거
+	width: 50px;
+	height: 60px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: #333; 아이콘 색상
+	margin: 0;
+}
+
+메뉴 항목 기본적으로 숨기기
+.menu .menu-items {
+	display: none; 메뉴 항목 숨기기
+	position: absolute; 메뉴가 햄버거 아이콘 위에 나타나도록
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #fff; 배경색
+	border-radius: 5px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	z-index: 50; 메뉴가 아이콘 위에 오도록
+	width: 200px; 메뉴의 너비
+	padding: 10px;
+}
+
+메뉴가 활성화되면 표시
+.menu.active .menu-items {
+	display: block; 메뉴 항목 보이기
+}
+
+트리거 버튼
+.menu .btn.trigger {
+	opacity: 1;
+	z-index: 100;
+	cursor: pointer;
+	transition: transform 0.3s;
+	background-color: transparent;
+}
+
+.menu .btn.trigger:hover {
+	transform: scale(1.1);
+}
+
+.menu .btn.trigger .line {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 60%;
+	height: 4px;
+	background: #000;
+	border-radius: 6px;
+	transform: translate(-50%, -50%);
+	transition: background-color 0.3s, height 0.3s, top 0.3s;
+}
+
+.menu .btn.trigger .line:before, .menu .btn.trigger .line:after {
+	content: "";
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	background: #000;
+	border-radius: 6px;
+	transition: background-color 0.3s, transform 0.3s;
+}
+
+.menu .btn.trigger .line:before {
+	top: -10px;
+	transform-origin: center;
+}
+
+.menu .btn.trigger .line:after {
+	top: 10px;
+	transform-origin: center;
+}
+
+X 모양 변형
+.menu.active .trigger .line {
+	height: 0;
+	top: 50%;
+}
+
+.menu.active .trigger .line:before {
+	transform: rotate(45deg);
+	top: 0;
+}
+
+.menu.active .trigger .line:after {
+	transform: rotate(-45deg);
+	top: 0;
+}
+
+아이콘 컨테이너
+.menu .icons {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	overflow: visible;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+회전 축
+.menu .rotater {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	transform-origin: 50% 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.menu .rotater i {
+	font-size: 20px;
+	align-items: center;
+}
+
+메뉴 열렸을 때 아이콘 보이기
+.menu.active .btn-icon {
+	opacity: 1;
+	z-index: 50;
+}
+
+각 아이콘 위치
+.menu .rotater:nth-child(1) {
+	transform: rotate(-45deg);
+}
+
+.menu .rotater:nth-child(2) {
+	transform: rotate(45deg);
+}
+
+✅ 아이콘 이동 범위 줄여서 닉네임 침범 방지
+.menu.active .rotater:nth-child(1) .btn-icon {
+	transform: translate(calc(-50% - 20px), calc(80% - 10px)) rotate(45deg);
+}
+
+.menu.active .rotater:nth-child(2) .btn-icon {
+	transform: translate(calc(-50% - 5px), calc(80% + 5px)) rotate(-45deg);
+} */

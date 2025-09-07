@@ -1,0 +1,296 @@
+@charset "UTF-8";
+
+:root {
+	--bg: #ffffff;
+	--ink: #111827;
+	--sub: #6b7280;
+	--line: #e5e7eb;
+	--brand: #7c3aed;
+	--brand-ink: #f5f3ff;
+	--card: #ffffff;
+	--muted: #f8fafc;
+	--shadow: 0 10px 20px rgba(17, 24, 39, .08);
+	--accent: #f59e0b;
+}
+
+[data-theme="dark"] {
+	--bg: #0b0f14;
+	--ink: #e5e7eb;
+	--sub: #a0a9b6;
+	--line: #1f2937;
+	--brand: #a78bfa;
+	--brand-ink: #0b0f14;
+	--card: #0f151c;
+	--muted: #0b1016;
+	--shadow: 0 10px 24px rgba(0, 0, 0, .45);
+	--accent: #fbbf24;
+}
+
+/* ===============================
+   Header (layout & look only)
+   =============================== */
+.site-header {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	backdrop-filter: saturate(180%) blur(12px);
+	background: color-mix(in oklab, var(--bg, #fff) 86%, transparent);
+	border-bottom: 1px solid var(--line, #e5e7eb);
+	color: var(--ink, #111827);
+}
+
+.header-inner {
+	position: relative; /* 절대배치 기준 & 클릭막힘 방지 */
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 14px 20px;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+/* 프로필 아이콘 */
+.profile-icon {
+	font-size: 38px;
+	color: var(--brand);
+	cursor: pointer;
+	transition: transform 0.2s ease;
+}
+
+.profile-icon:hover {
+	transform: scale(1.15);
+	color: var(--accent);
+}
+
+/* 드롭다운 메뉴 */
+.dropdown-menu {
+	position: absolute;
+	right: 6px;
+	top: 65px;
+	background-color: var(--card);
+	border: 2px solid var(--brand);
+	border-radius: 16px;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+	display: none;
+	min-width: 160px;
+	z-index: 1000;
+	padding: 12px 10px;
+	transition: all 0.2s ease;
+}
+
+/* 고양이 발 꼬리 만들기 */
+.dropdown-menu::before {
+	content: "";
+	position: absolute;
+	top: -10px;
+	right: 18px;
+	width: 20px;
+	height: 20px;
+	background: var(--card);
+	border: 2px solid var(--brand);
+	border-bottom: none;
+	border-right: none;
+	transform: rotate(45deg);
+	border-radius: 4px 0 0 0;
+	box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* 링크 아이템 */
+.dropdown-menu a {
+	display: block;
+	padding: 8px 14px;
+	color: var(--ink);
+	font-weight: 600;
+	border-radius: 8px;
+	text-decoration: none;
+	transition: background-color 0.2s;
+}
+
+.dropdown-menu a:hover {
+	background-color: var(--muted);
+	color: var(--brand);
+}
+
+.dropdown-menu a i {
+	width: 18px;
+	text-align: center;
+	color: var(--brand);
+}
+
+#userNameDisplay {
+	text-align: center;
+	padding: 10px 15px;
+	font-weight: bold;
+	border-bottom: 1px solid #ddd;
+}
+
+/* Brand */
+.brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-weight: 800;
+	letter-spacing: .3px
+}
+
+.brand-badge {
+	width: 36px;
+	height: 36px;
+	border-radius: 12px;
+	background: conic-gradient(from 180deg at 50% 50%, var(--brand, #7c3aed),
+		color-mix(in oklab, var(--brand, #7c3aed) 65%, #00d4ff));
+	display: grid;
+	place-items: center;
+	color: var(--brand-ink, #f5f3ff);
+	box-shadow: var(--shadow, 0 10px 20px rgba(17, 24, 39, .08));
+}
+
+.brand-txt {
+	display: flex;
+	flex-direction: column;
+	line-height: 1
+}
+
+.brand-txt b {
+	font-size: 18px
+}
+
+.brand-txt span {
+	font-size: 11px;
+	color: var(--sub, #6b7280)
+}
+
+/* Nav */
+.nav {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	position: relative;
+	z-index: 210;
+}
+
+.nav a {
+	padding: 8px 12px;
+	color: var(--sub, #6b7280);
+	border-radius: 10px;
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.nav a:hover {
+	background: var(--muted, #f8fafc);
+	color: var(--ink, #111827)
+}
+
+/* Theme toggle 자리만(비주얼은 toggle.css에서) */
+.toggle {
+	margin-left: 8px;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	position: relative;
+	z-index: 220;
+}
+
+/* (선택) 남은시간 박스 */
+.token-box {
+	font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR",
+		sans-serif;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-left: 10px;
+	padding: 6px 10px;
+	border: 1px solid var(--line, #e5e7eb);
+	border-radius: 10px;
+	background: color-mix(in oklab, var(--card, #fff) 86%,
+		var(--brand, #7c3aed));
+	color: var(--ink, #111827);
+	box-shadow: var(--shadow, 0 10px 20px rgba(17, 24, 39, .08));
+}
+
+#remainTime {
+	font-weight: 700
+}
+
+/* ===============================
+   Footer
+   =============================== */
+.site-footer {
+	margin-top: auto;
+	border-top: 1px solid var(--line, #e5e7eb);
+	background: var(--muted, #f8fafc);
+	color: var(--sub, #6b7280);
+}
+
+.site-footer .footer-inner {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 10px;
+}
+
+.site-footer .footer-inner h4 {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 800;
+	color: var(--brand, #7c3aed);
+}
+
+.site-footer .footer-inner .desc {
+	color: var(--sub, #6b7280);
+	margin-bottom: 8px
+}
+
+.site-footer .footer-inner p {
+	margin: 3px 0
+}
+
+/* Footer links */
+.footer-links {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	white-space: nowrap
+}
+
+.footer-links a {
+	color: var(--brand, #7c3aed);
+	text-decoration: none;
+	margin: 6px;
+	transition: color .2s ease;
+}
+
+.footer-links a:hover {
+	color: var(--accent, #f59e0b)
+}
+
+.footer-links span {
+	color: var(--line, #e5e7eb)
+}
+
+.cat-icon {
+	width: 28px;
+	height: 28px;
+	margin-bottom: 8px
+}
+
+/* ===============================
+   Responsive
+   =============================== */
+@media ( max-width :1024px) {
+	.site-footer .footer-inner {
+		padding: 32px 20px
+	}
+}
+
+@media ( max-width :640px) {
+	.site-footer .footer-inner {
+		padding: 28px 16px
+	}
+}

@@ -1,0 +1,163 @@
+<!-- resources/mapper/AccountMapper.xml -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.dao.AccountMapper">
+
+  <!-- 계좌 + 최근내역 resultMap -->
+  <resultMap id="AccountWithHistoryMap" type="com.sboot.moabayo.vo.AccountVO">
+    <id     column="ID"          property="id"/>
+    <result column="ICON"        property="icon"/>
+    <result column="NAME"        property="name"/>
+    <result column="ACCOUNT_NO"  property="number"/>
+    <result column="PRODUCT"     property="product"/>
+    <result column="TYPE"        property="type"/>
+    <result column="BALANCE"     property="balance"/>
+    <result column="OPENED_AT"   property="openedAt"/>
+    <collection property="history" ofType="com.sboot.moabayo.vo.TxVO"
+                column="ID" select="selectHistoryByUserAccountId"/>
+  </resultMap>
+
+  <!-- 공통 SELECT 컬럼 -->
+  <sql id="AccountSelectColumns">
+    ua.user_account_id AS ID,
+
+    /* 아이콘은 type 기반 매핑 */
+    CASE UPPER(bp.type)
+      WHEN 'DEPOSIT' THEN '💳'
+      WHEN 'SAVINGS' THEN '🏦'
+      WHEN 'LOAN'    THEN '📄'
+      ELSE '💰'
+    END AS ICON,
+
+    NVL(ua.account_name, '내 통장') AS NAME,
+    ua.account_number AS ACCOUNT_NO,
+    bp.name AS PRODUCT,
+    bp.type AS TYPE,
+
+    /* 잔액: 입금계열 +, 출금계열 - */
+    NVL(ua.balance, 0) AS BALANCE,
+
+    /* 개설일: 첫 거래일자 (없으면 NULL) */
+    ua.create_date AS OPENED_AT
+  </sql>
+
+  <!-- 사용자 계좌 (내역 포함) -->
+  <select id="findAccountsWithHistoryByUserId" resultMap="AccountWithHistoryMap" parameterType="long">
+    SELECT
+      <include refid="AccountSelectColumns"/>
+    FROM user_account ua
+    JOIN bank_product bp ON bp.account_id = ua.account_id
+    WHERE ua.user_id = #{userId}
+    ORDER BY ua.user_account_id DESC
+  </select>
+
+  <!-- 사용자 계좌 (내역 제외) -->
+  <resultMap id="AccountOnlyMap" type="com.sboot.moabayo.vo.AccountVO">
+    <id     column="ID"          property="id"/>
+    <result column="ICON"        property="icon"/>
+    <result column="NAME"        property="name"/>
+    <result column="ACCOUNT_NO"  property="number"/>
+    <result column="PRODUCT"     property="product"/>
+    <result column="TYPE"        property="type"/>
+    <result column="BALANCE"     property="balance"/>
+    <result column="OPENED_AT"   property="openedAt"/>
+  </resultMap>
+
+  <select id="findAccountsByUserId" resultMap="AccountOnlyMap" parameterType="long">
+    SELECT
+      <include refid="AccountSelectColumns"/>
+    FROM user_account ua
+    JOIN bank_product bp ON bp.account_id = ua.account_id
+    WHERE ua.user_id = #{userId}
+    ORDER BY ua.user_account_id DESC
+  </select>
+
+  <!-- 최근 거래내역 N개: ts/type/amount/bal(러닝밸런스) -->
+  <select id="selectHistoryByUserAccountId" parameterType="long" resultType="com.sboot.moabayo.vo.TxVO">
+    SELECT
+      TO_CHAR(t.date_time, 'YYYY-MM-DD HH24:MI') AS ts,
+
+      /* 화면에 보일 라벨: 필요시 한글 CASE 로 치환 */
+      t.account_type AS type,
+
+      /* 부호 포함 금액(원 단위) */
+      TRUNC(
+        CASE
+          WHEN UPPER(t.account_type) IN ('DEPOSIT','INCOME','TRANSFER_IN','입금','이체수신')
+            THEN t.approved_amount
+          ELSE -t.approved_amount
+        END
+      ) AS amount,
+
+      /* 러닝 밸런스(원 단위) */
+      TRUNC(SUM(
+        CASE
+          WHEN UPPER(t.account_type) IN ('DEPOSIT','INCOME','TRANSFER_IN','입금','이체수신')
+            THEN t.approved_amount
+          ELSE -t.approved_amount
+        END
+      ) OVER (
+        PARTITION BY t.user_account_id
+        ORDER BY t.date_time
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+      )) AS bal
+
+    FROM account_transaction t
+    WHERE t.user_account_id = #{userAccountId}
+    ORDER BY t.date_time DESC
+    FETCH FIRST 10 ROWS ONLY
+  </select>
+<!-- 어카운트 넘버(유니크) 로 유저찾기 -->
+<select id="findUserByAccountNumber" resultType="com.sboot.moabayo.vo.UserVO">
+  SELECT 
+    u.user_id           AS userId,
+    TO_CHAR(u.create_date, 'YYYY-MM-DD') AS createDate,
+    u.account_num       AS accountNum,
+    u.address           AS address,
+    u.address_detail    AS addressDetail,
+    u.zip_code          AS zipCode,
+    u.email             AS email,
+    u.name              AS name,
+    u.login_id          AS loginId,
+    u.password          AS password,
+    u.phone             AS phone,
+    u.refresh_token     AS refreshToken,
+    u.is_admin          AS isAdmin
+  FROM users u
+  JOIN user_account ua
+    ON ua.user_id = u.user_id
+  WHERE ua.account_number = #{accNum, jdbcType=VARCHAR}
+</select>
+
+<!-- 사용자 계좌 목록(드롭다운) -->
+<select id="findSimpleAccountsByUserId" parameterType="long" resultType="map">
+  SELECT
+    ua.user_account_id AS user_account_id,
+    ua.account_name    AS account_name,
+    ua.account_number  AS account_number,
+    ua.balance         AS balance
+  FROM user_account ua
+  WHERE ua.user_id = #{userId}
+  ORDER BY ua.create_date DESC
+</select>
+
+<!-- 계좌번호 중복 체크 -->
+<select id="existsAccountNumber" parameterType="string" resultType="int">
+  SELECT COUNT(1) FROM user_account WHERE account_number = #{accountNumber}
+</select>
+
+<!-- 신규 계좌 INSERT (UserAccountVO를 쓰지 않고 map으로 안전하게) -->
+<insert id="insertUserAccount" parameterType="map">
+	<!-- Null 이 들어가는 이슈 때문에 -->
+  <selectKey keyProperty="user_account_id" resultType="long" order="BEFORE">
+    SELECT USER_ACCOUNT_ID_SEQ.NEXTVAL FROM dual
+  </selectKey>
+  INSERT INTO user_account (
+    user_account_id, user_id, account_id, account_number, account_name, create_date, balance
+  ) VALUES (
+    #{user_account_id}, #{user_id}, #{account_id}, #{account_number}, #{account_name}, SYSDATE, #{balance}
+  )
+</insert>
+
+</mapper>

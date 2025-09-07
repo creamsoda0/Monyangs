@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>N08-01 | 전체 카드 보기</title>
+
+<!-- 공통 테마/헤더푸터 (네 환경) -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css" />
+<script defer src="http://localhost:8810/js/theme.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+
+<!-- 공용 버튼 스타일 (있으면) -->
+<link rel="stylesheet" href="/ui-buttons.css" />
+
+<!-- 이 페이지 전용 -->
+<link rel="stylesheet" href="/css/card-catalog.css" />
+<script defer src="/js/card-catalog.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+	<div id="header"></div>
+
+	<main class="catalog">
+
+		<!-- Promo Banner -->
+		<section class="catalog-banner" id="catalogBanner" role="region" aria-label="맞춤 카드 추천">
+			<div class="cb-bg" aria-hidden="true"></div>
+
+			<div class="cb-content">
+				<div class="cb-left">
+					<span class="cb-chip">이번 달 추천</span>
+					<h2 class="cb-title">
+						소비 패턴에 딱 맞는<br>카드를 골라드렸어요
+					</h2>
+					<p class="cb-sub">
+						교통/편의점 결제가 많다면 <b>라이트냥 그린</b>으로 이번 달 <b>최대 +2% 캐시백</b>을 노려보세요.
+					</p>
+
+					<div class="cb-actions">
+						<a class="mbtn mbtn--primary is-pill" href="/usercard/recommend">맞춤 추천 보기</a>
+						<a class="mbtn mbtn--outline is-pill" href="#grid">모든 카드 보기</a>
+					</div>
+				</div>
+
+				<div class="cb-right">
+					<div class="cb-stat">
+						<span class="cb-label">적합도</span>
+						<!-- data-val(%)로 원형 게이지 채움 -->
+						<span class="cb-ring" data-val="84"><span>84%</span></span>
+					</div>
+					<ul class="cb-list">
+						<li>월 최대 <b>30,000P</b></li>
+						<li>연회비 <b>무료</b></li>
+						<li>전월실적 <b>30만+</b></li>
+					</ul>
+				</div>
+
+			</div>
+		</section>
+
+
+		<section class="head">
+			<h1>전체 카드 보기</h1>
+			<p class="sub">브랜드/혜택/카테고리로 빠르게 탐색하세요. 카드를 클릭하면 뒤집혀서 요약 혜택이 보여요.</p>
+			<div class="controls">
+				<div class="chips">
+					<button class="chip is-active" data-filter="all">전체</button>
+					<button class="chip" data-filter="외식">외식</button>
+					<button class="chip" data-filter="교통">교통</button>
+					<button class="chip" data-filter="편의점">편의점</button>
+					<button class="chip" data-filter="구독">구독</button>
+					<button class="chip" data-filter="해외">해외</button>
+				</div>
+				<div class="search">
+					<input id="q" type="search" placeholder="카드/혜택 검색" />
+				</div>
+			</div>
+		</section>
+
+		<section class="grid" aria-label="카드 목록">
+			<!-- 카드 1 : Glow -->
+			<article class="kcard fx-glow" data-tags="외식 구독" data-img="" style="--accent: #8b5cf6">
+				<div class="inner">
+					<div class="face front">
+						<div class="thumb" aria-hidden="true"></div>
+						<div class="meta">
+							<h3 class="name">야식냥 체크카드</h3>
+							<div class="tags">
+								<span>외식</span><span>배달앱</span><span>구독</span>
+							</div>
+						</div>
+						<span class="sheen" aria-hidden="true"></span>
+					</div>
+					<div class="face back">
+						<h4>핵심 혜택</h4>
+						<ul class="benefits">
+							<li>외식 7% 적립 (점심 +3%)</li>
+							<li>배달앱 10% 캐시백</li>
+							<li>모으냥즈 페이 5% 적립</li>
+						</ul>
+						<div class="actions">
+							<button class="mbtn mbtn--primary is-pill apply-btn">혜택 받기</button>
+							<button class="mbtn mbtn--outline is-pill flip-back">뒤로</button>
+						</div>
+					</div>
+				</div>
+			</article>
+
+			<!-- 카드 2 : Sheen -->
+			<article class="kcard fx-sheen" data-tags="교통 편의점" data-img="" style="--accent: #22d3ee">
+				<div class="inner">
+					<div class="face front">
+						<div class="thumb"></div>
+						<div class="meta">
+							<h3 class="name">커뮤냥 플래티넘</h3>
+							<div class="tags">
+								<span>교통</span><span>편의점</span>
+							</div>
+						</div>
+						<span class="sheen"></span>
+					</div>
+					<div class="face back">
+						<h4>핵심 혜택</h4>
+						<ul class="benefits">
+							<li>교통/편의점 10% 캐시백</li>
+							<li>OTT 구독 매월 3,000P</li>
+							<li>주말 카페 5% 적립</li>
+						</ul>
+						<div class="actions">
+							<button class="mbtn mbtn--primary is-pill apply-btn">혜택 받기</button>
+							<button class="mbtn mbtn--outline is-pill flip-back">뒤로</button>
+						</div>
+					</div>
+				</div>
+			</article>
+
+			<!-- 카드 3 : Gradient line -->
+			<article class="kcard fx-gradient" data-tags="해외 여행" data-img="" style="--accent: #f59e0b">
+				<div class="inner">
+					<div class="face front">
+						<div class="thumb"></div>
+						<div class="meta">
+							<h3 class="name">글로벌냥 카드</h3>
+							<div class="tags">
+								<span>해외</span><span>여행</span>
+							</div>
+						</div>
+					</div>
+					<div class="face back">
+						<h4>핵심 혜택</h4>
+						<ul class="benefits">
+							<li>해외 결제 3% 적립</li>
+							<li>공항 라운지 연 2회</li>
+							<li>여행 보험 포함</li>
+						</ul>
+						<div class="actions">
+							<button class="mbtn mbtn--primary is-pill apply-btn">혜택 받기</button>
+							<button class="mbtn mbtn--outline is-pill flip-back">뒤로</button>
+						</div>
+					</div>
+				</div>
+			</article>
+
+			<!-- 카드 4 : Neon -->
+			<article class="kcard fx-neon" data-tags="편의점 커피" data-img="" style="--accent: #10b981">
+				<div class="inner">
+					<div class="face front">
+						<div class="thumb"></div>
+						<div class="meta">
+							<h3 class="name">라이트냥 그린</h3>
+							<div class="tags">
+								<span>편의점</span><span>커피</span>
+							</div>
+						</div>
+					</div>
+					<div class="face back">
+						<div class="back-hero">
+							<div class="fit">
+								<!-- data-fit 값(%)로 채워짐 -->
+								<div class="fit-ring" aria-label="적합도">
+									<span>84%</span>
+								</div>
+								<em>적합도</em>
+							</div>
+							<div class="info">
+								<h3 class="b-name">야식냥 체크카드</h3>
+								<div class="kv">
+									<span class="kv-chip">월 최대 <b>30,000P</b></span> <span class="kv-chip">연회비 <b>무료</b></span> <span class="kv-chip">전월실적 <b>30만+</b></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="benefit-grid">
+							<div class="b-item">외식 7% 적립 (점심 +3%)</div>
+							<div class="b-item">배달앱 10% 캐시백</div>
+							<div class="b-item">모으냥즈 페이 5% 적립</div>
+							<div class="b-item">영화·카페 추가 우대</div>
+						</div>
+
+						<div class="actions">
+							<button class="mbtn mbtn--primary is-pill apply-btn">혜택 받기</button>
+							<button class="mbtn mbtn--outline is-pill flip-back">뒤로</button>
+						</div>
+					</div>
+
+				</div>
+			</article>
+
+			<!-- 카드 5 : Slice -->
+			<article class="kcard fx-slice" data-tags="구독 멤버십" data-img="" style="--accent: #ef4444">
+				<div class="inner">
+					<div class="face front">
+						<div class="thumb"></div>
+						<div class="meta">
+							<h3 class="name">서브냥 멤버십</h3>
+							<div class="tags">
+								<span>구독</span><span>멤버십</span>
+							</div>
+						</div>
+					</div>
+					<div class="face back">
+						<h4>핵심 혜택</h4>
+						<ul class="benefits">
+							<li>OTT 3종 합산 7% 적립</li>
+							<li>뮤직/이북 10% 캐시백</li>
+							<li>클라우드 5% 적립</li>
+						</ul>
+						<div class="actions">
+							<button class="mbtn mbtn--primary is-pill apply-btn">혜택 받기</button>
+							<button class="mbtn mbtn--outline is-pill flip-back">뒤로</button>
+						</div>
+					</div>
+				</div>
+			</article>
+
+			<!-- 카드 6 : Float -->
+			<article class="kcard fx-float" data-tags="주유 자동차" data-img="" style="--accent: #60a5fa">
+				<div class="inner">
+					<div class="face front">
+						<div class="thumb"></div>
+						<div class="meta">
+							<h3 class="name">드라이브냥</h3>
+							<div class="tags">
+								<span>주유</span><span>정비</span>
+							</div>
+						</div>
+					</div>
+					<div class="face back">
+						<h4>핵심 혜택</h4>
+						<ul class="benefits">
+							<li>주유소 120원/L 할인</li>
+							<li>세차/정비 10% 캐시백</li>
+							<li>하이패스 5% 적립</li>
+						</ul>
+						<div class="actions">
+							<button class="mbtn mbtn--primary is-pill apply-btn">혜택 받기</button>
+							<button class="mbtn mbtn--outline is-pill flip-back">뒤로</button>
+						</div>
+					</div>
+				</div>
+			</article>
+		</section>
+	</main>
+
+	<div id="footer"></div>
+</body>
+</html>

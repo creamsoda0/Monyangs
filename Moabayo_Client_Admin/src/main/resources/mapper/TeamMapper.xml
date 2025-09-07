@@ -1,0 +1,13 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.dao.TeamMapper">
+  <select id="listAdmins" resultType="map">
+    SELECT a.admin_id, u.user_id, u.name, u.login_id, a.role, u.email, u.create_date
+    FROM admin a JOIN users u ON u.user_id = a.user_id
+    ORDER BY a.admin_id DESC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+  <update id="updateAdminRole">
+    UPDATE admin SET role = #{role} WHERE admin_id = #{adminId}
+  </update>
+</mapper>

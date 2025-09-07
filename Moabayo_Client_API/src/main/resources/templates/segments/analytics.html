@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style> body{max-width:960px;margin:32px auto;font-family:sans-serif;} </style>
+</head>
+<body>
+  <h2 th:text="${title}">세그먼트 분석</h2>
+
+  <div style="margin-bottom:12px">
+    AGE:
+    <select id="ageSel">
+      <option>20s</option><option selected>30s</option><option>40s</option>
+      <option>50s</option><option>60s</option><option>70s+</option>
+    </select>
+    GENDER:
+    <label><input type="radio" name="g" value="F" checked> F</label>
+    <label><input type="radio" name="g" value="M"> M</label>
+    <button id="btn">적용</button>
+  </div>
+
+  <canvas id="bar1" height="320"></canvas>
+
+<script>
+const UPJONG_CODES = ["ss001","ss002","ss003","ss004","ss005","ss006","ss007","ss008"];
+const UPJONG_LABELS = ["요식/유흥","유통","스포츠/문화/레저","가정생활/서비스",
+                       "교육/학원","의료","자동차","전자상거래"];
+
+// JSON 필드명이 대문자/카멜이 섞여도 읽히게 안전 접근 헬퍼
+function pickFlex(obj, ...names) {
+  const norm = k => k.replace(/_/g, "").toLowerCase();
+  const map = {};
+  for (const k of Object.keys(obj)) map[norm(k)] = obj[k];
+  for (const n of names) {
+    const key = norm(n);
+    if (key in map) return map[key];
+  }
+  return undefined;
+}
+
+// "30대","70대이상" → "30s","70s+"
+function normalizeAge(txt){
+  if(!txt) return "etc";
+  txt = String(txt);
+  if (txt.includes("70")) return "70s+";
+  for (const k of ["60","50","40","30","20"]) if (txt.includes(k)) return k+"s";
+  return "etc";
+}
+
+// /csv/age → (ageBand,gender) 업종별 분포 계산
+async function buildAgeGenderSeries(ageBand, gender){
+  const res  = await fetch("/csv/age");
+  const rows = await res.json();
+
+  // 업종별 TRY 합계
+  const sums = Object.fromEntries(UPJONG_CODES.map(c => [c, 0]));
+  for (const r of rows){
+    const code   = pickFlex(r, "UPJONG_CD", "upjong_cd", "upjongCd");
+    const g      = (pickFlex(r, "GENDER", "gender") || "").toUpperCase();
+    const ageRaw = pickFlex(r, "AGE", "age");
+    const age    = normalizeAge(ageRaw);
+    const tryCnt = Number(pickFlex(r, "CARD_TRY", "card_try", "cardTry") || 0);
+    if (!UPJONG_CODES.includes(code)) continue;
+    if (g !== gender.toUpperCase() || age !== ageBand) continue;
+    sums[code] += tryCnt;
+  }
+
+  const total = Object.values(sums).reduce((a,b)=>a+b,0);
+  const ratios = UPJONG_CODES.map(c => total>0 ? sums[c]/total : 0);
+
+  return { labels: UPJONG_LABELS, data: ratios, title: `${ageBand}·${gender} 업종 분포` };
+}
+
+let chart; // 재사용
+function drawBar({labels, data, title}){
+  const ctx = document.getElementById("bar1").getContext("2d");
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: { labels, datasets: [{ label: title, data, borderWidth: 1 }] },
+    options: {
+      responsive: true,
+      scales: { y: { beginAtZero: true, ticks:{ callback:v => (v*100).toFixed(0)+"%" } } },
+      plugins:{ tooltip:{ callbacks:{ label: (ctx)=> (ctx.parsed.y*100).toFixed(1)+"%" } } }
+    }
+  });
+}
+
+// 초기 렌더
+buildAgeGenderSeries("30s","F").then(drawBar);
+
+// UI 이벤트
+document.getElementById("btn").addEventListener("click", async () => {
+  const age = document.getElementById("ageSel").value;
+  const gender = document.querySelector("input[name=g]:checked").value;
+  const dto = await buildAgeGenderSeries(age, gender);
+  drawBar(dto);
+});
+
+// 디버그: 응답 첫 줄 확인(필드명이 다를 때 콘솔에서 확인 가능)
+fetch("/csv/age").then(r=>r.json()).then(arr => console.log("sample row:", arr[0]));
+</script>
+</body></html>

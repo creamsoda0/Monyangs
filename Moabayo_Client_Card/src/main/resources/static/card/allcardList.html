@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>카드 상품 전체 조회 | 모으냥즈</title>
+
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link rel="stylesheet" href="http://localhost:8810/css/header.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/footer.css" />
+<script defer src="http://localhost:8810/js/common.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+:root {
+	--bg: #f8f3da; /* 헤더/푸터 노랑과 어울리는 아이보리 */
+	--panel: #ffffff;
+	--text: #222;
+	--muted: #6b7280;
+	--brand: #28c2a0; /* 포인트 */
+	--chip: #eef2f6;
+	--border: #e5e7eb;
+}
+
+* {
+	box-sizing: border-box
+}
+
+html, body {
+	height: 100%
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background: var(--bg);
+	color: var(--text);
+	font-family: -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif
+}
+
+.content {
+	flex: 1
+}
+
+/* Hero */
+.hero {
+	max-width: 1200px;
+	margin: 28px auto 0;
+	padding: 24px;
+	border-radius: 16px;
+	background: linear-gradient(135deg, #eaf7ff, #eef9f2);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, .06)
+}
+
+.hero h1 {
+	font-size: 22px;
+	margin: 0 0 8px;
+	font-weight: 800
+}
+
+.hero p {
+	margin: 0 0 14px;
+	color: var(--muted)
+}
+
+.searchbar {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap
+}
+
+.searchbar input {
+	flex: 1;
+	min-width: 220px;
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	padding: .8rem 1rem;
+	outline: none
+}
+
+.searchbar select {
+	width: 180px;
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	padding: .6rem .8rem;
+	background: #fff
+}
+
+/* Chips */
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 12px
+}
+
+.chip {
+	background: var(--chip);
+	border: 1px solid var(--border);
+	color: #333;
+	padding: .45rem .8rem;
+	border-radius: 999px;
+	cursor: pointer;
+	user-select: none;
+	font-weight: 600;
+	font-size: 14px;
+	transition: background .15s, border-color .15s, transform .05s;
+}
+
+.chip:hover {
+	transform: translateY(-1px)
+}
+
+.chip.active {
+	background: var(--brand);
+	color: #fff;
+	border-color: transparent
+}
+
+/* Grid */
+.wrap {
+	max-width: 1200px;
+	margin: 18px auto 40px;
+	padding: 0 2px
+}
+
+.toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 14px 2px;
+	color: var(--muted)
+}
+
+.grid {
+	display: grid;
+	gap: 16px;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.card-item {
+	background: #fff;
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	overflow: hidden;
+	cursor: pointer;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, .05);
+	transition: transform .15s, box-shadow .15s, border-color .15s;
+}
+
+.card-item:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 14px 24px rgba(0, 0, 0, .10);
+	border-color: #dfe3ea
+}
+
+.thumb {
+	width: 100%;
+	aspect-ratio: 4/2.6;
+	background: #f5f7fa center/cover no-repeat;
+}
+
+.meta {
+	padding: .9rem 1rem
+}
+
+.name {
+	font-weight: 800;
+	font-size: 16px;
+	line-height: 1.3;
+	margin-bottom: .35rem
+}
+
+.badges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px
+}
+
+.badge {
+	background: #f1f5f9;
+	color: #0f172a;
+	border-radius: 999px;
+	padding: .25rem .55rem;
+	font-size: 12px;
+	font-weight: 700
+}
+
+.issuer {
+	margin-top: .5rem;
+	color: #64748b;
+	font-size: 12px
+}
+
+/* Footer fix */
+#footer {
+	margin-top: 0 !important
+}
+</style>
+</head>
+<body>
+	<div id="header"></div>
+
+	<div class="content">
+		<section class="hero">
+			<h1>카드 비교를 새롭게, 카드 발견을 즐겁게</h1>
+			<p>
+				원하는 혜택으로 골라보세요. (이미지는
+				<code>/cardimg</code>
+				사용)
+			</p>
+			<div class="searchbar">
+				<input id="q" type="text" placeholder="카드명 · 혜택 검색 (예: 커피, 영화, 주유)" /> <select id="sort">
+					<option value="popular">정렬: 인기순</option>
+					<option value="annual">연회비 낮은순</option>
+					<option value="name">이름순</option>
+				</select>
+			</div>
+			<div class="chips" id="chips">
+				<div class="chip" data-tag="쇼핑">쇼핑</div>
+				<div class="chip" data-tag="식비">식비</div>
+				<div class="chip" data-tag="교통">교통</div>
+				<div class="chip" data-tag="여행">여행</div>
+				<div class="chip" data-tag="영화">영화</div>
+				<div class="chip" data-tag="카페">카페</div>
+				<div class="chip" data-tag="주유">주유</div>
+				<div class="chip" data-tag="구독">구독</div>
+			</div>
+		</section>
+
+		<div class="wrap">
+			<div class="toolbar">
+				<div>
+					<strong id="count">0</strong>개 카드
+				</div>
+				<div style="font-size: 12px; color: #94a3b8;">Tip: 칩 여러 개를 눌러 교집합 필터링 가능</div>
+			</div>
+
+			<div id="grid" class="grid"></div>
+		</div>
+	</div>
+
+	<div id="footer"></div>
+
+	<script>
+  // 데이터 (이미지는 /cardimg/ 이하 네 파일 사용)
+  const cards = [
+    {id:'sc1', name:'스페이스캣 클래식', img:'http://localhost:8810/cardimg/spacecat-card.png', issuer:'Moenyangs', annual:0, tags:['쇼핑','카페','구독'], perks:['온라인 5%','카페 10%','OTT 2천원 할인'], popular:95},
+    {id:'sc2', name:'스페이스캣 플러스',  img:'http://localhost:8810/cardimg/spacecat-card.png', issuer:'Moenyangs', annual:10000, tags:['여행','영화'], perks:['해외적립 2%','영화 3천원 할인'], popular:83},
+
+    {id:'sm1', name:'서머캣 카드',       img:'http://localhost:8810/cardimg/summercat.png', issuer:'Moenyangs', annual:5000, tags:['식비','카페','쇼핑'], perks:['편의점 5%','카페 10%'], popular:88},
+    {id:'sm2', name:'서머캣 라이트',     img:'http://localhost:8810/cardimg/summercat.png', issuer:'Moenyangs', annual:0, tags:['교통','식비'], perks:['대중교통 10%','배달 5%'], popular:70},
+
+    {id:'hl1', name:'할로윈캣',          img:'http://localhost:8810/cardimg/holloweencat.png', issuer:'Moenyangs', annual:7000, tags:['영화','구독'], perks:['영화 4천원','OTT 2천원'], popular:79},
+    {id:'hl2', name:'할로윈캣 딜라이트', img:'http://localhost:8810/cardimg/holloweencat.png', issuer:'Moenyangs', annual:12000, tags:['여행','주유'], perks:['해외수수료 50%','주유 100원/L'], popular:68},
+
+    {id:'gr1', name:'그린캣 에코',       img:'http://localhost:8810/cardimg/card-green.png', issuer:'Moenyangs', annual:3000, tags:['교통','여행'], perks:['항공마일 적립','지하철 10%'], popular:90},
+    {id:'gr2', name:'그린캣 스탠다드',   img:'http://localhost:8810/cardimg/card-green.png', issuer:'Moenyangs', annual:0, tags:['주유','쇼핑'], perks:['주유 80원/L','오프라인 2%'], popular:72}
+  ];
+
+  const state = { q:'', sort:'popular', tags:new Set() };
+  const $grid = document.getElementById('grid');
+  const $count = document.getElementById('count');
+
+  function render(){
+    let list = cards
+      .filter(c => {
+        // 검색
+        const hay = (c.name + ' ' + c.perks.join(' ') + ' ' + c.tags.join(' ')).toLowerCase();
+        if(state.q && !hay.includes(state.q)) return false;
+        // 칩(교집합)
+        for(const t of state.tags) if(!c.tags.includes(t)) return false;
+        return true;
+      })
+      .sort((a,b) => {
+        if(state.sort==='annual') return a.annual - b.annual;
+        if(state.sort==='name') return a.name.localeCompare(b.name,'ko');
+        return b.popular - a.popular; // popular
+      });
+
+    $count.textContent = list.length;
+
+    $grid.innerHTML = list.map(c => `
+      <div class="card-item" data-id="${c.id}" onclick="viewDetail('${c.id}')">
+        <div class="thumb" style="background-image:url('${c.img}')"></div>
+        <div class="meta">
+          <div class="name">${c.name}</div>
+          <div class="badges">
+            ${c.tags.map(t=>`<span class="badge">#${t}</span>`).join('')}
+            ${c.annual ? `<span class="badge">연회비 ${c.annual.toLocaleString()}원</span>` : `<span class="badge">연회비 없음</span>`}
+          </div>
+          <div class="issuer">${c.perks.join(' · ')}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 이벤트
+  document.getElementById('q').addEventListener('input', e => { state.q = e.target.value.trim().toLowerCase(); render(); });
+  document.getElementById('sort').addEventListener('change', e => { state.sort = e.target.value; render(); });
+
+  document.getElementById('chips').addEventListener('click', e => {
+    const chip = e.target.closest('.chip'); if(!chip) return;
+    const tag = chip.dataset.tag;
+    chip.classList.toggle('active');
+    chip.classList.contains('active') ? state.tags.add(tag) : state.tags.delete(tag);
+    render();
+  });
+
+  // 상세 이동 (원하면 실제 경로로 바꿔줘)
+  function viewDetail(id){
+    // TODO: 상세 페이지 라우팅을 연결하세요.
+    // 예: location.href = `/card/detail.html?id=${id}`;
+    console.log('view card:', id);
+  }
+
+  // 초기 렌더
+  render();
+</script>
+</body>
+</html>

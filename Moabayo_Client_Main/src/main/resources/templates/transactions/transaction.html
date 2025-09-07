@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>거래 내역</title>
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link rel="stylesheet" href="http://localhost:8810/css/header.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/transaction.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/footer.css" />
+<script defer src="http://localhost:8810/js/common.js"></script>
+</head>
+<body>
+
+	<!-- ✅ Header -->
+	<div id="header"></div>
+
+	<div class="account-bar">
+		<div class="account-info">계좌번호: 110-123-456789</div>
+		<div class="balance">잔액: 1,580,000원</div>
+	</div>
+
+	<!-- 탭 메뉴 -->
+	<div class="tabs">
+		<div class="tab active" onclick="filterTransactions('전체')">전체</div>
+		<div class="tab" onclick="filterTransactions('입금')">입금</div>
+		<div class="tab" onclick="filterTransactions('출금')">출금</div>
+		<div class="tab" onclick="filterTransactions('페이머니')">페이머니</div>
+	</div>
+
+	<!-- 거래 내역 리스트 -->
+	<div class="transaction-list" id="transactionList">
+
+		<div class="date-label">2025-07-30</div>
+
+		<div class="transaction-item" onclick="openDetailPopup('스타벅스', '출금', '-4,500원', '1,575,500원', '카페', '체크카드', '2025-07-30 14:20', '스타벅스 안양점')">
+			<div class="transaction-left">
+				<div class="category">카페</div>
+				<div class="type">출금</div>
+			</div>
+			<div class="transaction-right">
+				<div class="amount">-4,500원</div>
+				<div class="balance-after">잔액: 1,575,500원</div>
+			</div>
+		</div>
+
+		<div class="transaction-item" onclick="openDetailPopup('월급', '입금', '+2,000,000원', '3,575,500원', '급여', '이체', '2025-07-30 09:00', '회사(㈜예시)')">
+			<div class="transaction-left">
+				<div class="category">급여</div>
+				<div class="type">입금</div>
+			</div>
+			<div class="transaction-right">
+				<div class="amount">+2,000,000원</div>
+				<div class="balance-after">잔액: 3,575,500원</div>
+			</div>
+		</div>
+	</div>
+	<!-- ✅ Footer -->
+	<div id="footer"></div>
+	<script>
+    function openDetailPopup(title, type, amount, balance, category, method, datetime, location) {
+      const url = `/transactionDetail.html?title=${encodeURIComponent(title)}&type=${type}&amount=${amount}&balance=${balance}&category=${category}&method=${method}&datetime=${datetime}&location=${encodeURIComponent(location)}`;
+      window.open(url, '상세거래내역', 'width=400,height=600,resizable=no');
+    }
+
+    function filterTransactions(type) {
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // 실제 필터링 로직은 여기에 구현하세요.
+      alert(`'${type}' 거래만 보기 기능은 아직 구현되지 않았습니다.`);
+    }
+  </script>
+
+</body>
+</html>

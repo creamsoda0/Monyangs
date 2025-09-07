@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>모으냥즈 · 카드 발급</title>
+
+<!-- headr footer가 달리는 모든 페이지에 갖다 붙일것 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<!-- 이것도 같이 붙여야함 toggle switch 만들기 -->
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+<script defer src="http://localhost:8810/js/theme.js"></script>
+
+<link rel="stylesheet" href="/css/card-register.css" />
+<meta name="theme-color" content="#0b0f14" />
+</head>
+<body>
+	<div id="header"></div>
+
+	<main class="page">
+		<!-- Stepper -->
+		<nav class="stepper" aria-label="발급 단계">
+			<div class="step is-active" data-step="1">
+				<span>1</span>카드 선택
+			</div>
+			<div class="step" data-step="2">
+				<span>2</span>계좌 연동
+			</div>
+			<div class="step" data-step="3">
+				<span>3</span>확인 · 완료
+			</div>
+		</nav>
+
+		<section class="grid">
+			<!-- Left: Card Preview -->
+			<aside class="preview">
+				<div class="card-stage" id="cardStage">
+					<img id="cardImg" src="/cardimg/spacecat-card.png" alt="카드 미리보기" loading="eager" />
+					<div class="gloss"></div>
+				</div>
+
+				<div class="meta">
+					<div class="brand">Moa Card</div>
+					<h1 id="cardName">Moa SpaceCat</h1>
+					<p class="desc">일상 혜택을 똑똑하게 모으는 카드</p>
+					<ul class="chips" role="list">
+						<li>#통신 7%</li>
+						<li>#커피 30%</li>
+						<li>#대중교통 10%</li>
+					</ul>
+					<dl class="info">
+						<div>
+							<dt>브랜드</dt>
+							<dd>VISA / MASTER</dd>
+						</div>
+						<div>
+							<dt>연회비</dt>
+							<dd>국내 15,000 / 해외 20,000</dd>
+						</div>
+					</dl>
+				</div>
+			</aside>
+
+			<!-- Right: Forms -->
+			<section class="forms">
+				<!-- STEP 1: 카드 선택 -->
+				<form id="step1" class="panel is-active" autocomplete="off" novalidate>
+					<h2>카드 선택</h2>
+					<label class="field"> <span>카드 디자인</span> <select id="designSelect">
+							<option value="/cardimg/spacecat-card.png" selected>Space Cat</option>
+							<option value="/cardimg/card-green.png">Mint Green</option>
+							<option value="/cardimg/summercat.png">Summer Cat</option>
+					</select>
+					</label> <label class="field"> <span>국제 브랜드</span>
+						<div class="inline">
+							<label><input type="radio" name="brand" value="VISA" checked> VISA</label> <label><input type="radio" name="brand" value="MASTER"> MASTER</label>
+						</div>
+					</label>
+
+					<div class="actions">
+						<button type="button" class="btn primary" data-next>다음 단계</button>
+					</div>
+				</form>
+
+				<!-- STEP 2: 계좌 연동 -->
+				<form id="step2" class="panel" autocomplete="off" novalidate>
+					<h2>계좌 연동</h2>
+
+					<label class="field"> <span>은행 선택</span>
+						<div class="banks" role="listbox" aria-label="은행 선택" id="bankList">
+							<button type="button" class="bank is-selected" data-bank="우리">우리</button>
+							<button type="button" class="bank" data-bank="국민">국민</button>
+							<button type="button" class="bank" data-bank="신한">신한</button>
+							<button type="button" class="bank" data-bank="하나">하나</button>
+						</div>
+					</label> <label class="field"> <span>계좌 번호</span> <input id="account" placeholder="예) 1234-56-789012" inputmode="numeric">
+					</label> <label class="field"> <span>본인 인증 (휴대폰)</span>
+						<div class="inline">
+							<input id="phone" placeholder="010-1234-5678" inputmode="tel">
+							<button type="button" class="btn" id="sendOtp">인증번호 요청</button>
+						</div>
+					</label> <label class="field"> <span>인증번호</span> <input id="otp" placeholder="6자리" maxlength="6" inputmode="numeric"> <small id="otpMsg" class="msg"></small>
+					</label>
+
+					<div class="actions">
+						<button type="button" class="btn" data-prev>이전</button>
+						<button type="button" class="btn primary" id="linkBtn" disabled>계좌 연동</button>
+					</div>
+				</form>
+
+				<!-- STEP 3: 확인/완료 -->
+				<form id="step3" class="panel" autocomplete="off" novalidate>
+					<h2>확인 · 완료</h2>
+					<div class="summary">
+						<p>
+							<strong>선택 카드:</strong> <span id="sumCard">Moa SpaceCat</span>
+						</p>
+						<p>
+							<strong>국제 브랜드:</strong> <span id="sumBrand">VISA</span>
+						</p>
+						<p>
+							<strong>연동 계좌:</strong> <span id="sumAccount">-</span>
+						</p>
+					</div>
+
+					<div class="actions">
+						<button type="button" class="btn" data-prev>이전</button>
+						<button type="button" class="btn primary" id="issueBtn">카드 발급하기</button>
+					</div>
+
+					<div class="done" id="doneBox" hidden>
+						<div class="check">✔</div>
+						<h3>발급 완료!</h3>
+						<p>내 카드함으로 이동하여 즉시 사용 설정을 진행할 수 있어요.</p>
+						<div class="actions">
+							<a class="btn" href="/usercard/mycard">내 카드 보러가기</a>
+						</div>
+					</div>
+				</form>
+			</section>
+		</section>
+	</main>
+
+	<div id="footer"></div>
+	<script src="/js/card-register.js"></script>
+</body>
+</html>

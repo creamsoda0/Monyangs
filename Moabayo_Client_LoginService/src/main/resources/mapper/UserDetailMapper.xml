@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sboot.moabayo.dao.UserDetailMapper">
+	<select id="findUserDetailByLoginId" 
+			resultType="com.sboot.moabayo.vo.UserDetailVO"
+			parameterType="string"
+			>
+        SELECT 
+            login_id 	AS loginId,
+            gender 	 	AS gender,
+            birth_date 	AS birthDate
+        FROM users
+        WHERE login_id = #{loginId}
+	</select>
+</mapper>

@@ -1,0 +1,171 @@
+/* 전역: 가장자리/테두리 */
+html,body{margin:0;background:var(--bg);color:var(--ink);}
+:root{
+  --bg:#ffffff; --ink:#111827; --sub:#6b7280; --line:#e5e7eb;
+  --card:#ffffff; --muted:#f8fafc; --shadow:0 10px 20px rgba(15,23,42,.08);
+  --brand:#7c3aed; --brand-ink:#f5f3ff; --accent:#f59e0b;
+}
+[data-theme="dark"]{
+  --bg:#0b0f14; --ink:#e5e7eb; --sub:#9aa5b1; --line:#1f2937;
+  --card:#0f151c; --muted:#0b1016; --shadow:0 10px 24px rgba(0,0,0,.45);
+  --brand:#a78bfa; --brand-ink:#0b0f14; --accent:#fbbf24;
+}
+
+/* 그리드는 기존 card-grid.css 와 동일 스펙을 가정 */
+.feature-grid{max-width:1160px;margin:14px auto 24px;padding:0 24px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media (max-width:1100px){.feature-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:720px){.feature-grid{grid-template-columns:1fr}}
+
+.app-card{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);
+  border-radius:20px;box-shadow:var(--shadow);padding:18px;min-height:200px;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;}
+.app-card:hover{transform:translateY(-4px);}
+.title{font:800 18px/1.2 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR";margin:4px 0;}
+.desc{color:var(--sub);margin:0 0 8px;}
+.bullets{margin:8px 0 14px;padding-left:16px;color:var(--ink);}
+.bullets.tight{margin:6px 0 10px}
+.bullets li{margin:2px 0}
+.hint{color:var(--sub);font-size:12px}
+
+.head-row{display:flex;justify-content:space-between;align-items:center}
+.badge{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:999px;
+  font-size:12px;border:1px solid var(--line);background:var(--muted);color:var(--ink);}
+
+/* 미니 차트 래퍼 */
+.mini-chart{position:relative;background:transparent}
+.mini-chart.center{display:grid;place-items:center}
+.mosaic{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+.mosaic .chip{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:var(--muted)}
+
+/* 도넛 중앙 라벨 */
+.donut-center{position:absolute;display:grid;place-items:center;inset:0;text-align:center;pointer-events:none}
+.donut-center b{font-size:22px}
+
+/* 링 게이지 */
+.viz-row{display:flex;gap:16px;align-items:center}
+.ring{position:relative;width:120px;height:120px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .track{fill:none;stroke:var(--line);stroke-width:10}
+.ring .bar{fill:none;stroke:var(--brand);stroke-width:10;stroke-linecap:round;stroke-dasharray: 326; stroke-dashoffset:326; transition:stroke-dashoffset .6s ease}
+.ring-label{position:absolute;inset:0;display:grid;place-items:center;font-weight:900}
+.ring-sub{position:absolute;left:50%;top:72%;transform:translateX(-50%);font-size:11px;color:var(--sub)}
+.ring .num{font-size:22px}
+
+/* 펄스 아이콘 */
+.pulse-icon{position:absolute;right:18px;top:18px;width:12px;height:12px}
+.pulse-icon .dot{width:100%;height:100%;border-radius:50%;background:#ef4444;box-shadow:0 0 0 0 rgba(239,68,68,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{to{box-shadow:0 0 0 14px rgba(239,68,68,0)}}
+
+/* 카드 호버 변형(버튼 이펙트 참조한 미니멀 버전) */
+.card--glow::before{content:"";position:absolute;inset:-20%;z-index:-1;border-radius:30px;
+  background:radial-gradient(closest-side,color-mix(in oklab,var(--brand)30%,transparent)0%,transparent 70%);
+  transform:scale(.9);opacity:0;filter:blur(14px);transition:opacity .25s,transform .25s,filter .25s}
+.card--glow:hover::before{opacity:1;transform:scale(1);filter:blur(18px)}
+
+.card--draw::after,.card--draw::before{content:"";position:absolute;background:color-mix(in oklab,var(--brand)70%,var(--ink));transition:all .25s}
+.card--draw::before{right:16px;top:16px;height:0;width:2px}
+.card--draw::after{right:16px;top:16px;width:0;height:2px}
+.card--draw:hover::before{height:calc(100% - 32px)}
+.card--draw:hover::after{width:calc(100% - 32px)}
+
+.card--fill::after{content:"";position:absolute;inset:0;width:0;right:0;z-index:-1;border-radius:inherit;
+  background:linear-gradient(315deg,color-mix(in oklab,var(--brand)36%,transparent)0%,transparent 70%);transition:width .28s}
+.card--fill:hover::after{left:0;width:100%}
+
+.card--flip{perspective:900px}
+.flip-wrap{position:relative;height:100%}
+.front,.back{position:absolute;inset:0;padding:18px;border-radius:inherit;backface-visibility:hidden;display:flex;flex-direction:column}
+.back{transform:rotateY(180deg);background:color-mix(in oklab,var(--brand)10%,var(--card))}
+.card--flip:hover .front{transform:rotateY(180deg);transition:transform .4s}
+.card--flip:hover .back{transform:rotateY(0);transition:transform .4s .04s}
+
+/* 큰 숫자 */
+.big-num{font-weight:900;font-size:26px;margin:4px 0}
+
+/* ====== [override] chart/text harmony ====== */
+
+/* 카드 기본 여백 보강 */
+.app-card{ padding:20px 18px 22px; min-height:220px; }
+.app-card .mbtn{ margin-top:8px; }   /* 버튼이 차트에 붙지 않게 */
+
+/* 캔버스 높이 표준화 (HTML에 height 속성이 있어도 강제 적용) */
+.mini-chart{ margin:6px 0 12px; }
+.mini-chart canvas{ display:block; width:100% !important; height:110px !important; }
+.mini-chart.center canvas{ height:160px !important; }
+#sparkPoints{ height:64px !important; }   /* 스파크라인은 더 얕게 */
+
+/* 링 게이지 레이아웃 보강 */
+.viz-row{ display:flex; align-items:center; gap:16px; }
+.ring{ flex:0 0 120px; }                 /* 링은 고정폭 */
+.viz-row .bullets{ flex:1 1 auto; min-width:0; } /* 텍스트가 줄바꿈 되도록 */
+
+/* 도넛 중앙 라벨 타이포/간격 */
+.donut-center{ display:grid; place-items:center; gap:2px; line-height:1.05; }
+.donut-center b{ font-size:22px; }
+.delta{ margin-top:6px; }
+
+/* 링 보조 캡션이 링과 겹치지 않도록 위치 보정 */
+.ring-sub{ top:78%; }
+
+/* 작은 화면에서는 차트 더 얕게 */
+@media (max-width:720px){
+  .mini-chart canvas{ height:96px !important; }
+  .mini-chart.center canvas{ height:140px !important; }
+}
+/* ===== fix: charts vs text overlap ===== */
+
+/* 카드 여백 살짝 키우기 */
+.app-card{ padding:20px 18px 22px; }
+
+/* 모든 캔버스는 CSS로 높이 제어 (inline height 무시) */
+.mini-chart{ position:relative; margin:8px 0 12px; }
+.mini-chart canvas{ display:block; width:100% !important; height:120px !important; z-index:1; }
+
+/* 도넛 영역은 조금 더 큼 */
+.mini-chart.center{ min-height:180px; }
+.mini-chart.center canvas{ height:180px !important; }
+.donut-center{ position:absolute; inset:0; display:grid; place-items:center; gap:2px; z-index:2; pointer-events:none; }
+.donut-center b{ font-size:20px; line-height:1; }
+
+/* 스파크라인은 얕게 */
+#sparkPoints{ height:72px !important; }
+
+/* 링 게이지: 캡션을 링 아래로 빼기 */
+.ring{ position:relative; width:120px; height:140px; } /* 120px 링 + 20px 캡션 */
+.ring svg{ position:absolute; left:0; top:0; width:120px; height:120px; transform:rotate(-90deg); }
+.ring-label{ position:absolute; inset:0; display:grid; place-items:center; font-weight:900; }
+.ring-sub{ position:absolute; left:50%; top:126px; transform:translateX(-50%); font-size:12px; color:var(--sub); }
+
+/* 텍스트 래퍼와의 간격 확보 */
+.viz-row{ gap:16px; align-items:center; }
+.viz-row .bullets{ margin-top:2px; }
+
+/* 도넛 중앙 라벨: 숫자와 %를 한 줄로 */
+.donut-center{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px; text-align:center;
+  font-size:0;                  /* ← 텍스트노드(%) 숨김 */
+}
+.donut-center b{
+  font-size:22px; line-height:1; font-weight:900; position:relative;
+}
+.donut-center b::after{
+  content:"%";                  /* ← 숫자 뒤에 % 붙이기 */
+  margin-left:2px; font-size:14px; font-weight:800;
+}
+.donut-center span{ font-size:12px; }  /* "적합도" 보이게 복원 */
+
+/* 링 중앙 라벨도 동일 이슈 */
+.ring-label{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-size:0;                  /* ← 기존 텍스트노드(%) 숨김 */
+}
+.ring-label .num{
+  font-size:22px; line-height:1; font-weight:900; position:relative;
+}
+.ring-label .num::after{
+  content:"%"; margin-left:2px; font-size:12px; font-weight:800;
+}
+

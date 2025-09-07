@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+  <meta charset="utf-8" />
+  <title>은행상품 상세</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/css/bpdetail.css" />
+
+  <!-- 공통 리소스 (layout/base로 옮길 수 있으면 더 좋음) -->
+  <link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+  <link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+  <link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+
+  <script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+  <script defer src="http://localhost:8810/js/common.js"></script>
+  <script defer src="http://localhost:8810/js/adminservice.js"></script>
+  <script defer src="http://localhost:8810/js/bankservice.js"></script>
+  <script defer src="http://localhost:8810/js/cardservice.js"></script>
+  <script defer src="http://localhost:8810/js/transactionservice.js"></script>
+  <script defer src="http://localhost:8810/js/theme.js"></script>
+
+  <!-- 페이지 전용 JS (마지막에 defer로) -->
+  <script defer src="/js/bpdetail.js"></script>
+  
+  <style>
+html, body { height: 100%; }
+body {
+min-height: 100dvh;
+display: flex;
+flex-direction: column;
+}
+main { flex: 1 0 auto; }         /* 본문이 남는 높이를 채움 */
+#footer { margin-top: auto; }     /* 푸터가 바닥으로 밀착 */
+</style>
+  
+</head>
+
+<body>
+
+<div id="header"></div>
+  <section layout:fragment="content">
+    <!-- JS가 data-* 채워 넣을 컨테이너 -->
+    <div class="bp-detail" id="bpDetail" th:object="${bpDetail}"
+       th:attr="data-id=*{accountId},
+                data-name=*{name},
+                data-type=*{type},
+                data-category=*{category},
+                data-rate=*{interest},
+                data-img=*{img},
+                data-benefits=*{benefits},
+                data-desc=*{description}">
+      <main>
+        <!-- 히어로 -->
+        <section class="bp-hero" id="hero">
+          <div>
+            <div class="chips">
+              <span class="chip" id="p-type">-</span>
+              <span class="chip" id="p-cat">-</span>
+            </div>
+            <h1 class="name" id="p-name">상품명</h1>
+            <p class="desc" id="p-desc">상품 설명이 들어갑니다.</p>
+            <div class="chips" id="p-benefits"></div>
+          </div>
+
+          <div>
+            <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px">
+              <div class="bp-ring" id="fitRing"><span id="fitPct">0%</span></div>
+              <div>
+                <div class="label">적합도</div>
+                <div class="value" id="fitLabel">최근 소비 패턴 기준</div>
+              </div>
+            </div>
+
+            <div class="stats">
+              <div class="stat">
+                <div class="label">기본 금리</div>
+                <div class="value" id="baseRate">-</div>
+              </div>
+              <div class="stat">
+               <div class="label">최고 금리</div>
+                <div class="value" id="maxRate">-</div>
+              </div>
+              <div class="stat">
+                <div class="label">유형</div>
+                <div class="value" id="typeLabel">-</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="bp-grid">
+          <!-- 좌: 시뮬레이터 -->
+          <section class="bp-sim" id="sim">
+            <h3>금리 시뮬레이터</h3>
+
+            <div class="row">
+              <div>
+                <label class="label" for="amount">예치 금액</label>
+                <input id="amountRange" type="range" min="100000" max="100000000" step="50000" />
+                <div class="ctl">
+                  <input id="amount" class="num" type="text" inputmode="numeric" value="1000000" />원
+                </div>
+              </div>
+
+              <div>
+                <label class="label">기간</label>
+                <select id="term" class="num">
+                  <option value="3">3개월</option>
+                  <option value="6">6개월</option>
+                  <option value="12" selected>12개월</option>
+                  <option value="24">24개월</option>
+                  <option value="36">36개월</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="label">과세</label>
+                <select id="tax" class="num">
+                  <option value="0.154" selected>일반(15.4%)</option>
+                  <option value="0.095">세금우대(9.5%)</option>
+                  <option value="0">비과세(0%)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row" id="benefitToggles" style="grid-template-columns:1fr">
+              <!-- 우대 토글을 JS가 주입 -->
+            </div>
+
+            <div class="bp-result" aria-live="polite">
+              <div class="bp-card"><strong>세전 이자</strong><div id="r-gross">-</div></div>
+              <div class="bp-card"><strong>세후 이자</strong><div id="r-net">-</div></div>
+              <div class="bp-card"><strong>유효 금리(연환산)</strong><div id="r-eff">-</div></div>
+            </div>
+
+            <div class="sim-outputs">
+              <div class="tile"><span>세전 이자</span><strong id="preInt">0원</strong></div>
+              <div class="tile"><span>세후 이자</span><strong id="postInt">0원</strong></div>
+              <div class="tile"><span>유효 금리(연환산)</span><strong id="apy">0.00%</strong></div>
+              <div class="tile"><span>만기 수령액(세후)</span><strong id="maturity">0원</strong></div>
+            </div>
+
+            <small id="rateLine" class="hint">적용 금리: 0.00% · 우대 합산 +0bp (최대 0bp)</small>
+            <div class="bp-badges" id="capBadges"></div>
+          </section>
+
+          <!-- 우: 가입 CTA -->
+          <aside class="bp-aside">
+            <div class="bp-cta">
+              <div class="row">
+                <div>
+                 <div class="muted">최고 금리</div> 
+                  <div class="rate" id="ctaMax">-</div>
+                </div>
+                <div>
+                  <div class="muted">기본 금리</div>
+                  <div class="rate" style="font-size:20px" id="ctaBase">-</div>
+                </div>
+              </div>
+              <button class="cta-btn" id="applyBtn">가입하기</button>
+            </div>
+          </aside>
+        </section>
+
+        <!-- 비슷한 상품 -->
+        <section class="bp-similar">
+          <h3>비슷한 상품</h3>
+          <div class="bp-grid3" id="similarWrap"></div>
+        </section>
+      </main>
+    </div>
+  </section>
+  
+  <div id="footer"></div>
+</body>
+</html>

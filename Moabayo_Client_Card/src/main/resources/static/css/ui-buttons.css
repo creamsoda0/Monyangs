@@ -1,0 +1,58 @@
+/* 전역: 가장자리 흰띠 방지 + 테마 변수 의존 */
+html, body { margin:0; background:var(--bg); color:var(--ink); }
+:root{
+  --bg:#ffffff; --ink:#111827; --sub:#6b7280; --line:#e5e7eb;
+  --card:#ffffff; --shadow:0 10px 20px rgba(15,23,42,.08);
+  --brand:#7c3aed; --brand-ink:#f5f3ff;
+}
+[data-theme="dark"]{
+  --bg:#0b0f14; --ink:#e5e7eb; --sub:#9aa5b1; --line:#1f2937;
+  --card:#0f151c; --shadow:0 10px 24px rgba(0,0,0,.45);
+  --brand:#a78bfa; --brand-ink:#0b0f14;
+}
+
+/* ===== 모으냥 버튼 베이스 ===== */
+.mbtn{
+  --h:40px; --px:16px; --radius:12px;
+  position:relative; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  height:var(--h); padding:0 var(--px); border-radius:var(--radius);
+  border:1px solid var(--line); background:var(--card); color:var(--ink);
+  font:700 14px/1 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+  text-decoration:none; cursor:pointer; user-select:none;
+  box-shadow:var(--shadow);
+  transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background-color .12s ease, color .12s ease, opacity .12s ease;
+}
+.mbtn:hover{ transform:translateY(-1px); }
+.mbtn:active{ transform:translateY(0); }
+.mbtn:focus-visible{ outline:2px solid color-mix(in oklab, var(--brand) 55%, transparent); outline-offset:2px; }
+.mbtn[disabled], .mbtn.is-disabled{ opacity:.5; pointer-events:none; }
+
+.mbtn--lg{ --h:48px; --px:18px; --radius:14px; font-size:15px; }
+.mbtn--sm{ --h:32px; --px:12px; --radius:10px; font-size:13px; }
+.mbtn--block{ display:flex; width:100%; }
+.mbtn.is-pill{ --radius:999px; }
+.mbtn .icon{ width:18px; height:18px; display:inline-flex; align-items:center; }
+
+/* ===== 변형(담백한 토널) ===== */
+.mbtn--primary{ background:var(--brand); color:var(--brand-ink); border:none; }
+.mbtn--neutral{ background:var(--card); color:var(--ink); } /* 기본 */
+.mbtn--outline{ background:transparent; color:var(--ink); border:1px solid var(--line); }
+.mbtn--ghost{ background:transparent; color:var(--ink); border:1px solid transparent; }
+.mbtn--soft{
+  background: color-mix(in oklab, var(--brand) 12%, var(--card));
+  color: color-mix(in oklab, var(--brand) 80%, var(--ink));
+  border:1px solid color-mix(in oklab, var(--brand) 20%, var(--line));
+}
+
+/* 로딩 스피너(옵션) */
+.mbtn.is-loading{ color:transparent; pointer-events:none; }
+.mbtn.is-loading::after{
+  content:""; position:absolute; width:16px; height:16px; border-radius:50%;
+  border:2px solid currentColor; border-right-color:transparent; animation:spin .8s linear infinite;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* 모션 민감 사용자 배려 */
+@media (prefers-reduced-motion:reduce){
+  .mbtn, .mbtn::after{ transition:none !important; animation:none !important; }
+}

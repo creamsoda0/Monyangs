@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>추천 카드</title>
+<link rel="icon" href="images/cat.ico" type="image/x-icon" />
+<link rel="stylesheet" href="http://localhost:8810/css/header.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/recommend.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/footer.css" />
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js" defer></script>
+<!-- Custom JS -->
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script type="module" src="http://localhost:8810/js/cardrecommend.js"></script>
+</head>
+<body>
+	<!-- ✅ Header -->
+	<div id="header"></div>
+
+	<div class="card-header">
+		<h1>추천 카드</h1>
+		<p class="intro">당신의 소비 패턴에 맞는 카드들을 추천해드려요!</p>
+	</div>
+
+	<div class="swiper mySwiper">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide">
+				<div class="card-item">
+					<div class="card-img" style="background-image: url('/cardimg/summercat.png');"></div>
+					<div class="card-content">
+						<div class="card-title">여름 피서 적립 카드</div>
+						<div class="card-desc">빙수, 카페, 워터파크 최대 10% 캐시백! 여름을 즐기는 당신에게 추천!</div>
+					</div>
+				</div>
+			</div>
+			<div class="swiper-slide">
+				<div class="card-item">
+					<div class="card-img" style="background-image: url('/cardimg/spacecat-card.png');"></div>
+					<div class="card-content">
+						<div class="card-title">우주여행 마일리지 카드</div>
+						<div class="card-desc">항공 마일리지와 쇼핑 리워드를 동시에! 특별한 혜택을 우주처럼.</div>
+					</div>
+				</div>
+			</div>
+			<div class="swiper-slide">
+				<div class="card-item">
+					<div class="card-img" style="background-image: url('/cardimg/holloweencat.png');"></div>
+					<div class="card-content">
+						<div class="card-title">할로윈 시즌 혜택 카드</div>
+						<div class="card-desc">할로윈 한정 캐릭터 굿즈, 편의점/디저트 할인! 귀엽고 실속 있는 선택.</div>
+					</div>
+				</div>
+			</div>
+			<div class="swiper-slide">
+				<div class="card-item">
+					<div class="card-img" style="background-image: url('/cardimg/card-green.png');"></div>
+					<div class="card-content">
+						<div class="card-title">녹색 카드</div>
+						<div class="card-desc">친환경 소비를 응원하는 카드, 에코 적립 혜택까지!</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Navigation buttons -->
+		<div class="swiper-button-prev prev"></div>
+		<div class="swiper-button-next next"></div>
+	</div>
+
+	<button class="view-button" onclick="location.href='carddetail'">자세히 보기</button>
+	<!-- ✅ Footer -->
+	<div id="footer"></div>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!-- templates/coin/coin-complete.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<head>
+<meta charset="UTF-8" />
+<title>모으냥즈 | 충전 완료</title>
+
+<!-- 완료 전용 CSS -->
+<link rel="stylesheet" th:href="@{/css/coin/complete.css}" />
+
+<!-- 공용(헤더/푸터/테마) - 프로젝트 공통 자원 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<script defer src="http://localhost:8810/js/theme.js"></script>
+</head>
+
+<body>
+	<div id="header"></div>
+
+	<section layout:fragment="content">
+		<!-- 완료 컨테이너. 상태값을 data-status로 내려서 JS가 이펙트 제어 -->
+		<main class="ny-complete" th:attr="data-status=${status}">
+			<!-- Stepper (3: 완료 활성화) -->
+			<nav class="c-stepper" aria-label="충전 단계">
+				<ol>
+					<li><span>1</span><em>금액입력</em></li>
+					<li><span>2</span><em>결제진행</em></li>
+					<li class="is-active"><span>3</span><em>완료</em></li>
+				</ol>
+			</nav>
+
+			<!-- 카드 -->
+			<article class="c-card">
+				<div class="confetti" aria-hidden="true"></div>
+				<header class="c-head">
+					<!-- 결과 뱃지 + 타이틀 -->
+					<div class="c-result" th:classappend="${status}=='success' ? ' is-success' : (${status}=='cancel' ? ' is-cancel' : ' is-fail')">
+						<!-- 애니 체크/엑스 -->
+						<svg class="mark success" viewBox="0 0 48 48" aria-hidden="true">
+            <circle class="ring" cx="24" cy="24" r="22" />
+            <path class="tick" d="M14 24 L22 32 L35 17" />
+          </svg>
+						<svg class="mark fail" viewBox="0 0 48 48" aria-hidden="true">
+            <circle class="ring" cx="24" cy="24" r="22" />
+            <path class="cross" d="M16 16 L32 32 M32 16 L16 32" />
+          </svg>
+						<div class="title">
+							<h1>
+								<span class="txt success">충전이 완료되었어요 🎉</span> <span class="txt cancel">결제가 취소되었어요</span> <span class="txt fail">결제에 실패했어요 😥</span>
+							</h1>
+							<p class="sub">
+								<span class="txt success">모의 충전이 성공했습니다.</span> <span class="txt cancel">원하시면 다시 시도할 수 있어요.</span> <span class="txt fail" th:text="${errorMessage} ?: '일시적인 오류가 발생했습니다.'"></span>
+							</p>
+						</div>
+					</div>
+				</header>
+
+				<!-- 성공/실패/취소 공통 영수증 -->
+				<section class="receipt">
+					<div>
+						<span>충전 금액</span> <strong th:text="${#numbers.formatInteger(amount,3,'COMMA')} + '원'">0원</strong>
+					</div>
+					<div>
+						<span>거래번호</span> <strong><code th:text="${tid} ?: '-'">-</code></strong>
+					</div>
+					<div>
+						<span>승인시각</span> <strong th:text="${#temporals.format(approvedAt, 'yyyy-MM-dd HH:mm:ss')}">-</strong>
+					</div>
+
+					<!-- (선택) 충전 후 잔액 내려줄 때만 표시 -->
+					<div th:if="${balanceAfter != null}">
+						<span>충전 후 잔액</span> <strong th:text="${#numbers.formatInteger(balanceAfter,3,'COMMA')} + '원'">0원</strong>
+					</div>
+				</section>
+
+				<!-- 액션 -->
+				<div class="actions" th:if="${status}=='success'">
+					<a class="btn-accent glow" th:href="@{/bank/index}">확인</a>
+					<a class="btn-outline" th:href="@{/bank/history}">거래내역 보기</a>
+				</div>
+
+				<div class="actions" th:if="${status}=='cancel'">
+					<a class="btn-accent" th:href="@{/bank/charge}">다시 충전하기</a>
+					<a class="btn-ghost" th:href="@{/bank/index}">홈으로</a>
+				</div>
+
+				<div class="actions" th:if="${status}!='success' and ${status}!='cancel'">
+					<a class="btn-accent" th:href="@{/bank/charge}">다시 시도</a>
+					<a class="btn-ghost" th:href="@{/bank/index}">홈으로</a>
+				</div>
+			</article>
+
+			<!-- 도움말 -->
+			<aside class="c-card c-hint">
+				<ul>
+					<li>브라우저 팝업 차단으로 결제창이 열리지 않을 수 있습니다. 이 경우 팝업 허용 후 다시 시도해 주세요.</li>
+					<li>진행이 반복 실패할 경우 잠시 후 다시 시도하거나 고객센터로 문의해 주세요.</li>
+				</ul>
+			</aside>
+		</main>
+	</section>
+
+	<div id="footer"></div>
+
+	<!-- 완료 전용 JS -->
+	<script defer th:src="@{/js/coin/complete.js}"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<head>
+<meta charset="UTF-8" />
+<title layout:fragment="title">모으냥즈 | 결제 연결 중…</title>
+
+<!-- 공용 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css" />
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/theme.js"></script>
+
+<!-- 페이지 전용 -->
+<link rel="stylesheet" href="/css/coin/pay.css" />
+<script defer src="/js/coin/pay.js"></script>
+</head>
+<body>
+	<div id="header"></div>
+
+	<section layout:fragment="content">
+		<main class="ny-pay">
+			<nav class="c-stepper" aria-label="충전 단계">
+				<ol>
+					<li><span>1</span><em>금액입력</em></li>
+					<li class="is-active"><span>2</span><em>결제진행</em></li>
+					<li><span>3</span><em>완료</em></li>
+				</ol>
+			</nav>
+
+			<section class="c-card">
+				<header class="c-head">
+					<h1>카카오페이 연결 중…</h1>
+					<p class="sub">결제 창을 여는 동안 잠시만 기다려주세요.</p>
+				</header>
+
+				<!-- 서버에서 들어온 값 (선택) -->
+				<input type="hidden" id="_csrfParam" th:if="${_csrf != null}" th:value="${_csrf.parameterName}" /> <input type="hidden" id="_csrfToken" th:if="${_csrf != null}" th:value="${_csrf.token}" />
+
+				<div class="progress">
+					<div class="spinner" aria-hidden="true"></div>
+					<div class="lines">
+						<p>
+							<strong>요청 준비</strong> · 결제 세션 생성
+						</p>
+						<p>
+							<strong>보안 확인</strong> · 리다이렉트 URL 발급
+						</p>
+						<p>
+							<strong>카카오페이로 이동</strong>
+						</p>
+					</div>
+				</div>
+
+				<div class="meta">
+					<div>
+						<span>충전 금액</span><strong id="pay-amount" th:text="${amount != null ? #numbers.formatInteger(amount,3,'COMMA') + '원' : '-'}">-</strong>
+					</div>
+					<div>
+						<span>수단</span><strong>카카오페이</strong>
+					</div>
+				</div>
+
+				<div class="actions">
+					<button id="retryBtn" class="btn-outline" hidden>다시 시도</button>
+					<a href="/bank/charge" class="btn-ghost">돌아가기</a>
+				</div>
+
+				<div id="errorBox" class="error" role="alert" hidden>
+					연결에 실패했습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요. <small id="errMsg"></small>
+				</div>
+			</section>
+
+			<!-- 백업 안내 -->
+			<aside class="c-card c-hint">
+				<ul>
+					<li>브라우저의 팝업 차단으로 결제창이 열리지 않을 수 있습니다. 이 경우 “다시 시도”를 눌러주세요.</li>
+					<li>진행이 반복 실패할 경우 잠시 후 다시 시도하거나 고객센터로 문의해 주세요.</li>
+				</ul>
+			</aside>
+
+			<!-- 클라이언트에서 사용할 진행 파라미터 (선택) -->
+			<div id="ny-pay-config" th:attr="data-ready=@{/bank/ready-api}" th:attrappend=" data-amount=${amount}"></div>
+		</main>
+	</section>
+
+	<div id="footer"></div>
+</body>
+</html>

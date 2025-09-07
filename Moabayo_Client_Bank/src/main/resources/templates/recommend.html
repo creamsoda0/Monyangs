@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>모으냥즈 | 추천 상품</title>
+
+<!-- 스타일 -->
+<link rel="stylesheet" href="/css/recommend.css" />
+
+<!-- Chart.js (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+<!-- 스크립트 -->
+<script defer src="/js/recommend.js"></script>
+
+<!-- headr footer가 달리는 모든 페이지에 갖다 붙일것 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<!-- 이것도 같이 붙여야함 toggle switch 만들기 -->
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+<script defer src="http://localhost:8810/js/theme.js"></script>
+
+</head>
+<body>
+	<!-- ⚠ 헤더/푸터는 프로젝트 공통 레이아웃에 삽입 예정 -->
+	<div id="header"></div>
+
+	<main id="recommend" class="recommend-page">
+		<!-- ============= HERO (이벤트 무드) ============= -->
+		<section class="hero">
+			<div class="hero-inner">
+				<div class="eyebrow">
+					<span class="pill pill-event">기간 한정</span> <span class="pill pill-brand">모으냥즈 추천</span>
+				</div>
+				<h1 class="hero-title">
+					이번 주, 나와 닮은 소비패턴을 위한<br />맞춤 <span>은행 상품</span>
+				</h1>
+				<p class="hero-desc">“해당 그룹은 이런 소비를 하고 있어요” — ML 분석 기반 인사이트와 함께 혜택을 확인하세요.</p>
+				<div class="hero-ctas">
+					<a href="#insights" class="btn btn-primary">소비 패턴 리포트</a>
+					<a href="#products" class="btn btn-ghost">추천 상품 보기</a>
+				</div>
+				<div class="hero-countdown">
+					<strong id="dday">D-7</strong> <span>이벤트 종료까지</span>
+				</div>
+			</div>
+			<div class="hero-bg"></div>
+		</section>
+
+		<!-- ============= SEGMENT FILTERS ============= -->
+		<section class="filters" aria-label="세그먼트 선택">
+			<div class="filter-row">
+				<div class="filter">
+					<div class="label">나이</div>
+					<div class="chip-group" data-key="age">
+						<button class="chip is-active" data-value="20s">20대</button>
+						<button class="chip" data-value="30s">30대</button>
+						<button class="chip" data-value="40s">40대</button>
+						<button class="chip" data-value="50s+">50대+</button>
+					</div>
+				</div>
+				<div class="filter">
+					<div class="label">성별</div>
+					<div class="seg-group" data-key="gender">
+						<button class="seg is-active" data-value="F">여성</button>
+						<button class="seg" data-value="M">남성</button>
+					</div>
+				</div>
+				<div class="filter">
+					<div class="label">지역</div>
+					<select class="select" data-key="region">
+						<option value="서울" selected>서울</option>
+						<option value="경기">경기</option>
+						<option value="부산">부산</option>
+						<option value="대구">대구</option>
+						<option value="광주">광주</option>
+						<option value="기타">기타</option>
+					</select>
+				</div>
+				<div class="filter">
+					<div class="label">시간대</div>
+					<select class="select" data-key="time">
+						<option value="morning">아침(6–11)</option>
+						<option value="noon" selected>점심(11–14)</option>
+						<option value="evening">저녁(18–22)</option>
+						<option value="night">심야(22–02)</option>
+					</select>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============= KPI SNAPSHOT ============= -->
+		<section id="insights" class="kpis">
+			<div class="kpi">
+				<div class="kpi-label">월 평균 소비</div>
+				<div class="kpi-value" id="kpiSpend">₩ 1,240,000</div>
+				<div class="kpi-sub">동일 그룹 평균</div>
+			</div>
+			<div class="kpi">
+				<div class="kpi-label">최다 카테고리</div>
+				<div class="kpi-value" id="kpiTopCat">외식 · 카페</div>
+				<div class="kpi-sub">비중 32%</div>
+			</div>
+			<div class="kpi">
+				<div class="kpi-label">피크 시간대</div>
+				<div class="kpi-value" id="kpiPeak">점심 12:00</div>
+				<div class="kpi-sub">결제건수 최다</div>
+			</div>
+			<div class="kpi">
+				<div class="kpi-label">유사 이용자</div>
+				<div class="kpi-value" id="kpiCohort">7,582명</div>
+				<div class="kpi-sub">세그먼트 규모</div>
+			</div>
+		</section>
+
+		<!-- ============= CHARTS ============= -->
+		<section class="charts">
+			<div class="card">
+				<div class="card-h">
+					<h3>카테고리 소비 비중</h3>
+					<span class="hint">지난 30일 | 표본: 세그먼트</span>
+				</div>
+				<canvas id="donutChart" height="200"></canvas>
+			</div>
+
+			<div class="card">
+				<div class="card-h">
+					<h3>시간대별 결제 건수</h3>
+					<span class="hint">아침 · 점심 · 저녁 · 심야</span>
+				</div>
+				<canvas id="barChart" height="200"></canvas>
+			</div>
+
+			<div class="card">
+				<div class="card-h">
+					<h3>주간 소비 추이</h3>
+					<span class="hint">최근 7일</span>
+				</div>
+				<canvas id="lineChart" height="200"></canvas>
+			</div>
+		</section>
+
+		<!-- ============= RECOMMENDED PRODUCTS (EVENT STYLE) ============= -->
+		<section id="products" class="products">
+			<div class="products-h">
+				<h2>맞춤 추천 상품</h2>
+				<p>세그먼트 소비패턴을 반영한 특화 혜택</p>
+			</div>
+
+			<div id="productGrid" class="grid"></div>
+		</section>
+
+		<!-- ============= NOTE ============= -->
+		<section class="notice">
+			<p class="muted">
+				* 현재 화면은 <strong>목업 데이터</strong>입니다. 파이썬 ML 분석 결과를
+				<code>window.renderInsights(data)</code>
+				로 주입하면 동일 UI에 실데이터가 렌더링되도록 설계했습니다.
+			</p>
+		</section>
+	</main>
+
+	<!-- ⚠ 푸터 자리 -->
+	<div id="footer"></div>
+
+</body>
+</html>

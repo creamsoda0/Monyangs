@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+body {
+	text-align: center;
+	padding-top: 100px;
+	background-color: #fff8f0;
+	font-family: sans-serif;
+}
+
+/* 로딩창 */
+#loading-screen {
+	position: fixed;
+	inset: 0;
+	background-color: #fff8dc;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
+}
+
+#loading-screen img {
+	margin-bottom: 16px;
+}
+
+/* 로딩 진행 바 */
+.progress-container {
+	width: 80%;
+	height: 16px;
+	background-color: #eee;
+	border-radius: 10px;
+	overflow: hidden;
+	margin-top: 10px;
+}
+
+.progress-bar {
+	height: 100%;
+	width: 0%;
+	background-color: #FFB300;
+	transition: width 0.2s ease;
+}
+
+#progress-text {
+	margin-top: 8px;
+	font-weight: bold;
+}

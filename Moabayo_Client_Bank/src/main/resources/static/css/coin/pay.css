@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+/* 토큰/스코프 */
+.ny-pay{
+  --ink:#1f2937; --sub:#6b7280; --line:#e5e7eb; --card:#fff; --accent:#7c3aed;
+  --shadow:0 10px 24px rgba(15,23,42,.08);
+  color:var(--ink);
+  width:100%; max-width:840px; margin:0 auto; padding:18px; box-sizing:border-box;
+}
+html[data-theme="dark"] .ny-pay{
+  --ink:#e5e7eb; --sub:#9aa5b1; --line:#1f2937; --card:#0f151c; --accent:#a78bfa;
+  --shadow:0 12px 26px rgba(0,0,0,.55);
+}
+
+.c-stepper{ margin:8px 0 14px; }
+.c-stepper ol{ display:flex; gap:18px; list-style:none; padding:0; margin:0; }
+.c-stepper li{ display:flex; align-items:center; gap:8px; color:var(--sub); font-weight:600; }
+.c-stepper li span{ width:26px; height:26px; display:inline-grid; place-items:center;
+  border:1px solid var(--line); border-radius:999px; background:transparent; }
+.c-stepper li.is-active{ color:var(--ink); }
+.c-stepper li.is-active span{ background:var(--accent); border-color:var(--accent); color:#fff;}
+
+.c-card{
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  box-shadow:var(--shadow); padding:18px; margin:0 0 16px; background-clip:padding-box;
+}
+
+.c-head h1{ font-size:1.25rem; margin:0 0 4px; }
+.c-head .sub{ color:var(--sub); margin:0 0 10px; }
+
+.progress{ display:flex; gap:16px; align-items:center; padding:8px 0; }
+.spinner{
+  width:28px; height:28px; border-radius:50%;
+  border:3px solid color-mix(in srgb, var(--accent) 50%, transparent);
+  border-top-color:transparent; animation:spin 1s linear infinite;
+}
+@keyframes spin{ to{ transform:rotate(360deg);} }
+.lines p{ margin:.2rem 0; color:var(--sub); }
+.lines p strong{ color:var(--ink); }
+
+.meta{ margin:12px 0 6px; display:grid; grid-template-columns: 1fr auto; row-gap:6px; }
+.meta > div{ display:contents; }
+.meta span{ color:var(--sub); }
+.meta strong{ text-align:right; }
+
+.actions{ display:flex; gap:10px; margin-top:12px; }
+.btn-outline{ border:1px solid var(--line); border-radius:10px; padding:10px 14px; background:transparent; font-weight:800;}
+.btn-ghost{ border:1px solid var(--line); border-radius:10px; padding:10px 14px; background:transparent; text-decoration:none; color:var(--ink); font-weight:800; }
+.btn-outline:hover, .btn-ghost:hover{ border-color:var(--ink); }
+
+.error{ margin-top:12px; color:#b91c1c; background:#fee2e2; border:1px solid #fca5a5; padding:10px 12px; border-radius:10px; }
+html[data-theme="dark"] .error{ background:#3f1f20; border-color:#7f1d1d; color:#fecaca; }
+
+.c-hint ul{ margin:0; padding-left:18px; color:var(--sub); }
+
+/* ============== Dark-mode page background ============== */
+html[data-theme="dark"],
+html[data-theme="dark"] body{
+  background-color:#0c0f14 !important;
+}
+
+/* ============== 카드/보더/포커스 유출 차단 ============== */
+.ny-pay .c-card{
+  background-clip:padding-box;   /* 흰 테두리 방지 */
+  overflow:hidden;               /* 포커스 링/그림자 카드 밖 유출 차단 */
+  position:relative;
+}
+.ny-pay .c-card::before,
+.ny-pay .c-card::after{ content:none !important; } /* 공용 pseudo 차단 */
+
+/* 다크에서 카드/보더 확정 */
+html[data-theme="dark"] .ny-pay .c-card{
+  background:#0f151c;
+  border:1px solid #1e293b;
+  box-shadow:0 10px 20px rgba(0,0,0,.55);
+}
+
+/* 스테퍼 원형 배지 보더/배경 동기화 */
+.ny-pay .c-stepper li span{
+  background:transparent;
+  border-color:var(--line);
+}
+.ny-pay .c-stepper li.is-active span{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+
+/* 버튼/보더 대비 보정 */
+html[data-theme="dark"] .ny-pay .btn-ghost,
+html[data-theme="dark"] .ny-pay .btn-outline{
+  border-color:#374151;
+  color:#e5e7eb;
+}
+html[data-theme="dark"] .ny-pay .btn-ghost:hover,
+html[data-theme="dark"] .ny-pay .btn-outline:hover{
+  border-color:#a78bfa;
+}
+
+/* 오류 박스 톤 일치 (이미 있으면 유지) */
+html[data-theme="dark"] .ny-pay .error{
+  background:#3f1f20;
+  border-color:#7f1d1d;
+  color:#fecaca;
+}
+
+/* 크롬 오토필/포커스 등 외부 그림자 제거(혹시 있을 경우) */
+.ny-pay *{
+  outline-color: transparent;
+}

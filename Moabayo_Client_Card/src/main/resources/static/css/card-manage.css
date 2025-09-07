@@ -1,0 +1,118 @@
+/* ===== Console Compact: 토큰 ===== */
+:root{
+  --bg:#f6f7fb; --ink:#101418; --sub:#717b8a;
+  --line:#e6e8ef; --card:#ffffff; --muted:#f2f4f8;
+  --brand:#6d5df6; --brand-ink:#ffffff;
+  --warn:#f2b94b; --danger:#ff6b6b;
+  --radius:12px; --shadow:0 8px 22px rgba(16,20,24,.08);
+}
+
+html[data-theme="dark"]{
+  --bg:#0b0f12; --ink:#e8ecf3; --sub:#9aa5b1;
+  --line:rgba(255,255,255,.08);
+  --card:#0f141a; --muted:#0b1117;
+  --brand:#8b7cf5; --brand-ink:#0b0f12;
+  --shadow:0 14px 36px rgba(0,0,0,.55);
+}
+
+html,body{height:100%}
+body{margin:0;color:var(--ink);background:var(--bg);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif}
+
+/* ===== 레이아웃 ===== */
+.m-layout{
+  display:grid; grid-template-columns:280px 1fr 360px; gap:16px;
+  padding: 16px clamp(16px,2vw,28px) 36px;
+}
+@media (max-width:1200px){ .m-layout{ grid-template-columns:260px 1fr } .m-preview{ display:none } }
+
+/* ===== 좌측 서랍 ===== */
+.m-drawer{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; box-shadow:var(--shadow) }
+.m-search input{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--muted); color:var(--ink) }
+.m-list{ list-style:none; margin:10px 0; padding:0; display:grid; gap:8px; max-height:60vh; overflow:auto }
+.m-list li{
+  display:flex; align-items:center; gap:10px; padding:10px; border:1px solid var(--line);
+  border-radius:10px; background:var(--card); cursor:pointer; transition:transform .12s, box-shadow .2s;
+}
+.m-list li:hover{ transform:translateY(-2px); box-shadow:var(--shadow) }
+.m-list li.is-on{ outline:2px solid var(--brand); outline-offset:2px }
+.m-add{ width:100%; padding:10px; border-radius:10px; border:1px dashed var(--line); background:transparent; color:var(--ink); cursor:pointer }
+
+/* ===== 메인 ===== */
+.m-main{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; box-shadow:var(--shadow) }
+.m-heading{ display:flex; align-items:center; gap:8px; margin-bottom:10px;
+  background:linear-gradient(90deg, color-mix(in oklab, var(--brand), transparent 75%), transparent);
+  padding:12px; border-radius:12px;
+}
+.m-heading h1{ margin:0; font-size:18px }
+.badge{ display:inline-block; padding:4px 8px; border-radius:999px; border:1px solid var(--line); background:var(--muted); font-size:12px; margin-left:auto }
+.badge.state-active{ background:var(--brand); color:var(--brand-ink); border-color:transparent }
+
+/* 빠른 작업 */
+.quickbar{ display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 12px }
+.qbtn{ height:36px; padding:0 12px; border:1px solid var(--line); border-radius:999px; background:var(--card); color:var(--ink); cursor:pointer }
+.qbtn:hover{ filter:brightness(1.05) }
+.qbtn-ghost{ background:transparent }
+.qbtn-danger{ border-color:transparent; background:var(--danger); color:#fff }
+
+/* KPI */
+.kpis{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:10px }
+.kpi{ border:1px solid var(--line); border-radius:12px; background:var(--muted); padding:12px; box-shadow:var(--shadow) }
+.kpi-h{ color:var(--sub); font-weight:600; margin-bottom:6px }
+
+/* 탭 */
+.m-tabs{ display:flex; gap:8px; margin:8px 0 12px }
+.m-tabs button{
+  padding:10px 14px; border:1px solid var(--line); border-radius:999px; background:var(--card); color:var(--ink);
+  transition:transform .12s, background .2s;
+}
+.m-tabs button:hover{ transform:translateY(-1px) }
+.m-tabs button.is-on{ background:var(--brand); color:var(--brand-ink); border-color:transparent; box-shadow:0 6px 16px color-mix(in oklab, var(--brand), black 70%) }
+.m-tab{ display:none } .m-tab.is-on{ display:block }
+
+/* 공통 박스/그리드 */
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
+.box{ border:1px solid var(--line); border-radius:12px; padding:12px; background:var(--muted); box-shadow:var(--shadow) }
+.box.row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap }
+.hint{ color:var(--sub); font-size:13px }
+
+/* 진행률 */
+.progress{ display:flex; align-items:center; gap:10px; margin-top:8px }
+.progress-track{ flex:1; height:10px; border-radius:999px; background:color-mix(in oklab, var(--line), transparent 35%) }
+.progress-bar{ height:100%; border-radius:999px; background:linear-gradient(90deg, var(--brand), color-mix(in oklab, var(--brand), white 18%)); transition:width .35s }
+.progress-label{ min-width:48px; text-align:right; color:var(--sub) }
+
+/* 칩/입력 */
+.chips, .filters{ display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 10px }
+.chip{ height:30px; padding:0 10px; border:1px solid var(--line); border-radius:999px; background:var(--card); cursor:pointer }
+.chip.is-on{ background:var(--brand); color:var(--brand-ink); border-color:transparent }
+.limit-ctl{ display:flex; gap:10px; align-items:center }
+.num{ width:140px; padding:8px; border:1px solid var(--line); border-radius:8px; background:var(--card); color:var(--ink) }
+
+/* 이용내역 테이블 */
+.tx{ width:100%; border-collapse:separate; border-spacing:0 8px }
+.tx th{ color:var(--sub); font-weight:600 }
+.tx td, .tx th{ padding:10px 12px; background:var(--card); border-top:1px solid var(--line); border-bottom:1px solid var(--line) }
+.tx td:first-child, .tx th:first-child{ border-left:1px solid var(--line); border-top-left-radius:10px; border-bottom-left-radius:10px }
+.tx td:last-child, .tx th:last-child{ border-right:1px solid var(--line); border-top-right-radius:10px; border-bottom-right-radius:10px }
+.tx .r{ text-align:right }
+
+/* 프리뷰 & 로그 */
+.m-preview{ position:sticky; top:16px; height:fit-content; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; box-shadow:var(--shadow) }
+.cover{ width:100%; aspect-ratio:16/10; border:1px solid var(--line); border-radius:12px; margin-bottom:10px;
+  background: radial-gradient(120% 120% at 20% 10%, #8b7cf5 0%, transparent 55%), radial-gradient(120% 120% at 80% 0%, #ffd166 0%, transparent 50%), linear-gradient(180deg, color-mix(in oklab, var(--muted), transparent 20%), var(--muted)); }
+
+/* 리빌 */
+.reveal{ margin:10px 0; padding:12px; border:1px dashed var(--line); border-radius:10px; background:var(--card); font-family:ui-monospace, SFMono-Regular, Menlo, monospace }
+.reveal.hide{ display:none }
+
+/* 토스트 */
+.toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--card); color:var(--ink);
+  border:1px solid var(--line); box-shadow:var(--shadow); padding:10px 14px; border-radius:999px; z-index:50 }
+.toast button{ margin-left:8px; background:transparent; border:none; color:var(--brand); cursor:pointer }
+
+/* 모달(dialog) */
+dialog{ border:none; border-radius:12px; padding:0; background:transparent }
+.modal{ background:var(--card); color:var(--ink); border:1px solid var(--line); border-radius:12px; padding:16px; min-width:320px; box-shadow:var(--shadow) }
+.modal h3{ margin:0 0 8px 0 }
+.modal menu{ display:flex; gap:8px; justify-content:flex-end; margin-top:12px }
+.checklist{ list-style:none; padding:0; margin:8px 0 12px 0; display:grid; gap:6px }

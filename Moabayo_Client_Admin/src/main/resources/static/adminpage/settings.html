@@ -1,0 +1,48 @@
+<section id="settings" class="page">
+	<div class="section-title">
+		<i class='bx bxs-cog'></i>
+		<h2>환경 설정</h2>
+	</div>
+	<div class="grid-2">
+		<div class="card">
+			<h3>보안</h3>
+			<div style="display: flex; gap: 1rem; align-items: center; margin: .5rem 0;">
+				<label class="inline"><input type="checkbox" checked data-hook="cfg-2fa"> 관리자 2단계 인증(2FA)</label> <label class="inline"><input type="checkbox" checked data-hook="cfg-session-expire"> 세션 유휴 만료 15분</label>
+			</div>
+			<div class="toolbar">
+				<select class="input" data-hook="cfg-pwlen">
+					<option>비밀번호 최소 8자</option>
+					<option selected>최소 10자(권장)</option>
+					<option>최소 12자(강화)</option>
+				</select>
+				<button class="btn" data-hook="cfg-apply">적용</button>
+			</div>
+		</div>
+
+		<div class="card">
+			<h3>영업일/공휴일</h3>
+			<div class="toolbar">
+				<input class="input" type="date" data-hook="holiday-date">
+				<button class="btn" data-hook="holiday-add">공휴일 추가</button>
+				<button class="btn" data-hook="holiday-del">삭제</button>
+			</div>
+			<p class="help">※ 배치/이자계산/정산 스케줄과 연동</p>
+			<ul class="list" data-bind="holidays">
+				<!-- JS 바인딩 -->
+			</ul>
+		</div>
+    <div class="card">
+      <h3>알림 채널</h3>
+      <div class="toolbar">
+        <label class="inline"><input type="checkbox" checked data-hook="chn-email"> 이메일</label>
+        <label class="inline"><input type="checkbox" checked data-hook="chn-sms"> SMS</label>
+        <label class="inline"><input type="checkbox" data-hook="chn-push"> 푸시</label>
+      </div>
+      <div class="toolbar">
+              <input class="input" type="email" placeholder="관리용 이메일">
+              <button class="btn">저장</button>
+            </div>
+          </div>
+          </div>
+ </section>
+

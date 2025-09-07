@@ -1,0 +1,115 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Mori;
+	background: #111;
+	min-height: 100vh;
+	padding: 0;
+	margin: 0;
+}
+
+.gallery {
+	display: flex;
+	overflow-x: auto; /* 가로 스크롤 */
+	overflow-y: hidden;
+	white-space: nowrap;
+	scroll-behavior: smooth;
+	/* 세로 크기 고정 */
+	height: 300px; /* 카드 높이에 맞게 조정 */
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.cards {
+	display: flex;
+	gap: 16px;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+	white-space: nowrap;
+	overflow-x: visible;
+}
+
+.cards li {
+	position: absolute;
+	width: 18rem;
+	height: 22rem;
+	top: 0; /* 중앙이 아닌 위쪽 고정 */
+	left: 50%;
+	transform: translateX(-50%) translateX(-0.1rem);
+	border-radius: 1rem;
+}
+
+.card-item {
+	width: 100%;
+	height: 100%;
+	background: #fff;
+	border-radius: 1rem;
+	overflow: hidden;
+	box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+	display: flex;
+	flex-direction: column;
+}
+
+.card-img {
+	height: 60%;
+	background-size: cover;
+	background-position: center;
+}
+
+.card-content {
+	padding: 1rem;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.card-title {
+	font-weight: bold;
+	font-size: 1rem;
+	margin-bottom: 0.5rem;
+	color: #111;
+}
+
+.card-desc {
+	font-size: 0.9rem;
+	color: #444;
+}
+
+.actions {
+	position: absolute;
+	bottom: 25px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+button {
+	display: inline-block;
+	outline: none;
+	padding: 8px 14px;
+	background: #222;
+	border: solid 2px #eee;
+	color: #eee;
+	text-decoration: none;
+	border-radius: 99px;
+	padding: 12px 25px;
+	font-weight: 600;
+	cursor: pointer;
+	line-height: 18px;
+	margin: 1rem;
+}
+
+a {
+	color: #88ce02;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>은행상품 가입하기</title>
+<link rel="stylesheet" href="/css/bpregister.css">
+<script defer src="/js/bpregister.js"></script>
+
+
+<!-- headr footer가 달리는 모든 페이지에 갖다 붙일것 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<!-- 이것도 같이 붙여야함 toggle switch 만들기 -->
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+<script defer src="http://localhost:8810/js/theme.js"></script>
+
+<style>
+html, body {
+	height: 100%;
+}
+
+body {
+	min-height: 100dvh;
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	flex: 1 0 auto;
+} /* 본문이 남는 높이를 채움 */
+#footer {
+	margin-top: auto;
+} /* 푸터가 바닥으로 밀착 */
+</style>
+</head>
+<body>
+	<div id="header"></div>
+	<!-- bpregister.html 아무 곳(</body> 직전 추천)에 폼 하나만 추가 -->
+	<form id="applyForm" action="/register/api/apply" method="post" style="display:none"></form>
+	
+	<div class="wrap" id="bpDetail" th:object="${bpDetail}" 
+				th:attr="data-id=*{accountId},
+                data-name=*{name},
+                data-type=*{type},
+                data-category=*{category},
+                data-rate=*{interest},
+                data-img=*{img},
+                data-benefits=*{benefits},
+                data-desc=*{description}">
+		<!-- 좌: 가입 요약(스티키) -->
+		<aside class="card summary sticky">
+			<div class="hd">상품 요약</div>
+			<div class="bd">
+				<div class="chips" id="prodChips"></div>
+				<h2 id="prodName" style="margin: 8px 0 2px"></h2>
+				<p id="prodDesc" class="small" style="margin: 0 0 12px"></p>
+
+				<div style="display: flex; align-items: center; gap: 12px">
+					<div class="ring" id="fitRing">
+						<span id="fitPct">80%</span>
+					</div>
+					<div class="row">
+						<div class="small">기본 금리</div>
+						<div>
+							<b id="baseRate">-</b>
+						</div>
+						<div class="small">최고 금리</div>
+						<div>
+							<b id="maxRate">-</b>
+						</div>
+					</div>
+				</div>
+
+				<div class="kpi">
+					<div class="tile">
+						<b>적용 금리(연)</b><strong id="appliedRate">-</strong>
+					</div>
+					<div class="tile">
+						<b>만기 수령액(세후)</b><strong id="maturity">-</strong>
+					</div>
+					<div class="tile">
+						<b>세전 이자</b><strong id="preInt">-</strong>
+					</div>
+					<div class="tile">
+						<b>세후 이자</b><strong id="postInt">-</strong>
+					</div>
+				</div>
+
+				<div class="hint" id="appliedLine" style="margin-top: 8px">적용 금리: -</div>
+			</div>
+		</aside>
+
+		<!-- 우: 단계 위저드 -->
+		<main class="card">
+			<div class="hd">상품 가입하기</div>
+			<div class="bd">
+				<div class="stepper" id="stepper">
+					<div class="step is-on">
+						<span class="dot">1</span>계정 선택
+					</div>
+					<div class="step">
+						<span class="dot">2</span>납입 설정
+					</div>
+					<div class="step">
+						<span class="dot">3</span>우대/약관
+					</div>
+					<div class="step">
+						<span class="dot">4</span>확인
+					</div>
+				</div>
+
+				<!-- 1. 계정 선택 -->
+				<section class="section is-on" data-step="1">
+					<div class="row cols-2">
+						<div>
+							<div class="label">출금 계좌(자금원)</div>
+							<select id="funding" class="num"></select>
+							<div class="hint">자동이체/예치금이 이 계좌에서 출금됩니다.</div>
+						</div>
+						<div>
+							<div class="label">신규 계좌 개설</div>
+							<select id="openNew" class="num">
+								<option value="yes">신규 계좌 개설 (권장)</option>
+								<option value="no">기존 계좌에 추가</option>
+							</select>
+							<div class="hint">신규 개설 시 전용 계좌가 발급됩니다.</div>
+						</div>
+					</div>
+					<div class="foot-nav">
+						<button class="btn ghost" disabled>이전</button>
+						<button class="btn brand" id="next1">다음</button>
+					</div>
+				</section>
+
+				<!-- 2. 납입 설정 -->
+				<section class="section" data-step="2">
+					<div class="row cols-3">
+						<div>
+							<div class="label" id="amountLabel">예치 금액</div>
+							<input id="amountRange" type="range" min="100000" max="100000000" step="50000"> <input id="amount" type="text" class="num" value="3000000">
+						</div>
+						<div>
+							<div class="label">기간</div>
+							<select id="term" class="num">
+								<option value="3">3개월</option>
+								<option value="6">6개월</option>
+								<option value="12" selected>12개월</option>
+								<option value="24">24개월</option>
+								<option value="36">36개월</option>
+							</select>
+						</div>
+						<div>
+							<div class="label">과세</div>
+							<select id="tax" class="num">
+								<option value="0.154" selected>일반(15.4%)</option>
+								<option value="0.095">세금우대(9.5%)</option>
+								<option value="0">비과세(0%)</option>
+							</select>
+						</div>
+					</div>
+					<div class="row cols-2" id="savingExtra" style="display: none">
+						<div>
+							<div class="label">자동이체일(적금)</div>
+							<select id="autopayDay" class="num">
+								<option>5일</option>
+								<option selected>15일</option>
+								<option>25일</option>
+							</select>
+						</div>
+						<div>
+							<div class="label">만기 처리</div>
+							<select id="maturityOp" class="num">
+								<option>자동재예치</option>
+								<option selected>해지 후 출금</option>
+							</select>
+						</div>
+					</div>
+					<div class="foot-nav">
+						<button class="btn" id="prev2">이전</button>
+						<button class="btn brand" id="next2">다음</button>
+					</div>
+				</section>
+
+				<!-- 3. 우대/약관 -->
+				<section class="section" data-step="3">
+					<div class="label">우대 조건 선택</div>
+					<div class="chips" id="bonusWrap"></div>
+					<div class="hint" id="noBonusHint" style="display: none">적용 가능한 우대 조건이 없습니다.</div>
+
+					<hr style="border: none; border-top: 1px solid var(--line); margin: 14px 0">
+					<div class="row">
+						<label class="badge"><input type="checkbox" id="consent1"> (필수) 상품설명서 및 약관 동의</label> <label class="badge"><input type="checkbox" id="consent2"> (필수) 개인(신용)정보 수집·이용 동의</label> <label class="badge"><input type="checkbox" id="consent3"> (선택) 마케팅 정보 수신 동의</label>
+					</div>
+
+					<div class="foot-nav">
+						<button class="btn" id="prev3">이전</button>
+						<button class="btn brand" id="next3">다음</button>
+					</div>
+				</section>
+
+				<!-- 4. 확인 -->
+				<section class="section" data-step="4">
+					<div class="row">
+						<div class="badge">
+							출금계좌: <span id="sumFunding" style="margin-left: 6px"></span>
+						</div>
+						<div class="badge" id="sumAmount"></div>
+						<div class="badge">
+							기간: <span id="sumTerm" style="margin-left: 6px"></span>
+						</div>
+						<div class="badge">
+							적용금리: <span id="sumRate" style="margin-left: 6px"></span>
+						</div>
+					</div>
+					<p class="hint" style="margin-top: 10px">아래 버튼을 누르면 신청이 접수됩니다.</p>
+					<div class="foot-nav">
+						<button class="btn" id="prev4">이전</button>
+						<button class="btn brand" id="submitBtn">가입하기</button>
+					</div>
+				</section>
+
+			</div>
+		</main>
+	</div>
+	<div id="footer"></div>
+</body>
+</html>

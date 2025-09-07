@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cloudinary Upload</title>
+</head>
+<body>
+	<h2>Cloudinary 업로드 테스트</h2>
+<form id="form" enctype="multipart/form-data">
+  <label>카드 ID:
+    <input type="number" name="cardId" value="205" required />
+  </label>
+  <input type="file" name="file" required />
+  <button type="submit">업로드</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+document.getElementById('form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const res = await fetch('/api/images/upload', { method: 'POST', body: fd });
+
+  if (!res.ok) {
+    const msg = await res.text().catch(() => '');
+    alert('업로드 실패: ' + (msg || res.status));
+    return;
+  }
+
+  const data = await res.json();
+  document.getElementById('result').innerHTML = `
+    <p>업로드 완료! URL:</p>
+    <a href="${data.url}" target="_blank">${data.url}</a><br>
+    <img src="${data.url}" style="max-width:200px; margin-top:10px;">
+  `;
+});
+</script>
+
+</body>
+</html>

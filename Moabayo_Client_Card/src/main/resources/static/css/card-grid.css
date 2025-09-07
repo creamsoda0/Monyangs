@@ -1,0 +1,89 @@
+/* 전역: 테두리/여백 이슈 제거 */
+html,body{margin:0;background:var(--bg);color:var(--ink);}
+
+/* 토큰(페이지 공통과 동일) */
+:root{
+  --bg:#ffffff; --ink:#111827; --sub:#6b7280; --line:#e5e7eb;
+  --card:#ffffff; --muted:#f8fafc; --shadow:0 10px 20px rgba(15,23,42,.08);
+  --brand:#7c3aed; --brand-ink:#f5f3ff; --accent:#f59e0b;
+}
+[data-theme="dark"]{
+  --bg:#0b0f14; --ink:#e5e7eb; --sub:#9aa5b1; --line:#1f2937;
+  --card:#0f151c; --muted:#0b1016; --shadow:0 10px 24px rgba(0,0,0,.45);
+  --brand:#a78bfa; --brand-ink:#0b0f14; --accent:#fbbf24;
+}
+
+/* 그리드 레이아웃 */
+.feature-grid{
+  max-width:1160px; margin:14px auto 24px; padding:0 24px;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+}
+@media (max-width:1100px){ .feature-grid{ grid-template-columns:1fr 1fr; } }
+@media (max-width:720px){ .feature-grid{ grid-template-columns:1fr; } }
+
+/* 카드 베이스 */
+.app-card{
+  position:relative; overflow:hidden;
+  background:var(--card); border:1px solid var(--line); border-radius:20px;
+  box-shadow:var(--shadow); padding:18px; min-height:200px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+.app-card:hover{ transform:translateY(-4px); }
+.icon{ width:44px; height:44px; border-radius:14px; display:grid; place-items:center; margin-bottom:10px;
+  background:var(--muted); color:var(--ink); border:1px solid var(--line);
+}
+.title{ font:800 18px/1.2 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR"; margin:4px 0; letter-spacing:-.01em; }
+.desc{ color:var(--sub); margin:0 0 8px; }
+.bullets{ margin:8px 0 14px; padding-left:16px; color:var(--ink); }
+.bullets.tight{ margin:6px 0 10px; }
+.bullets li{ margin:2px 0; }
+.tags{ display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 14px; }
+.tag{ font-size:12px; padding:2px 8px; border-radius:999px; background:var(--muted); border:1px solid var(--line); color:var(--ink); }
+.score{ font-weight:900; font-size:20px; }
+
+/* 버튼 베이스(프로젝트 공통 .mbtn 사용) */
+.mbtn{ --h:36px; --px:12px; --radius:999px; font-weight:700; }
+
+/* === Hover Variants (버튼 이펙트에서 가져온 미니멀 버전) === */
+
+/* 1) GLOW: 카드 배경에 부드러운 그라데이션 글로우(버튼-9 변형) */
+.card--glow::before{
+  content:""; position:absolute; inset:-20%; z-index:-1; border-radius:30px;
+  background:radial-gradient(closest-side, color-mix(in oklab, var(--brand) 30%, transparent) 0%, transparent 70%);
+  transform:scale(.9); opacity:0; filter:blur(14px);
+  transition: opacity .25s ease, transform .25s ease, filter .25s ease;
+}
+.card--glow:hover::before{ opacity:1; transform:scale(1); filter:blur(18px); }
+
+/* 2) DRAW: 테두리 그리기(버튼-3 변형, 과하지 않게 2px) */
+.card--draw::after, .card--draw::before{
+  content:""; position:absolute; background: color-mix(in oklab, var(--brand) 70%, var(--ink));
+  transition: all .25s ease;
+}
+.card--draw::before{ right:16px; top:16px; height:0%; width:2px; }
+.card--draw::after { right:16px; top:16px; width:0%; height:2px; }
+.card--draw:hover::before{ height: calc(100% - 32px); }
+.card--draw:hover::after { width: calc(100% - 32px); }
+
+/* 3) FILL: 오른쪽→왼쪽 소프트 채움(버튼-15 변형) */
+.card--fill::after{
+  content:""; position:absolute; inset:0; width:0%; right:0; z-index:-1; border-radius:inherit;
+  background: linear-gradient(315deg, color-mix(in oklab, var(--brand) 36%, transparent) 0%, transparent 70%);
+  transition: width .28s ease;
+}
+.card--fill:hover::after{ left:0; width:100%; }
+
+/* 4) FLIP: 전/후면 컨텐츠 3D 전환(버튼-12 변형) */
+.card--flip{ perspective: 900px; }
+.flip-wrap{ position:relative; height:100%; }
+.front, .back{
+  position:absolute; inset:0; padding:18px; border-radius:inherit; backface-visibility:hidden;
+  display:flex; flex-direction:column;
+}
+.back{ transform: rotateY(180deg); background: color-mix(in oklab, var(--brand) 10%, var(--card)); }
+.card--flip:hover .front{ transform: rotateY(180deg); transition: transform .4s ease; }
+.card--flip:hover .back { transform: rotateY(0);     transition: transform .4s ease .04s; }
+
+/* 5) LIFT / SOFT: 베이스 변형 */
+.card--lift:hover{ box-shadow: 0 16px 32px rgba(0,0,0,.16); }
+.card--soft{ background: color-mix(in oklab, var(--brand) 10%, var(--card)); border-color: color-mix(in oklab, var(--brand) 18%, var(--line)); }

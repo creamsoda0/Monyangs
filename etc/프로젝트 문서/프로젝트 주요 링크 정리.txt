@@ -1,0 +1,30 @@
+프로젝트 중요 내용들 업데이트
+-----------------------------
+프로젝트 중요 링크 모음
+---
+피그마 디자인 링크
+https://www.figma.com/team_invite/redeem/UxsCc15aUh2ZUubFPsylM3
+---
+형상관리 엑셀(간트차트) 링크
+https://1drv.ms/x/c/4b7ff71454902b22/EcFRQJvjOsRHpv-RcqG3bZABsHDJ9xmMh827szaTWiPhew?e=IkF9bH
+---
+기능명세서 엑셀 파일 링크
+https://1drv.ms/x/c/4b7ff71454902b22/EcyqYSZd1F9LlUQTZYeEUoEBcepUtGxZlGc8Qkzh263_Tg?e=0NkM9X
+---
+선배들의 프로젝트 - 태산
+https://github.com/marugy/Taesan?tab=readme-ov-file##-%F0%9F%9B%A0%EF%B8%8F-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EC%88%A0
+---
+공공데이터 포털
+https://www.data.go.kr/tcs/dss/selectDataSetList.do?keyword=%EC%8B%A0%EC%9A%A9%EC%B9%B4%EB%93%9C+%EB%A7%A4%EC%B6%9C
+---
+업데이트 250804
+프로젝트 포트 정리
+Eureka_Server: 8012
+Client_LoginService: 8811
+Client_Main: 8812
+Client_Bank: 8813
+Client_Card: 8814
+Client_Admin: 8815
+---
+업데이트 250806 
+토큰 암호화 기술: HS256

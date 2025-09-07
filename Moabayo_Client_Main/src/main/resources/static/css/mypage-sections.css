@@ -1,0 +1,114 @@
+/* /css/mypage-sections.css */
+
+/* ========== 표시/숨김 유틸 ========== */
+.table-data.hide { display: none !important; }   /* 기존 3컬럼 숨길 때 */
+.section-stack { display: none; margin-top: 24px; }
+.section-stack.active { display: block; }
+.section-view { display: none; background: var(--light); border-radius: 16px; padding: 18px; box-shadow: 0 2px 6px rgba(0,0,0,.04); }
+.section-view.active { display: block; }
+
+/* ========== 섹션 헤더 ========== */
+.section-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 12px; }
+.section-head h3 { font-size: 24px; font-weight: 700; color: var(--dark); }
+.section-head .sub { color: var(--sub); font-size: .875rem; }
+
+/* ========== 미니 KPI ========== */
+.mini-kpis { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 12px; margin: 8px 0 16px; }
+.mini-kpis li { display:flex; align-items:center; gap:12px; padding: 12px 14px; border:1px solid var(--line); border-radius: 14px; background: var(--light); }
+.mini-kpis .icon { width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background: var(--light-blue); color: var(--blue); }
+.mini-kpis .meta { line-height:1.2; }
+.mini-kpis .meta .label { color: var(--sub); font-weight:600; font-size:.9rem; }
+.mini-kpis .meta .val { color: var(--dark); font-weight:700; font-size:1.1rem; }
+
+/* ========== 공통 패널 ========== */
+.panel { border:1px solid var(--line); border-radius:12px; background: var(--light); padding: 14px; }
+.panel + .panel { margin-top: 12px; }
+.panel .panel-title { font-weight:700; margin-bottom: 8px; color: var(--dark); }
+
+/* 좌/우 그리드(은행/카드) */
+.section-grid { display:grid; gap: 14px; }
+.section-grid.cols-2 { grid-template-columns: 1.2fr 1fr; }
+@media (max-width: 1080px) { .section-grid.cols-2 { grid-template-columns: 1fr; } }
+
+/* ========== 테이블(기존 .table 재사용, 약간만 보강) ========== */
+.section-view .table-wrap { overflow:auto; border-radius:.6rem; border:1px solid var(--line); }
+.section-view .table { width:100%; border-collapse:collapse; }
+.section-view .table thead th { text-align:left; padding:.7rem .8rem; background: var(--grey); font-weight:600; }
+.section-view .table tbody td { padding:.6rem .8rem; border-top:1px solid var(--line); }
+.section-view .table .right { text-align:right; }
+
+/* ========== 카드 타일 (내 카드/추천 카드) ========== */
+.card-tile-lite { border:1px solid var(--line); border-radius:12px; background: var(--light); padding: 12px; display:flex; gap:12px; align-items:center; }
+.card-tile-lite .logo { width:48px; height:30px; border-radius:6px; background: var(--grey); display:grid; place-items:center; font-weight:700; color: var(--dark); }
+.card-tile-lite .meta { flex:1; min-width:0; }
+.card-tile-lite .meta .name { font-weight:700; color: var(--dark); }
+.card-tile-lite .meta .desc { color: var(--sub); font-size:.875rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.card-tile-lite .actions { display:flex; gap:6px; }
+
+.tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+.tag { display:inline-block; padding:2px 8px; border-radius:999px; background: var(--grey); color: var(--sub); font-size:.75rem; font-weight:600; }
+
+/* 진행바 (혜택/한도 등) */
+.progress { width:100%; height:6px; background: var(--grey); border-radius:999px; overflow:hidden; }
+.progress .bar { height:100%; width:0; background: var(--blue); transition: width .25s ease; }
+
+/* 배지 색상 (손익 등) */
+.badge { display:inline-block; padding:.15rem .5rem; border-radius:999px; background: var(--grey); color: var(--sub); font-size:.75rem; font-weight:600; }
+.badge.up   { background: rgba(0,200,0,.12); color:#0a0; }
+.badge.down { background: rgba(220,0,0,.12); color:#c00; }
+
+/* ========== 툴바/인풋 ========== */
+.toolbar { display:flex; gap:.5rem; margin-bottom:.6rem; }
+.toolbar input[type="search"],
+.section-view input[type="text"],
+.section-view input[type="email"],
+.section-view input[type="tel"],
+.section-view input[type="password"]{
+  width:100%; padding:.5rem .7rem; border:1px solid var(--line); border-radius:.5rem; background: var(--light); color: var(--ink);
+}
+.btn { border:1px solid var(--line); background:transparent; color: var(--ink); padding:.45rem .8rem; border-radius:.5rem; cursor:pointer; font-size:.875rem; }
+.btn.primary { background: var(--brand); border-color: var(--brand); color:#fff; }
+.btn.ghost:hover { background: var(--grey); }
+
+/* ========== 보안 섹션 작은 리스트 ========== */
+.list-soft { list-style:none; margin:0; padding:0; }
+.list-soft li { display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid var(--line); }
+.list-soft li:first-child { border-top:0; }
+
+/* ========== 접근성 포커스 ========== */
+.section-head h3:focus { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 6px; }
+
+/* /css/mypage-sections.css (추가) */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 12px; }
+
+/* === Settings 섹션 === */
+.settings-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+  gap:1rem;
+}
+.settings-form label{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.5rem 0;
+}
+.settings-form .select{
+  width: 60%;
+  padding:.5rem .6rem;
+  border:1px solid var(--line);
+  border-radius:.5rem;
+  background: var(--light);
+  color: var(--ink);
+}
+.settings-form input[type="checkbox"]{ transform: scale(1.05); }
+.settings-form .hint{ color:var(--sub); font-size:.85rem; }
+
+/* (옵션) 잔액 가리기 토글 시 */
+body.hide-balance #kpi-asset,
+body.hide-balance .right { filter: blur(6px); }
+
+.settings-form .row.between{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:.8rem; padding:.25rem 0;
+}
+.settings-form .hint{ margin-top:.5rem; color:var(--sub); font-size:.875rem; }
+

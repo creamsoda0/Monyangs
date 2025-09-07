@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/index.css" />
+<link rel="stylesheet" href="/css/wave.css" />
+<!-- GSAP 안 쓰면 이 줄 빼고, 쓰면 아래 주석 해제 (index.js보다 먼저) -->
+<!-- <script defer src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script> -->
+<script defer src="/js/index.js"></script>
+<title>모으냥즈 은행</title>
+</head>
+
+<body data-theme="day">
+	<button class="theme-toggle" aria-pressed="false" title="Toggle theme">
+		<span class="theme-toggle__thumb"> <span class="icon-sun" aria-hidden="true"></span> <span class="icon-moon" aria-hidden="true"></span>
+		</span> <span class="theme-toggle__label">Night</span>
+	</button>
+
+
+	<h1 class="title">Mounyangs Bank</h1>
+	<div class="wrapper">
+		<button class="button brand-badge" type="button" aria-label="모으냥즈 홈">
+			<span class="button__face"> <i class='bx bxs-cat' aria-hidden="true"></i>
+			</span>
+		</button>
+	</div>
+
+	<div class="sky"></div>
+	<div class="ocean">
+		<div class="wave"></div>
+		<div class="wave"></div>
+	</div>
+</body>
+</html>

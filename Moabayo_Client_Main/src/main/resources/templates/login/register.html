@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>모으냥즈 회원가입</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 카카오 주소 API -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<link rel="stylesheet" href="http://localhost:8810/css/register.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/footer.css" />
+<script src="/js/register.js"></script>
+<!-- headr footer가 달리는 모든 페이지에 갖다 붙일것 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/mainpage2.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<!-- 이것도 같이 붙여야함 toggle switch 만들기 -->
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+<script defer src="http://localhost:8810/js/theme.js"></script>
+
+<!-- (추가) Flatpickr: 달력 위젯 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+</head>
+<body>
+	<div id="header"></div>
+	<div class="signup-container">
+		<h2 class="text-center mb-4">🐾 모으냥즈 회원가입 🐾</h2>
+
+		<form id="signupForm" class="has-validation" method="post" action="/registration/register" novalidate>
+			<section class="nx-section">
+				<h3 class="nx-title">기본 정보</h3>
+				<div class="grid-2">
+					<div class="form-floating mb-3">
+						<input class="form-control" id="name" name="name" placeholder=" " required> <label for="name">이름</label>
+					</div>
+					<!-- 성별: 세그먼트 버튼 (제출값: M/F) -->
+					<fieldset class="nx-segment" aria-label="성별 선택">
+						<input type="radio" class="seg-radio" id="genderM" name="gender" value="M" required> <label for="genderM" class="seg-btn" aria-pressed="false">남자</label> <input type="radio" class="seg-radio" id="genderF" name="gender" value="F" required> <label for="genderF" class="seg-btn" aria-pressed="false">여자</label>
+					</fieldset>
+				</div>
+
+				<div class="form-floating mb-3">
+					<input class="form-control" id="birthDate" name="birthDate" placeholder=" " required> <label for="birthDate">생년월일</label>
+				</div>
+			</section>
+
+			<section class="nx-section">
+				<h3 class="nx-title">로그인</h3>
+				<div class="input-group mb-2">
+					<input type="text" class="form-control" id="loginId" name="loginId" placeholder="아이디" required>
+					<button type="button" class="btn btn-outline-secondary" id="checkUserIdBtn">중복확인</button>
+				</div>
+				<p id="idCheckMsg" class="nx-help" aria-live="polite"></p>
+
+				<div class="grid-2">
+					<div class="form-floating mb-3">
+						<input type="password" class="form-control" id="password" name="password" placeholder=" " required> <label for="password">비밀번호</label>
+					</div>
+					<div class="form-floating mb-3">
+						<input type="password" class="form-control" id="confirmPassword" placeholder=" " required> <label for="confirmPassword">비밀번호 확인</label>
+					</div>
+				</div>
+			</section>
+
+			<section class="nx-section">
+				<h3 class="nx-title">연락처 · 주소</h3>
+				<div class="grid-2">
+					<div class="form-floating mb-3">
+						<input type="tel" class="form-control" id="phone" name="phone" placeholder=" " required> <label for="phone">핸드폰 번호</label>
+					</div>
+					<div class="form-floating mb-3">
+						<input type="email" class="form-control" id="email" name="email" placeholder=" " required> <label for="email">이메일</label>
+					</div>
+				</div>
+
+				<div class="grid-2">
+					<div id="zip-code-box" class="mb-3">
+						<input type="text" id="zipCode" name="zipCode" placeholder="우편번호" readonly required>
+						<button type="button" id="searchAddress">주소 검색</button>
+					</div>
+					<div class="form-floating mb-3">
+						<input class="form-control" id="address" name="address" placeholder=" " readonly required> <label for="address">주소</label>
+					</div>
+				</div>
+
+				<div class="form-floating mb-2">
+					<input class="form-control" id="addressDetail" name="addressDetail" placeholder=" " required> <label for="addressDetail">상세주소</label>
+				</div>
+			</section>
+
+			<div class="nx-sticky">
+				<button type="submit" class="btn btn-warning btn-lg" disabled>가입하기</button>
+			</div>
+		</form>
+
+	</div>
+
+	<!-- Footer 삽입 -->
+	<div id="footer"></div>
+
+</body>
+
+</html>

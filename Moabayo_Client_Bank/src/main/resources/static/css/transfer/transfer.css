@@ -1,0 +1,179 @@
+/* =========================
+   1) 페이지 토큰 (스코프: #transfer)
+   ========================= */
+#transfer{
+  --tf-ink:#111827; --tf-sub:#6b7280;
+  --tf-bg:#ffffff;  --tf-card:#ffffff;
+  --tf-line:#e5e7eb; --tf-brand:#7c3aed;
+  --tf-accent:#f2c14e; --tf-muted:#f8fafc;
+  --tf-shadow:0 10px 24px rgba(17,24,39,.08);
+}
+/* 다크 토큰: 흰 라인/밝은 띠 방지 */
+html[data-theme="dark"] #transfer{
+  --tf-ink:#e5e7eb; --tf-sub:#9aa5b1;
+  --tf-bg:#0b0f14;  --tf-card:#0f151c;
+  --tf-line:#111827;            /* 한 톤 더 어둡게 */
+  --tf-brand:#a78bfa; --tf-accent:#fbbf24; --tf-muted:#0b1016;
+  --tf-shadow:0 10px 24px rgba(0,0,0,.42);
+}
+/* 브라우저에게 다크 힌트 */
+html[data-theme="dark"]{ color-scheme: dark; }
+
+/* =========================
+   2) 레이아웃
+   ========================= */
+#transfer.page{ max-width:960px; margin:24px auto 40px; padding:0 16px; background:var(--tf-bg); }
+#transfer .tf-card{
+  background:var(--tf-card); border:1px solid var(--tf-line);
+  border-radius:20px; box-shadow:var(--tf-shadow); padding:20px; overflow:hidden;
+}
+#transfer .tf-title{ font-weight:800; font-size:24px; letter-spacing:-.2px; margin:10px 2px 6px; color:var(--tf-ink); display:flex; align-items:center; gap:10px; }
+#transfer .tf-desc{ color:var(--tf-sub); margin:0 2px 18px; }
+
+/* 공통 레이아웃 배경(흰 띠) 확실히 덮기 */
+.site-content, main.site-content, #transfer.page{ background: var(--tf-bg) !important; }
+
+/* =========================
+   3) 폼
+   ========================= */
+#transfer .tf-form{ display:grid; grid-template-columns:1fr; gap:16px; }
+#transfer .row{ display:grid; grid-template-columns:160px 1fr; gap:12px; align-items:center; }
+#transfer .label{ color:var(--tf-sub); font-weight:600; }
+#transfer .field{ position:relative; }
+
+#transfer .input, #transfer .select, #transfer .textarea{
+  width:100%; max-width:100%; box-sizing:border-box;
+  border:1px solid var(--tf-line); background:var(--tf-card); color:var(--tf-ink);
+  border-radius:14px; padding:14px; font-size:16px; outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease;
+  -webkit-appearance:none; appearance:none; background-clip:padding-box;
+}
+#transfer .input:focus, #transfer .select:focus, #transfer .textarea:focus{
+  border-color: var(--tf-brand) !important;
+  box-shadow: inset 0 0 0 9999px rgba(0,0,0,0), 0 0 0 3px rgba(124,58,237,.12) !important;
+}
+#transfer .textarea{ min-height:86px; resize:vertical; }
+
+/* 셀렉트 화살표 (밝은 픽셀 방지) */
+#transfer .select{
+  line-height:1.2; padding-right:40px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--tf-sub) 50%),
+    linear-gradient(135deg, var(--tf-sub) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+  background-size: 6px 6px, 6px 6px; background-repeat:no-repeat;
+}
+
+/* 자동완성(크롬) 밝은 칠 제거 */
+#transfer input:-webkit-autofill,
+#transfer textarea:-webkit-autofill,
+#transfer select:-webkit-autofill{
+  -webkit-box-shadow: 0 0 0 1000px var(--tf-card) inset !important;
+  -webkit-text-fill-color: var(--tf-ink) !important;
+  caret-color: var(--tf-ink) !important;
+}
+
+/* 받는 사람/태그 */
+#transfer .recipient{ display:flex; align-items:center; gap:12px; }
+#transfer .avatar{ width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#f9d9ff,#dfe7ff); border:1px solid var(--tf-line); display:grid; place-items:center; font-weight:700; color:#5b4dc4; }
+#transfer .pill{ display:inline-flex; align-items:center; gap:6px; border:1px solid var(--tf-line); border-radius:999px; padding:6px 10px; background:var(--tf-muted); color:var(--tf-ink); font-size:12px; }
+
+/* 빠른 금액 */
+#transfer .quick{ display:flex; flex-wrap:wrap; gap:8px; }
+#transfer .quick button{ border:1px solid var(--tf-line); background:var(--tf-card); color:var(--tf-ink); border-radius:999px; padding:8px 12px; font-weight:600; cursor:pointer; }
+#transfer .quick button:hover{ border-color:var(--tf-brand); box-shadow:0 0 0 3px rgba(124,58,237,.12); }
+
+/* 버튼들 */
+#transfer .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:6px; }
+#transfer .btn{ appearance:none; border:none; border-radius:14px; padding:14px 18px; font-weight:800; cursor:pointer; }
+#transfer .btn-primary{ background:linear-gradient(135deg,var(--tf-brand), #6d28d9); color:#fff; }
+#transfer .btn-ghost{ background:transparent; border:1px solid var(--tf-line); color:var(--tf-ink); }
+#transfer .btn[disabled]{ opacity:.55; cursor:not-allowed; }
+
+/* 모달(옵션) */
+#transfer .modal{ position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.42); z-index:50; }
+#transfer .modal.show{ display:grid; }
+#transfer .modal .panel{ width:min(520px,92vw); background:var(--tf-card); border:1px solid var(--tf-line); border-radius:16px; padding:18px; box-shadow:var(--tf-shadow); }
+#transfer .panel h3{ margin:2px 0 10px; font-size:20px; color:var(--tf-ink); }
+#transfer .kv{ display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px dashed var(--tf-line); color:var(--tf-ink); }
+#transfer .kv:last-child{ border-bottom:none; }
+
+/* 진행/완료/실패 */
+#transfer .progress{ display:none; justify-content:center; align-items:center; gap:12px; padding:22px; }
+#transfer .progress.show{ display:flex; }
+#transfer .coin{ width:26px; height:26px; border-radius:50%; border:2px solid var(--tf-accent); position:relative; animation:spin 1.2s linear infinite; }
+#transfer .coin::after{ content:""; position:absolute; inset:6px; border-radius:50%; background:var(--tf-accent); opacity:.9; }
+@keyframes spin{ from{ transform:rotate(0) } to{ transform:rotate(360deg) } }
+
+#transfer .done{ display:none; text-align:center; padding:22px 14px 10px; }
+#transfer .done.show{ display:block; }
+#transfer .cat{ font-size:42px; line-height:1; }
+#transfer .done h2{ margin:10px 0 6px; }
+#transfer .done .desc{ color:var(--tf-sub); }
+
+#transfer .fail{ display:none; text-align:center; padding:22px 14px 10px; }
+#transfer .fail.show{ display:block; }
+#transfer .fail h2{ margin:10px 0 6px; }
+#transfer .fail .desc{ color:var(--tf-sub); }
+
+/* =========================
+   4) 페이지 전역 보정 (흰 선/띠 마감)
+   ========================= */
+#transfer .tf-card,
+#transfer .input, #transfer .select, #transfer .textarea,
+#transfer .pill, #transfer .avatar{
+  border-color: var(--tf-line) !important;
+}
+
+/* =========================
+   5) 반응형
+   ========================= */
+@media (max-width:720px){
+  #transfer.page{ padding:0 12px; }
+  #transfer .row{ grid-template-columns:1fr; }
+  #transfer .actions{ justify-content:stretch; }
+  #transfer .btn{ flex:1; }
+}
+/* ===== PIN 모달 전용 ===== */
+.pw-field{ position:relative; margin:10px 0 8px; }
+.pw-field .input{ letter-spacing: .3em; text-align:center; font-weight:800; }
+.pw-field .input.invalid{ border-color:#ef4444 !important; }
+.pw-field .eye{
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  width:36px; height:36px; border-radius:10px; border:1px solid var(--tf-line);
+  background:var(--tf-card); cursor:pointer;
+}
+.pw-field .eye::before{
+  content:"👁️"; display:block; text-align:center; line-height:34px;
+}
+.pw-meta{ display:flex; justify-content:space-between; align-items:center; min-height:20px; }
+.help{ color:var(--tf-sub); font-size:12px; }
+.error{ color:#ef4444; font-size:12px; }
+.shake{ animation:shake .35s ease; }
+@keyframes shake{
+  0%,100%{ transform:translateX(0) }
+  20%,60%{ transform:translateX(-6px) }
+  40%,80%{ transform:translateX(6px) }
+}
+
+/* ===== PIN(비밀번호) 모달 전용 ===== */
+.pw-field{ position:relative; margin:10px 0 8px; }
+.pw-field .input{ letter-spacing:0; text-align:left; font-weight:600; }
+.pw-field .input.invalid{ border-color:#ef4444 !important; }
+.pw-field .eye{
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  width:36px; height:36px; border-radius:10px; border:1px solid var(--tf-line);
+  background:var(--tf-card); cursor:pointer;
+}
+.pw-field .eye::before{
+  content:"👁️"; display:block; text-align:center; line-height:34px;
+}
+.pw-meta{ display:flex; justify-content:space-between; align-items:center; min-height:20px; }
+.help{ color:var(--tf-sub); font-size:12px; }
+.error{ color:#ef4444; font-size:12px; }
+.shake{ animation:shake .35s ease; }
+@keyframes shake{
+  0%,100%{ transform:translateX(0) }
+  20%,60%{ transform:translateX(-6px) }
+  40%,80%{ transform:translateX(6px) }
+}

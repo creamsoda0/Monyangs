@@ -1,0 +1,67 @@
+/* ======================================================
+   toggle-compact.css — mypage와 동일 룩 (52x26, 타이트)
+   ====================================================== */
+#switch-mode { display:none !important; }   /* 문서 전체 1개만! */
+
+:root{
+  --sw-w: 56px; --sw-h: 28px; --sw-pad: 3px;      /* 크기 */
+  --sw-border: var(--line);
+  --sw-track: var(--card);                         /* 라이트 트랙 */
+  --sw-track-dark:#0f151c;                         /* 다크 트랙 */
+  --sw-sun:#fb923c; --sw-moon:#fbbf24;             /* 아이콘 색 */
+  --sw-ball-1:#7c3aed; --sw-ball-2:#5b8cff;        /* 라일락 그라데이션 */
+  --sw-shadow-track:0 1px 1px rgba(0,0,0,.04),0 6px 16px rgba(17,24,39,.08);
+  --sw-shadow-ball: 0 6px 18px rgba(124,58,237,.25);
+}
+[data-theme="dark"]{ --sw-track:var(--sw-track-dark); }
+
+/* 헤더/마이페이지 어디서든 동일하게 적용(헤더 규칙을 리셋) */
+.site-header nav .toggle > label.admin-switch,
+#content   nav .toggle > label.admin-switch{
+  all: unset;
+  position: relative;
+  display:flex !important; align-items:center; justify-content:center;
+  width:var(--sw-w) !important; height:var(--sw-h) !important;
+  padding:var(--sw-pad) !important;
+  border-radius:999px !important;
+  background:linear-gradient(180deg,var(--sw-track),
+            color-mix(in oklab, var(--sw-track) 92%, #000));
+  border:1px solid var(--sw-border) !important;
+  box-shadow:var(--sw-shadow-track);
+  cursor:pointer; user-select:none; isolation:isolate; z-index:1;
+}
+
+/* 볼(꽉 차는 느낌) */
+.site-header nav .toggle > label.admin-switch .ball,
+#content   nav .toggle > label.admin-switch .ball{
+  position:absolute; top:var(--sw-pad); left:var(--sw-pad);
+  width:calc(var(--sw-h) - var(--sw-pad)*2);
+  height:calc(var(--sw-h) - var(--sw-pad)*2);
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--sw-ball-1),var(--sw-ball-2));
+  box-shadow:var(--sw-shadow-ball);
+  transition:transform .22s ease;
+}
+/* data-theme 기준 이동 */
+html[data-theme="dark"] .site-header nav .toggle > label.admin-switch .ball,
+html[data-theme="dark"] #content   nav .toggle > label.admin-switch .ball{
+  transform:translateX(calc(var(--sw-w) - var(--sw-h)));
+}
+
+/* 아이콘 */
+.site-header nav .toggle > label.admin-switch i,
+#content   nav .toggle > label.admin-switch i{
+  position:absolute; top:50%; transform:translateY(-50%);
+  font-size:14px; pointer-events:none; opacity:.95;
+}
+.site-header nav .toggle > label.admin-switch .bxs-moon,
+#content   nav .toggle > label.admin-switch .bxs-moon{ left:9px; color:var(--sw-moon); }
+.site-header nav .toggle > label.admin-switch .bx-sun,
+#content   nav .toggle > label.admin-switch .bx-sun  { right:9px; color:var(--sw-sun); }
+
+/* 헤더 클릭 막힘 방지 */
+.header-inner{ position:relative; }
+.site-header .toggle{ position:relative; z-index:220; }
+
+/* 구형 버튼형 숨김 */
+.toggle-btn{ display:none !important; }

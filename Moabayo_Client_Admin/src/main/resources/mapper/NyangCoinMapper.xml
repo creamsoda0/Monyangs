@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.mapper.AdminMapper">
+    <!-- 여기에 필요한 SQL 태그들 작성 예정 -->
+    <select id="coinBalanceByUser" resultType="decimal">
+  SELECT COALESCE(SUM(money),0) FROM nyang_coin WHERE user_id = #{userId}
+</select>
+
+<select id="coinHistory" resultType="map">
+  SELECT * FROM coin_history WHERE nyang_id = #{nyangId} ORDER BY create_date DESC LIMIT #{limit} OFFSET #{offset}
+</select>
+    
+</mapper>

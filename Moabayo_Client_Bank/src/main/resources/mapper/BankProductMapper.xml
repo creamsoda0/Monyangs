@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sboot.moabayo.dao.BankProductMapper">
+
+  <!-- 공통 컬럼 목록 -->
+  <sql id="columns">
+    account_id, name, img, description, category, benefits, interest, type
+  </sql>
+
+  <!-- VO 매핑 -->
+  <resultMap id="BankProductMap" type="com.sboot.moabayo.vo.BankProductVO">
+    <id     column="account_id"  property="accountId"/>
+    <result column="name"        property="name"/>
+    <result column="img"         property="img"/>
+    <result column="description" property="description"/>
+    <result column="category"    property="category"/>
+    <result column="benefits"    property="benefits"/>
+    <result column="interest"    property="interest" javaType="double"/>
+    <result column="type"        property="type"/>
+  </resultMap>
+
+  <!-- 전체 조회 -->
+  <select id="findAll" resultMap="BankProductMap">
+    SELECT <include refid="columns"/>
+    FROM bank_product
+    ORDER BY account_id
+  </select>
+
+  <!-- 단건 조회 -->
+  <select id="findById" parameterType="int" resultMap="BankProductMap">
+    SELECT <include refid="columns"/>
+    FROM bank_product
+    WHERE account_id = #{accountId}
+  </select>
+
+  <!-- 카테고리 목록(distinct) -->
+  <select id="findDistinctCategories" resultType="string">
+    SELECT DISTINCT category
+    FROM bank_product
+    WHERE category IS NOT NULL
+    ORDER BY category
+  </select>
+
+  <!-- 타입 목록(distinct) 필요시 -->
+  <select id="findDistinctTypes" resultType="string">
+    SELECT DISTINCT type
+    FROM bank_product
+    WHERE type IS NOT NULL
+    ORDER BY type
+  </select>
+
+  <!-- 검색 + 정렬 + 페이징(Oracle 12c+ : OFFSET/FETCH) -->
+  <!-- 파라미터 예시(Map):
+       nameLike: String (부분검색), type: String, category: String,
+       minRate: BigDecimal, maxRate: BigDecimal,
+       orderBy: 'name'|'interest'|'account_id', sort: 'asc'|'desc',
+       offset: int, limit: int -->
+  <select id="search" parameterType="map" resultMap="BankProductMap">
+    SELECT <include refid="columns"/>
+    FROM bank_product
+    <where>
+      <if test="nameLike != null and nameLike != ''">
+        ( LOWER(name) LIKE CONCAT('%', LOWER(#{nameLike}), '%')
+          OR LOWER(category) LIKE CONCAT('%', LOWER(#{nameLike}), '%')
+          OR LOWER(type) LIKE CONCAT('%', LOWER(#{nameLike}), '%') )
+      </if>
+
+      <if test="type != null and type != ''">
+        AND type = #{type}
+      </if>
+
+      <if test="category != null and category != ''">
+        AND category = #{category}
+      </if>
+
+      <if test="minRate != null">
+        AND interest &gt;= #{minRate}
+      </if>
+
+      <if test="maxRate != null">
+        AND interest &lt;= #{maxRate}
+      </if>
+    </where>
+
+    <choose>
+      <when test="orderBy == 'name'">
+        ORDER BY name
+      </when>
+      <when test="orderBy == 'interest'">
+        ORDER BY interest
+      </when>
+      <otherwise>
+        ORDER BY account_id
+      </otherwise>
+    </choose>
+    <if test="sort != null and sort.toLowerCase() == 'desc'">
+      DESC
+    </if>
+
+    <if test="offset != null and limit != null">
+      OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </if>
+  </select>
+
+  <!-- 검색 총 개수 -->
+  <select id="countSearch" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM bank_product
+    <where>
+      <if test="nameLike != null and nameLike != ''">
+        ( LOWER(name) LIKE CONCAT('%', LOWER(#{nameLike}), '%')
+          OR LOWER(category) LIKE CONCAT('%', LOWER(#{nameLike}), '%')
+          OR LOWER(type) LIKE CONCAT('%', LOWER(#{nameLike}), '%') )
+      </if>
+
+      <if test="type != null and type != ''">
+        AND type = #{type}
+      </if>
+
+      <if test="category != null and category != ''">
+        AND category = #{category}
+      </if>
+
+      <if test="minRate != null">
+        AND interest &gt;= #{minRate}
+      </if>
+
+      <if test="maxRate != null">
+        AND interest &lt;= #{maxRate}
+      </if>
+    </where>
+  </select>
+
+  <!-- INSERT (명시적 PK) -->
+  <insert id="insert" parameterType="com.sboot.moabayo.vo.BankProductVO">
+    INSERT INTO bank_product (
+      account_id, name, img, description, category, benefits, interest, type
+    ) VALUES (
+      #{accountId}, #{name}, #{img}, #{description}, #{category}, #{benefits}, #{interest}, #{type}
+    )
+  </insert>
+
+  <!-- INSERT (시퀀스 사용) - 선택: seq_bank_product가 있을 때 -->
+  <!--
+  <insert id="insertWithSeq" parameterType="com.sboot.moabayo.vo.BankProductVO" useGeneratedKeys="false">
+    INSERT INTO bank_product (
+      account_id, name, img, description, category, benefits, interest, type
+    ) VALUES (
+      seq_bank_product.NEXTVAL, #{name}, #{img}, #{description}, #{category}, #{benefits}, #{interest}, #{type}
+    )
+  </insert>
+  -->
+
+  <!-- UPDATE (부분 업데이트) -->
+  <update id="update" parameterType="com.sboot.moabayo.vo.BankProductVO">
+    UPDATE bank_product
+    <set>
+      <if test="name != null">name = #{name},</if>
+      <if test="img != null">img = #{img},</if>
+      <if test="description != null">description = #{description},</if>
+      <if test="category != null">category = #{category},</if>
+      <if test="benefits != null">benefits = #{benefits},</if>
+      <if test="interest != null">interest = #{interest},</if>
+      <if test="type != null">type = #{type},</if>
+    </set>
+    WHERE account_id = #{accountId}
+  </update>
+
+  <!-- DELETE -->
+  <delete id="delete" parameterType="int">
+    DELETE FROM bank_product
+    WHERE account_id = #{accountId}
+  </delete>
+
+</mapper>

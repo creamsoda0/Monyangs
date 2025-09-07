@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>모으냥즈 | 거래내역</title>
+
+<!-- Styles -->
+<link rel="stylesheet" href="/css/transactions.css" />
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+
+
+<!-- headr footer가 달리는 모든 페이지에 갖다 붙일것 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<!-- 이것도 같이 붙여야함 toggle switch 만들기 -->
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+<script defer src="http://localhost:8810/js/theme.js"></script>
+</head>
+<body>
+	<!-- ⚠ 공통 헤더/푸터는 프로젝트 레이아웃에서 주입 -->
+	<div id="header"></div>
+
+
+	<main id="tx" class="tx-page">
+		<!-- ===== 헤더 스냅샷 / 기간, 빠른 필터 ===== -->
+		<section class="snapshot">
+			<div class="snap-inner">
+				<div class="snap-left">
+					<h1 class="title">거래내역</h1>
+					<p class="desc">기간을 선택하고, 원하는 유형/카테고리로 빠르게 찾아보세요.</p>
+					<div class="period-row">
+						<label class="label">기간</label> <select id="periodSelect" class="select">
+							<option value="thisMonth" selected>이번 달</option>
+							<option value="lastMonth">지난 달</option>
+							<option value="90d">최근 90일</option>
+							<option value="custom">기간 지정…</option>
+						</select> <input id="fromDate" class="date" type="date" hidden /> <span class="dash" hidden>~</span> <input id="toDate" class="date" type="date" hidden />
+					</div>
+					<div class="quick-filters">
+						<button class="chip is-active" data-type="all">전체</button>
+						<button class="chip" data-type="income">입금</button>
+						<button class="chip" data-type="expense">출금</button>
+						<button class="chip" data-type="card">카드</button>
+						<button class="chip" data-type="transfer">이체</button>
+						<button class="chip" data-type="fee">수수료</button>
+						<button class="chip" data-type="refund">환불</button>
+					</div>
+				</div>
+
+				<div class="kpis">
+					<div class="kpi">
+						<div class="kpi-label">총 지출</div>
+						<div class="kpi-value" id="kpiExpense">₩ 0</div>
+						<div class="kpi-sub" id="kpiExpenseCnt">0건</div>
+					</div>
+					<div class="kpi">
+						<div class="kpi-label">총 수입</div>
+						<div class="kpi-value" id="kpiIncome">₩ 0</div>
+						<div class="kpi-sub" id="kpiIncomeCnt">0건</div>
+					</div>
+					<div class="kpi">
+						<div class="kpi-label">순지출</div>
+						<div class="kpi-value" id="kpiNet">₩ 0</div>
+						<div class="kpi-sub">지출 − 수입</div>
+					</div>
+					<div class="kpi">
+						<div class="kpi-label">거래 건수</div>
+						<div class="kpi-value" id="kpiCount">0건</div>
+						<div class="kpi-sub">필터 적용</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ===== 상단 검색/필터 ===== -->
+		<section class="filters" aria-label="고급 필터">
+			<div class="filters-row">
+				<input id="searchInput" class="search" type="search" placeholder="상호/메모/태그 검색" /> <select id="catSelect" class="select">
+					<option value="all" selected>카테고리 전체</option>
+					<option>외식</option>
+					<option>교통</option>
+					<option>주거</option>
+					<option>통신</option>
+					<option>구독</option>
+					<option>기타</option>
+				</select> <select id="methodSelect" class="select">
+					<option value="all" selected>결제수단 전체</option>
+					<option value="card">카드</option>
+					<option value="transfer">계좌이체</option>
+					<option value="auto">자동이체</option>
+					<option value="cash">현금</option>
+					<option value="fee">수수료</option>
+					<option value="refund">환불</option>
+				</select>
+				<div class="range">
+					<label>금액</label> <input id="amtMin" type="number" inputmode="numeric" placeholder="최소" /> <span>~</span> <input id="amtMax" type="number" inputmode="numeric" placeholder="최대" />
+				</div>
+				<select id="sortSelect" class="select">
+					<option value="dateDesc" selected>정렬: 최신순</option>
+					<option value="dateAsc">오래된순</option>
+					<option value="amtDesc">금액 높은순</option>
+					<option value="amtAsc">금액 낮은순</option>
+					<option value="merchantAsc">상호명</option>
+				</select>
+				<button id="resetBtn" class="btn btn-ghost">모두 해제</button>
+				<button id="exportBtn" class="btn btn-primary">CSV 내보내기</button>
+			</div>
+			<div id="activeChips" class="active-chips" aria-live="polite"></div>
+		</section>
+
+		<!-- ===== 레이아웃: 리스트 + 인사이트 ===== -->
+		<section class="content">
+			<div class="list-col">
+				<div id="txList" class="tx-list">
+					<!-- JS 렌더 -->
+				</div>
+				<button id="moreBtn" class="btn more">더 보기</button>
+			</div>
+
+			<aside class="insights">
+				<div class="card">
+					<div class="card-h">
+						<h3>카테고리 비중</h3>
+						<span class="hint">이번 달</span>
+					</div>
+					<canvas id="donut" height="180"></canvas>
+				</div>
+				<div class="card">
+					<div class="card-h">
+						<h3>일간 지출 추이</h3>
+						<span class="hint">최근 14일</span>
+					</div>
+					<canvas id="trend" height="180"></canvas>
+				</div>
+				<div class="card">
+					<div class="card-h">
+						<h3>시간대별 결제</h3>
+						<span class="hint">아침·점심·저녁·심야</span>
+					</div>
+					<canvas id="daypart" height="180"></canvas>
+				</div>
+				<div class="banner">
+					<strong>이번 달 외식이 +18% 증가했어요</strong>
+					<p>점심 시간대 사용이 많습니다. 야식냥 체크카드로 적립 혜택을 챙겨보세요.</p>
+				</div>
+			</aside>
+		</section>
+	</main>
+	<div id="footer"></div>
+
+</body>
+<!-- 데이터 가져오는 부분 -->
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	window.TX_ALL = /*[[${txnlist}]]*/[];
+	/*]]>*/
+</script>
+<!-- Scripts -->
+<script defer src="/js/transactions.js"></script>
+</html>

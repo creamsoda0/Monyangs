@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>회원가입 완료 | 모아봐요 모으냥즈</title>
+
+	<link rel="stylesheet" href="/css/mainpage2.css" />
+	<link rel="stylesheet" href="/css/welcome.css" />
+	
+	<!-- headr footer가 달리는 모든 페이지에 갖다 붙일것 -->
+	<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+	<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+	<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+	<script defer src="http://localhost:8810/js/common.js"></script>
+	<script defer src="http://localhost:8810/js/mainpage2.js"></script>
+	<script defer src="http://localhost:8810/js/adminservice.js"></script>
+	<script defer src="http://localhost:8810/js/bankservice.js"></script>
+	<script defer src="http://localhost:8810/js/cardservice.js"></script>
+	<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+	<!-- 이것도 같이 붙여야함 toggle switch 만들기 -->
+	<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+	<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+	<script defer src="http://localhost:8810/js/theme.js"></script>
+
+</head>
+<body class="site-layout">
+  <!-- ✅ Header: common.js가 주입 -->
+  <div id="header"></div>
+
+  <main class="wrap">
+    <section class="success">
+      <div class="success__ribbon">
+        <div class="paw-bg"></div>
+        <div class="success__badge" aria-hidden="true">
+          <i class='bx bx-check'></i>
+        </div>
+      </div>
+      <div class="success__body">
+        <h1 class="success__title">가입이 완료됐어요! 🎉</h1>
+        <p class="success__desc">
+          <span class="success__name" id="displayName">모으냥</span> 님, <b>모아봐요 모으냥즈</b>에 오신 걸 환영해요.
+        </p>
+
+        <!-- 다음 단계 -->
+        <div class="panel">
+          <ul class="next-steps small">
+            <!-- 운영에서 단계가 바뀔 수 있으니 텍스트는 단순 저장 -->
+            <li><i class='bx bx-link-alt'></i>자주 쓰는 <b>계좌/카드</b>를 연결해 보세요.</li>
+            <li><i class='bx bx-sun'></i>소비습관 기반 <b>예·적금 추천</b>을 받아 보세요.</li>
+            <!-- 필요시 이메일 인증/보안 설정 항목 추가 가능 -->
+          </ul>
+        </div>
+
+        <!-- CTA -->
+        <div class="actions">
+          <button class="btn pill" onclick="goTo('http://localhost:8812/mainpage')"><i class='bx bx-home-alt-2'></i>&nbsp;메인으로</button>
+          <button class="btn pill primary" onclick="goTo('/accounts/link')"><i class='bx bx-link'></i>&nbsp;계좌 연결하기</button>
+          <button class="btn pill" onclick="goTo('/onboarding')"><i class='bx bx-rocket'></i>&nbsp;바로 시작</button>
+        </div>
+
+        <!-- 서브 링크 -->
+        <div class="small" style="margin-top:12px; color:var(--sub);">
+          문제가 있나요? <a href="/support" style="text-decoration:none;">고객센터</a>로 문의하세요.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ✅ Footer: common.js가 주입 -->
+  <div id="footer"></div>
+
+  <script>
+    // URL ?name=... 또는 localStorage('userName') → 표시 (기존 페이지와 동일 컨벤션) 
+    // (welcome.html의 이름 주입 로직을 페이지에 맞게 경량화)  :contentReference[oaicite:5]{index=5}
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const nameFromQuery = params.get('name');
+      const nameFromStorage = localStorage.getItem('userName');
+      document.getElementById('displayName').textContent = nameFromQuery || nameFromStorage || '모으냥';
+    })();
+
+  </script>
+</body>
+</html>

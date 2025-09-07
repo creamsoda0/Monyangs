@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 다운로드 엑박은 무시할것. -->
+<mapper namespace="com.sboot.moabayo.dao.CardProductMapper">
+	<!-- card product Mapper 와 중복임. 이 파일은 제거할 것. -->
+	<select id="getRecommendCards"
+		resultType="com.sboot.moabayo.vo.CardProductVO">
+		SELECT
+		CARD_ID AS cardId,
+		IMG AS img,
+		NAME AS name,
+		BRAND AS
+		brand,
+		DESCRIPTION AS description,
+		CATEGORY AS category,
+		BENEFITS AS
+		benefits,
+		INTEREST AS interest,
+		TYPE AS type
+		FROM CARD_PRODUCT
+		ORDER BY
+		CARD_ID ASC
+	</select>
+
+	<select id="countByUserId" parameterType="long" resultType="int">
+		SELECT COUNT(*) FROM user_card WHERE user_id = #{userId}
+	</select>
+</mapper>

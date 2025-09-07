@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+body {
+    background-color: #fdf6ec; /* 베이지 배경 */
+    color: #5a4231;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+.mypage-box {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.user-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #e0c3a6; /* 고양이 털 느낌 */
+    border-radius: 50%;
+}
+
+.mypage-btn {
+    background-color: #f6c065;
+    color: #5a4231;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.mypage-btn:hover {
+    background-color: #eab55b;
+}
+
+.btn-danger {
+    background-color: #d88a36 !important;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c4762e !important;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff8e7;
+    border-top: 1px solid #d8bfa3;
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5rem 0;
+}
+
+.bottom-nav .nav-item {
+    text-align: center;
+    color: #b58b5d;
+    font-size: 0.85rem;
+}
+
+.bottom-nav .nav-item.active {
+    color: #d88a36;
+}

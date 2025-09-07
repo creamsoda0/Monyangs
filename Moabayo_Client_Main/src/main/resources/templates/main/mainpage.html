@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>모으냥즈 — 메인페이지 목업</title>
+<link rel="stylesheet" href="/css/mainpage2.css" />
+
+<!-- headr footer가 달리는 모든 페이지에 갖다 붙일것 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/mainpage2.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<!-- 이것도 같이 붙여야함 toggle switch 만들기 -->
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+<script defer src="http://localhost:8810/js/theme.js"></script>
+
+
+</head>
+<body class="site-layout">
+
+	<!-- ✅ Header -->
+	<div id="header"></div>
+
+
+	<!-- ===== Hero ===== -->
+	<section class="hero">
+		<div>
+			<h1>
+				<span style="color: var(--brand)">모으냥즈</span>와 함께 하는 즐거운 적금 라이프
+			</h1>
+			<p>고양이 캐릭터와 함께 목표를 세우고, 소비 습관을 분석해 똑똑하게 모아봐요.</p>
+			<div class="hero-cta">
+<!-- 				<button class="btn primary">지금 시작하기</button>
+				<button class="btn">가이드 보기</button> -->
+			</div>
+		</div>
+
+	</section>
+
+<!-- ===== Quick Cards (with SVG Waves) ===== -->
+<section class="mnz-quick section">
+  <div class="mnz-quick__grid">
+
+    <!-- BANKING (Lilac Wave) -->
+    <a class="qcard qcard--lilac" href="javascript:void(0);" onclick="goToBankService()">
+      <div class="qcard__bg">
+        <svg viewBox="0 0 300 180" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="gradL1" x1="0%" y1="0%" x2="100%" y2="100%" class="grad-lilac-1">
+              <stop offset="0%"/><stop offset="100%"/>
+            </linearGradient>
+            <linearGradient id="gradL2" x1="0%" y1="0%" x2="100%" y2="0%" class="grad-lilac-2">
+              <stop offset="0%"/><stop offset="100%"/>
+            </linearGradient>
+            <linearGradient id="gradL3" x1="0%" y1="0%" x2="100%" y2="0%" class="grad-lilac-2">
+              <stop offset="0%"/><stop offset="100%"/>
+            </linearGradient>
+          </defs>
+          <!-- 배경 -->
+          <rect width="300" height="180" fill="url(#gradL1)"/>
+
+          <!-- 파도 3겹 (g 이동 애니메이션) -->
+          <g class="wave-move-slow">
+            <path d="M0,130 C40,120 80,140 120,130 C160,120 200,140 240,130 C270,125 285,128 300,124 V180 H0 Z"
+                  fill="url(#gradL2)" opacity="0.55"/>
+          </g>
+          <g class="wave-move-mid">
+            <path d="M0,145 C50,135 100,155 150,145 C200,135 250,155 300,145 V180 H0 Z"
+                  fill="url(#gradL3)" opacity="0.65"/>
+          </g>
+          <g class="wave-move-fast">
+            <path d="M0,160 C60,152 120,168 180,160 C220,154 260,168 300,160 V180 H0 Z"
+                  fill="#ffffff22" opacity=".9"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="qcard__head">
+        
+        <i class="bx bx-server"></i>
+      </div>
+      <h3 class="qcard__title">BANKING</h3>
+      <p class="qcard__desc">입출금, 이체, 코인 충전 등 핵심 은행 기능으로 이동.</p>
+      <div class="qcard__cta">바로가기 →</div>
+    </a>
+
+    <!-- CARDS (Blue Wave) -->
+    <a class="qcard qcard--blue" href="javascript:void(0);" onclick="goToCardService()">
+      <div class="qcard__bg">
+        <svg viewBox="0 0 300 180" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="gradB1" x1="0%" y1="0%" x2="100%" y2="100%" class="grad-blue-1">
+              <stop offset="0%"/><stop offset="100%"/>
+            </linearGradient>
+            <linearGradient id="gradB2" x1="0%" y1="0%" x2="100%" y2="0%" class="grad-blue-2">
+              <stop offset="0%"/><stop offset="100%"/>
+            </linearGradient>
+            <linearGradient id="gradB3" x1="0%" y1="0%" x2="100%" y2="0%" class="grad-blue-2">
+              <stop offset="0%"/><stop offset="100%"/>
+            </linearGradient>
+          </defs>
+          <rect width="300" height="180" fill="url(#gradB1)"/>
+          <g class="wave-move-slow">
+            <path d="M0,130 C40,120 80,140 120,130 C160,120 200,140 240,130 C270,125 285,128 300,124 V180 H0 Z"
+                  fill="url(#gradB2)" opacity="0.55"/>
+          </g>
+          <g class="wave-move-mid">
+            <path d="M0,145 C50,135 100,155 150,145 C200,135 250,155 300,145 V180 H0 Z"
+                  fill="url(#gradB3)" opacity="0.65"/>
+          </g>
+          <g class="wave-move-fast">
+            <path d="M0,160 C60,152 120,168 180,160 C220,154 260,168 300,160 V180 H0 Z"
+                  fill="#ffffff22" opacity=".9"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="qcard__head">
+        
+        <i class="bx bx-credit-card"></i>
+      </div>
+      <h3 class="qcard__title">CARDS</h3>
+      <p class="qcard__desc">보유 카드 정리 · 혜택 비교 · 신규 신청.</p>
+      <div class="qcard__cta">바로가기 →</div>
+    </a>
+
+    <!-- SURVEY (라인 카드) -->
+    <a class="qcard qcard--line" href="/survey">
+      <div class="qcard__head">
+        <span class="qcard__tag">INSIGHT</span>
+        <i class="bx bx-bulb"></i>
+      </div>
+      <h3 class="qcard__title">SURVEY</h3>
+      <p class="qcard__desc">간단한 설문으로 맞춤 추천 품질 업.</p>
+      <div class="qcard__cta">참여하기 →</div>
+    </a>
+  </div>
+</section>
+
+
+<!-- === 모으냥즈 Before/After Hero === -->
+<section class="mnz-compare" aria-label="모으냥즈 소개 히어로">
+  <div class="mnz-compare__inner">
+
+    <!-- 슬라이더 캔버스 -->
+    <div class="mnz-compare__stage" data-mnz-compare>
+      <!-- After(오른쪽/컬러) -->
+      <img class="mnz-compare__img mnz-compare__img--after"
+           th:src="@{/img/after.png}"
+           alt="모으냥즈로 바뀐 모습" loading="lazy"/>
+
+      <!-- Before(왼쪽/그레이) -->
+      <div class="mnz-compare__before" data-mnz-before>
+        <img class="mnz-compare__img mnz-compare__img--before"
+             th:src="@{/img/before.jpg}"
+             alt="모으냥즈 이전의 모습" loading="lazy"/>
+      </div>
+
+      <!-- 가운데 인디케이터 -->
+      <div class="mnz-compare__bar" aria-hidden="true" data-mnz-bar></div>
+    </div>
+
+    <!-- 카피/CTA -->
+    <div class="mnz-compare__copy">
+      <h2 class="mnz-compare__title">
+        <span class="brand">모으냥즈</span>로 바뀌는 소비 습관
+      </h2>
+      <p class="mnz-compare__lead">
+        슬라이더를 좌우로 움직여 Before/After를 비교해 보세요. 목표 기반 미션과 리포트로
+        소비가 <strong>보이고</strong>, 저축이 <strong>이어집니다</strong>.
+      </p>
+      <div class="mnz-compare__cta">
+        <a href="javascript:void(0);" onclick="goToBankService()" class="mnz-btn mnz-btn--primary">지금 시작하기</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+	<!-- ===== Featured ===== -->
+	<section class="section" id="features">
+		<h2>주요 컨텐츠</h2>
+		<div class="feature-grid">
+			<article class="fcard">
+				<div class="fimg">
+					<span class="cat-placeholder">🐱</span>
+				</div>
+				<div class="fbody">
+					<h3>냥청년 적금</h3>
+					<p>청년 우대 금리와 출석 미션으로 금리 부스트.</p>
+					<div style="margin-top: 6px; display: flex; gap: 8px">
+						<button class="btn">상세보기</button>
+						<button class="btn primary">가입하기</button>
+					</div>
+				</div>
+			</article>
+			<article class="fcard">
+				<div class="fimg">
+					<span class="cat-placeholder">😼</span>
+				</div>
+				<div class="fbody">
+					<h3>소비패턴 리포트</h3>
+					<p>카테고리별 지출 트렌드와 절약 팁 제공.</p>
+					<div style="margin-top: 6px; display: flex; gap: 8px">
+						<button class="btn">리포트 보기</button>
+						<!-- <button class="btn primary">캘린더</button> -->
+					</div>
+				</div>
+			</article>
+<!-- 			<article class="fcard">
+				<div class="fimg">
+					<span class="cat-placeholder">🐾</span>
+				</div>
+				<div class="fbody">
+					<h3>미션 & 배지</h3>
+					<p>연속 적립·무지출 데이 등 재미있는 도전 과제.</p>
+					<div style="margin-top: 6px; display: flex; gap: 8px">
+						<button class="btn">도전하기</button>
+						<button class="btn primary">배지함</button>
+					</div>
+				</div>
+			</article> -->
+		</div>
+	</section>
+
+	<!-- ===== CTA ===== -->
+	<section class="cta">
+		<div class="cta-inner">
+			<div>
+				<strong style="font-size: 18px">지금 가입하면 스타트 보너스 1,000 냥코인</strong>
+				<div style="opacity: .9">미션 첫 주차 완료 시 추가 보상</div>
+			</div>
+			<button class="btn" style="background: var(--brand-ink); color: var(--brand); border: none;" onclick="window.location.href='http://localhost:8812/registerpage';">회원가입</button>
+		</div>
+	</section>
+
+	<!-- ✅ Footer -->
+	<div id="footer"></div>
+
+
+	<!-- Scripts -->
+
+	<!-- <script src="http://localhost:8810/js/mainpage2.js"></script> -->
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>카드 리스트 상세 화면</title>
+<link rel="icon" href="images/cat.ico" type="image/x-icon" />
+<link rel="stylesheet" th:href="@{/css/header.css}" />
+<link rel="stylesheet" href="css/footer.css" />
+<!-- ✅ 외부 JS 파일 연결 -->
+<script defer th:src="@{/js/common.js}"></script>
+<style>
+body {
+	margin: 0;
+	font-family: 'Segoe UI', sans-serif;
+	background-color: #f5f5f5;
+}
+
+.container {
+	display: flex;
+	height: 100vh;
+}
+
+/* 왼쪽 카드 리스트 */
+.card-list {
+	width: 40%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 2rem 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	border-right: 1px solid #ddd;
+	background-color: #fff;
+}
+
+.card-box {
+	position: relative;
+	width: 300px;
+	height: 180px;
+	border-radius: 20px;
+	background-size: cover;
+	background-position: center;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	color: white;
+	padding: 1.5rem;
+	box-sizing: border-box;
+	cursor: pointer;
+	margin: 0 auto;
+}
+
+.card-box:hover {
+	transform: scale(1.01);
+	transition: all 0.2s ease-in-out;
+}
+
+.card-number {
+	position: absolute;
+	bottom: 2.5rem;
+	left: 1.5rem;
+	font-size: 1.1rem;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+.card-owner {
+	position: absolute;
+	bottom: 1.2rem;
+	left: 1.5rem;
+	font-size: 0.95rem;
+}
+
+.card-brand {
+	position: absolute;
+	top: 1rem;
+	right: 1.5rem;
+	font-size: 1rem;
+	font-weight: bold;
+	opacity: 0.9;
+}
+
+/* 오른쪽 상세 정보 */
+.detail-panel {
+	flex: 1;
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.card-detail {
+	width: 100%;
+	max-width: 500px;
+	background-color: #fff;
+	border-radius: 15px;
+	padding: 2rem;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.detail-title {
+	font-size: 1.3rem;
+	font-weight: bold;
+	margin-bottom: 1rem;
+}
+
+.card-image {
+	width: 300px;
+	height: 180px;
+	border-radius: 12px;
+	background-color: #eee;
+	background-size: cover;
+	background-position: center;
+	margin-bottom: 1rem;
+}
+
+.detail-info {
+	font-size: 1rem;
+	margin-bottom: 0.7rem;
+	color: #333;
+}
+</style>
+</head>
+<body>
+
+	<!-- Header 삽입 -->
+	<div th:replace="html/header :: header"></div>
+
+	<div class="container">
+
+		<!-- 왼쪽 카드 리스트 -->
+		<div class="card-list">
+
+			<div class="card-box" onclick="showDetails(0)" style="background-image: url('/cardimg/summercat.png');">
+				<div class="card-brand">VISA</div>
+				<div class="card-number">****-****-****-1234</div>
+				<div class="card-owner">키갈동</div>
+			</div>
+
+			<div class="card-box" onclick="showDetails(1)" style="background-image: url('/cardimg/spacecat-card.png');">
+				<div class="card-brand">DISCOVER</div>
+				<div class="card-number">****-****-****-5678</div>
+				<div class="card-owner">크리스탈</div>
+			</div>
+
+			<div class="card-box" onclick="showDetails(2)" style="background-image: url('/cardimg/holloweencat.png');">
+				<div class="card-brand">MASTER</div>
+				<div class="card-number">****-****-****-9876</div>
+				<div class="card-owner">김지원</div>
+			</div>
+
+		</div>
+
+		<!-- 오른쪽 상세 보기 -->
+		<div class="detail-panel">
+			<div class="card-detail">
+				<div class="detail-title">카드 상세 정보</div>
+				<div id="cardImage" class="card-image"></div>
+				<div id="cardInfo">
+					<div class="detail-info">카드 번호: -</div>
+					<div class="detail-info">카드 소유자: -</div>
+					<div class="detail-info">카드사: -</div>
+					<div class="detail-info">브랜드: -</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Footer 삽입 -->
+	<div id="footer"></div>
+
+	<script>
+  const cards = [
+    {
+      number: '****-****-****-1234',
+      owner: '홍길동',
+      company: 'VISA',
+      brand: '삼성카드',
+      img: '/cardimg/summercat.png'
+    },
+    {
+      number: '****-****-****-5678',
+      owner: '이수정',
+      company: 'DISCOVER',
+      brand: '신한카드',
+      img: '/cardimg/spacecat-card.png'
+    },
+    {
+      number: '****-****-****-9876',
+      owner: '예지원',
+      company: 'MASTER',
+      brand: '국민카드',
+      img: '/cardimg/holloweencat.png'
+    }
+  ];
+
+  function showDetails(index) {
+    const card = cards[index];
+    document.getElementById("cardImage").style.backgroundImage = `url('${card.img}')`;
+    document.getElementById("cardInfo").innerHTML = `
+      <div class="detail-info">카드 번호: ${card.number}</div>
+      <div class="detail-info">카드 소유자: ${card.owner}</div>
+      <div class="detail-info">카드사: ${card.brand}</div>
+      <div class="detail-info">브랜드: ${card.company}</div>
+    `;
+  }
+</script>
+
+</body>
+</html>

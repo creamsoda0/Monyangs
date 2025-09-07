@@ -1,0 +1,138 @@
+@charset "UTF-8";
+
+/* ===============================
+   ✅ Light / Dark 토큰 (전역)
+   =============================== */
+:root{
+  /* 공통 색상 */
+  --bg:#ffffff;            /* 기본 배경 */
+  --ink:#111827;           /* 본문 텍스트 */
+  --sub:#6b7280;           /* 보조 텍스트 */
+  --line:#e5e7eb;          /* 경계선 */
+  --brand:#7c3aed;         /* 라일락 포인트 */
+  --brand-ink:#f5f3ff;     /* 포인트 위 텍스트 */
+  --card:#ffffff;          /* 카드 배경 */
+  --muted:#f8fafc;         /* 흐린 배경 */
+  --accent:#f59e0b;        /* 버튼/포인트 노랑 */
+  --shadow:0 10px 20px rgba(17,24,39,.08);
+
+  /* 로그인 전용 배경(기존 cornsilk 유지) */
+  --page-bg:#FFF8DC;
+}
+
+[data-theme="dark"], body.dark{
+  --bg:#0b0f14;
+  --ink:#e5e7eb;
+  --sub:#a0a9b6;
+  --line:#1f2937;
+  --brand:#a78bfa;
+  --brand-ink:#0b0f14;
+  --card:#0f151c;
+  --muted:#0b1016;
+  --accent:#fbbf24;
+  --shadow:0 10px 24px rgba(0,0,0,.45);
+
+  /* 로그인 전용 다크 배경 */
+  --page-bg:#0b0f14;
+}
+
+/* ===============================
+   Base
+   =============================== */
+body{
+  margin:0;
+  height:100%;
+  font-family:'Segoe UI', sans-serif;
+  background: var(--bg);          /* ⬅️ #FFF8DC 대신 */
+  color: var(--ink);
+  overflow-x:hidden;
+}
+.container{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding-top:80px;
+  height:77vh;
+}
+
+.cat-image{ width:150px; margin-bottom:20px; }
+
+h1{
+  font-family:'나눔손글씨 붓', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif;
+  font-size:1.8rem;
+  margin-bottom:10px;
+  color:var(--ink);
+}
+
+/* ===============================
+   Login Card
+   =============================== */
+/* 로그인 박스도 카드/라인 변수 사용 */
+.login-box{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 2rem 2.5rem;
+  width: 320px;
+  box-shadow: var(--shadow);
+}
+
+.login-box label{
+  display:block;
+  margin-bottom:.5rem;
+  font-weight:700;
+  color: var(--sub);
+}
+
+.login-box input{
+  width:100%;
+  padding:.7rem;
+  margin-bottom:1.2rem;
+  border:1px solid var(--line);
+  border-radius:10px;
+  font-size:1rem;
+  box-sizing:border-box;
+  background: var(--bg);
+  color: var(--ink);
+}
+.login-box input::placeholder{
+  color: color-mix(in oklab, var(--sub) 70%, transparent);
+}
+.login-box input:focus{
+  outline:none;
+  border-color: color-mix(in oklab, var(--brand) 55%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 30%, transparent);
+}
+
+/* 버튼 */
+.login-box button{
+  width:100%;
+  padding:.8rem;
+  background: linear-gradient(135deg, var(--brand), color-mix(in oklab, var(--brand) 60%, #00d4ff));
+  border:none;
+  border-radius:20px;
+  color: var(--brand-ink);
+  font-size:1.1rem;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow: var(--shadow);
+  transition: filter .15s ease, transform .06s ease;
+}
+.login-box button:hover{ filter: brightness(1.04); }
+.login-box button:active{ transform: translateY(1px); }
+
+/* ===============================
+   Links
+   =============================== */
+.links{
+  margin-top:1rem;
+  text-align:center;
+  font-size:.9rem;
+  color: var(--sub);
+}
+.links a{
+  margin:0 .4rem;
+  color: var(--brand);
+  text-decoration:none;
+}
+.links a:hover{ color: var(--accent); text-decoration:underline; }

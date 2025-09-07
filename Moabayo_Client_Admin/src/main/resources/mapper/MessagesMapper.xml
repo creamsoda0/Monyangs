@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.mapper.AdminMapper">
+    <!-- 여기에 필요한 SQL 태그들 작성 예정 -->
+    
+    <!-- 시간있으면 기능 추후 추가 
+    운영 공지/문의용 테이블 신설
+
+admin_notice(id, segment, channel, title, content, created_at, created_by, status)
+
+user_inquiry(id, user_id, category, title, content, status, assignee, created_at, updated_at) -->
+</mapper>

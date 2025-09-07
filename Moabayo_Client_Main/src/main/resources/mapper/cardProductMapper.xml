@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.dao.CardProductMapper">
+
+  <select id="existsById" resultType="int">
+    SELECT COUNT(1) FROM card_product WHERE card_id = #{cardId}
+  </select>
+
+  <update id="updateImageUrl">
+    UPDATE card_product 
+       SET img = #{imgUrl}
+     WHERE card_id = #{cardId}
+  </update>
+
+</mapper>

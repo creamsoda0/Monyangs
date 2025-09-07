@@ -1,0 +1,14 @@
+/* token.css (정리본) */
+.token-box{
+  position:absolute;     /* header 기준 */
+  right:200px;           /* 오른쪽 메뉴(로그인, 드롭다운) 공간 확보 */
+  top:50%;
+  transform:translateY(-50%);
+  background:transparent !important;
+  border:0 !important;
+  padding:0 !important;
+  margin:0;
+  font-weight:600;
+  z-index:5;
+}
+#remainTime{ font-weight:700; }

@@ -1,0 +1,76 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sboot.moabayo.dao.DashboardMapper">
+
+  <!-- 오늘 생성된 계좌 건수 -->
+  <select id="countNewAccountsToday" resultType="int">
+    SELECT COUNT(*) 
+    FROM USER_ACCOUNT ua
+    JOIN users u ON ua.user_id = u.user_id
+    WHERE TRUNC(u.create_date) = TRUNC(SYSDATE)
+  </select>
+
+  <!-- 이번 달 생성된 카드 건수 -->
+  <select id="countNewCardsThisMonth" resultType="int">
+    SELECT COUNT(*)
+    FROM USER_CARD uc
+    JOIN users u ON uc.user_id = u.user_id
+    WHERE TRUNC(u.create_date, 'MM') = TRUNC(SYSDATE, 'MM')
+  </select>
+
+  <!-- 오늘 승인 금액 합 -->
+  <select id="sumTxnToday" resultType="decimal">
+    SELECT NVL(SUM(amt),0) AS total_amt
+    FROM (
+      SELECT SUM(atx.approved_amount) AS amt
+      FROM account_transaction atx
+      WHERE TRUNC(atx.date_time) = TRUNC(SYSDATE)
+      UNION ALL
+      SELECT SUM(ctx.approved_amount) AS amt
+      FROM card_transaction ctx
+      WHERE TRUNC(ctx.date_time) = TRUNC(SYSDATE)
+    )
+  </select>
+
+  <!-- 리스크 알림 -->
+  <select id="riskAlerts" resultType="map">
+SELECT *
+FROM (
+  -- 금액 큰 결제
+  SELECT
+    'HIGH_CARD_AMOUNT' AS type,
+    ct.card_transaction_id AS ref_id,
+    uc.user_id,
+    ct.approved_amount,
+    ct.date_time,
+    ct.shop_name,
+    NULL AS cnt
+  FROM card_transaction ct
+  JOIN user_card uc
+    ON uc.user_card_id = ct.user_card_id
+  WHERE ct.approved_amount >= #{highAmount, jdbcType=NUMERIC}
+    AND TRUNC(ct.date_time) = TRUNC(SYSDATE)
+
+  UNION ALL
+
+  -- 짧은 시간 다건 결제
+  SELECT
+    'MANY_TXN_SHORT' AS type,
+    NULL AS ref_id,
+    uc.user_id,
+    NULL AS approved_amount,
+    MAX(ct.date_time) AS date_time,
+    NULL AS shop_name,
+    COUNT(*) AS cnt
+  FROM card_transaction ct
+  JOIN user_card uc
+    ON uc.user_card_id = ct.user_card_id
+  WHERE ct.date_time >= SYSDATE - (10/1440)
+  GROUP BY uc.user_id
+  HAVING COUNT(*) >= #{burstCount, jdbcType=NUMERIC}
+) t
+ORDER BY t.date_time DESC
+FETCH FIRST 20 ROWS ONLY
+  </select>
+
+</mapper>

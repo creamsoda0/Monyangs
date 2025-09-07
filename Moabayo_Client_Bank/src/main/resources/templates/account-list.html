@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>모으냥즈 | 계좌 조회</title>
+
+<!-- 페이지 전용 CSS -->
+<link rel="stylesheet" th:href="@{/css/bank-accounts.css}" />
+<link rel="icon" href="/images/cat.ico" type="image/x-icon" />
+
+
+<!-- headr footer가 달리는 모든 페이지에 갖다 붙일것 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<!-- 이것도 같이 붙여야함 toggle switch 만들기 -->
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+<script defer src="http://localhost:8810/js/theme.js"></script>
+
+</head>
+<body>
+
+	<!-- 헤더/푸터는 외부 링크로 주입 (이 파일엔 포함하지 않음) -->
+	<div id="header"></div>
+	<main class="bank-accounts">
+		<!-- 히어로 -->
+		<section class="nx-hero">
+			<div class="nx-hero__copy">
+				<p class="hello">내 계좌 조회</p>
+				<h1 class="username" th:text="${loginId} + ' 님'">guest 님</h1>
+				<p class="lead">보유 계좌와 최근 거래를 한 화면에서 확인하세요.</p>
+				<div class="cta">
+					<a href="/bank/product/list" class="btn btn-accent">새 계좌 개설</a>
+					<a href="/bank/transfer" class="btn btn-ghost">송금하기</a>
+				</div>
+			</div>
+			<div class="nx-hero__stats">
+				<div class="stat">
+					<div class="label">총 잔액</div>
+					<div class="value" id="stat-total">0 원</div>
+				</div>
+				<div class="stat">
+					<div class="label">계좌 수</div>
+					<div class="value" id="stat-count">0</div>
+				</div>
+				<div class="stat">
+					<div class="label">최근 개설</div>
+					<div class="value" id="stat-latest">-</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 본문 그리드 -->
+		<section class="acc-grid">
+			<!-- 리스트 패널 -->
+			<article class="panel acc-list-panel">
+				<header class="panel-head">
+					<h3>보유 계좌</h3>
+					<span class="pill">목업 데이터</span>
+				</header>
+
+				<!-- 필터 -->
+				<form class="filters" id="filters" onsubmit="return false;">
+					<input type="search" id="q" placeholder="계좌명/번호 검색…" aria-label="계좌 검색" /> <select id="type" aria-label="계좌 유형">
+						<option value="">전체</option>
+						<option value="DEPOSIT">입출금</option>
+						<option value="SAVINGS">적금</option>
+						<option value="LOAN">대출</option>
+					</select> <select id="sort" aria-label="정렬">
+						<option value="RECENT">최근순</option>
+						<option value="BALANCE_DESC">잔액↓</option>
+						<option value="BALANCE_ASC">잔액↑</option>
+					</select>
+					<button class="btn btn-outline" id="resetBtn" type="button">초기화</button>
+				</form>
+
+				<!-- 계좌 리스트 -->
+				<div class="acc-list" id="accList" role="list">
+					<!-- JS가 카드 렌더링 -->
+				</div>
+			</article>
+
+			<!-- 상세 패널 -->
+			<aside class="panel acc-detail-panel" id="accDetail">
+				<header class="panel-head">
+					<h3>계좌 상세</h3>
+					<span class="pill pill-dark" id="detailType">-</span>
+				</header>
+
+				<div class="detail-empty" id="detailEmpty">
+					<div class="cat">😺</div>
+					<p>왼쪽에서 계좌를 선택해주세요.</p>
+				</div>
+
+				<div class="detail-body" id="detailBody" hidden>
+					<div class="detail-top">
+						<div>
+							<div class="name" id="dName">-</div>
+							<div class="sub" id="dNumber">-</div>
+							<div class="sub" id="dProduct">-</div>
+							<div class="sub" id="dOpened">개설일 -</div>
+						</div>
+						<div class="bal-wrap">
+							<div class="label">잔액</div>
+							<div class="balance" id="dBalance">0 원</div>
+						</div>
+					</div>
+
+					<div class="detail-actions">
+						<a class="btn btn-dark" href="#" id="dSend">송금</a>
+						<a class="btn btn-outline" href="#" id="dMore">상세</a>
+					</div>
+
+					<div class="history">
+						<div class="section-head">
+							<h4>최근 거래</h4>
+							<a class="btn btn-outline btn-sm" href="/bank/history">전체 보기</a>
+						</div>
+						<div class="table-wrap">
+							<table class="ny-table">
+								<thead>
+									<tr>
+										<th>일시</th>
+										<th>구분</th>
+										<th class="t-right">금액(원)</th>
+										<th class="t-right">잔액(원)</th>
+									</tr>
+								</thead>
+								<tbody id="dHistory">
+									<!-- JS가 렌더 -->
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</aside>
+		</section>
+	</main>
+	<div id="footer"></div>
+
+	<!-- bank-accounts.html (bank-accounts.js보다 먼저) -->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		// Thymeleaf가 acclist를 JS 리터럴(Array<Object>)로 변환해 줍니다.
+		window.ACCOUNTS = /*[[${acclist}]]*/'[]';
+		/*]]>*/
+	</script>
+	<!-- 페이지 전용 JS -->
+	<script defer th:src="@{/js/bank-accounts.js}"></script>
+</body>
+</html>

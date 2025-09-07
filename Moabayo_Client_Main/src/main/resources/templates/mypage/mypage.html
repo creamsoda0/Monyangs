@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<title>마이페이지</title>
+
+<!-- Boxicons -->
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+<!-- Layout CSS -->
+<link rel="stylesheet" href="/css/mypage.css">
+<link rel="stylesheet" href="/css/mypage-realtime.css?v=20250813">
+<link rel="stylesheet" href="/css/mypage-sections.css?v=20250813">
+<!-- ⬅️ 추가 -->
+<script defer src="/js/theme.js?v=1"></script>
+<script defer src="/js/mypage-profile.js?v=1"></script>
+<script type="module" src="/js/mypagesections/index.js?v=20250813"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+</head>
+<body>
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="/mainpage" class="brand">
+			<i class='bx bxs-smile'></i> <span class="text">모으냥즈</span>
+		</a>
+
+		<ul class="side-menu top">
+			<li class="active"><a href="#/mypage">
+					<i class='bx bxs-dashboard bx-sm'></i><span class="text">Overview</span>
+				</a></li>
+			<li><a href="#/bank">
+					<i class='bx bxs-bank bx-sm'></i><span class="text">모으냥은행</span>
+				</a></li>
+			<li><a href="#/cards">
+					<i class='bx bxs-credit-card bx-sm'></i><span class="text">카드</span>
+				</a></li>
+			<li><a href="#/security">
+					<i class='bx bxs-shield bx-sm'></i><span class="text">보안</span>
+				</a></li>
+			<li><a href="#/settings">
+					<i class='bx bxs-cog bx-sm'></i><span class="text">설정</span>
+				</a></li>
+		</ul>
+
+		<ul class="side-menu bottom">
+			<li><a href="#/help">
+					<i class='bx bxs-help-circle bx-sm'></i><span class="text">도움말</span>
+				</a></li>
+			<li><a href="#/logout" class="logout">
+					<i class='bx bx-power-off bx-sm'></i><span class="text">로그아웃</span>
+				</a></li>
+		</ul>
+	</section>
+	<!-- /SIDEBAR -->
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu bx-sm' id="menuToggle" aria-label="사이드바 접기/펼치기"></i>
+
+			<a href="#/mypage" class="nav-link">My Page</a>
+
+			<form action="#" onsubmit="return false;">
+				<div class="form-input">
+					<input type="search" id="globalSearch" placeholder="카드/계좌/거래 검색..." />
+					<button type="button" class="search-btn">
+						<i class='bx bx-search'></i>
+					</button>
+				</div>
+			</form>
+
+			<!-- 다크모드 토글 (관리자 스타일) -->
+			<input type="checkbox" class="checkbox" id="switch-mode" hidden /> <label class="swith-lm" for="switch-mode" data-hook="toggle-theme" aria-label="테마 전환"> <i class="bx bxs-moon"></i> <i class="bx bx-sun"></i>
+				<div class="ball"></div>
+			</label>
+
+			<a href="#/notifications" class="notification" id="notificationIcon">
+				<i class='bx bxs-bell bx-tada-hover'></i><span class="num">3</span>
+			</a>
+
+			<a href="#/profile" class="profile" id="profileIcon">
+				<img src="https://placehold.co/64x64/png" alt="Profile" />
+			</a>
+		</nav>
+		<!-- /NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1 id="pageTitle">마이페이지</h1>
+					<ul class="breadcrumb" id="breadcrumb">
+						<li><a href="/">Home</a></li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li><a class="active" href="#/mypage">My Page</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<!-- 상단 KPI (관리자 box-info 느낌) -->
+			<ul class="box-info">
+				<li><i class='bx bxs-wallet'></i> <span class="text">
+						<p>총 자산</p>
+						<h3 id="kpi-asset">₩ 0</h3>
+				</span></li>
+				<li><i class='bx bxs-bank'></i> <span class="text">
+						<p>계좌 수</p>
+						<h3 id="kpi-accounts">0</h3>
+				</span></li>
+				<li><i class='bx bxs-credit-card'></i> <span class="text">
+						<p>카드 수</p>
+						<h3 id="kpi-cards">0</h3>
+				</span></li>
+			</ul>
+
+			<div class="table-data layout-3col">
+				<!-- 1) 빠른 실행 (좌측 그대로) -->
+				<div class="order" id="qaSection">
+					<div class="head">
+						<h3>빠른 실행</h3>
+					</div>
+					<div class="quick-actions">
+						<button class="qa" data-action="profile-edit">
+							<i class='bx bxs-user-detail'></i>
+							<div class="text">
+								<div class="title">정보 수정</div>
+								<div class="hint">개인정보/연락처</div>
+							</div>
+						</button>
+						<button class="qa" data-action="account-list">
+							<i class='bx bxs-bank'></i>
+							<div class="text">
+								<div class="title">계좌 조회</div>
+								<div class="hint">잔액/입출금</div>
+							</div>
+						</button>
+						<button class="qa" data-action="card-list">
+							<i class='bx bxs-credit-card'></i>
+							<div class="text">
+								<div class="title">카드 조회</div>
+								<div class="hint">보유/이력</div>
+							</div>
+						</button>
+						<button class="qa" data-action="pin-change">
+							<i class='bx bxs-key'></i>
+							<div class="text">
+								<div class="title">간편 비밀번호</div>
+								<div class="hint">변경/재설정</div>
+							</div>
+						</button>
+						<button class="qa warn" data-action="leave">
+							<i class='bx bxs-user-x'></i>
+							<div class="text">
+								<div class="title">회원탈퇴</div>
+								<div class="hint">계정 삭제</div>
+							</div>
+						</button>
+						<button class="qa danger" data-action="logout">
+							<i class='bx bx-log-out'></i>
+							<div class="text">
+								<div class="title">로그아웃</div>
+								<div class="hint">세션 종료</div>
+							</div>
+						</button>
+					</div>
+				</div>
+
+
+
+				<!-- 2) 실시간 패널 (가운데, 신규) -->
+				<section class="realtime" id="realtimeSection">
+					<div class="head">
+						<h3>실시간</h3>
+						<small id="rt-label" style="color: var(--sub)">정보 수정</small>
+					</div>
+
+					<!-- 버튼으로 전환되는 '뷰' 컨테이너 -->
+					<div class="rt-views">
+  <!-- 정보수정 -->
+  <div class="rt-view active" data-view="profile">
+    <form id="formProfile" class="rt-form" autocomplete="on">
+      <div class="grid-2">
+        <label>이름
+          <input type="text" name="name" id="pf-name" placeholder="홍길동" autocomplete="name">
+        </label>
+        <label>연락처
+          <input type="tel" name="phone" id="pf-phone" placeholder="010-1234-5678" autocomplete="tel">
+        </label>
+      </div>
+
+      <div class="grid-2">
+        <label>이메일
+          <input type="email" name="email" id="pf-email" placeholder="user@example.com" autocomplete="email">
+        </label>
+      </div>
+	  
+	  <!-- 주소 -->
+	  <div class="grid-2">
+	    <label>우편번호
+	      <div style="display:flex; gap:.5rem;">
+	        <input type="text" id="pf-zip" placeholder="우편번호" autocomplete="postal-code" style="flex:1" readonly>
+	        <button type="button" class="btn ghost" id="btnAddrSearch" aria-label="주소 검색">주소검색</button>
+	      </div>
+	    </label>
+
+	    <label>주소
+	      <input type="text" name="addr" id="pf-addr" placeholder="도로명/지번 주소" autocomplete="street-address" readonly>
+	    </label>
+	  </div>
+
+	  <label>상세 주소
+	    <input type="text" id="pf-addrDetail" placeholder="상세 주소(동/호 등)" autocomplete="address-line2">
+	  </label>
+
+
+      <div class="grid-2">
+        <!-- 비밀번호 변경: 새 비밀번호 + 확인 -->
+        <label>새 비밀번호
+          <input type="password" name="newPw" id="pf-newPw" placeholder="••••" minlength="8">
+        </label>
+        <label>비밀번호 확인
+          <input type="password" name="newPwConfirm" id="pf-newPwConfirm" placeholder="••••" minlength="8">
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn primary">
+          <i class='bx bx-save'></i> 저장
+        </button>
+        <button type="reset" class="btn ghost">초기화</button>
+      </div>
+    </form>
+  </div>
+
+
+						<!-- 계좌조회 -->
+						<div class="rt-view" data-view="accounts">
+							<div class="panel-toolbar">
+								<input id="accSearch" type="search" placeholder="계좌번호/별칭 검색">
+								<button id="accRefresh" class="btn ghost">
+									<i class='bx bx-refresh'></i> 새로고침
+								</button>
+							</div>
+							<div class="table-wrap">
+								<table class="table" id="accTable" aria-label="계좌 목록">
+									<thead>
+										<tr>
+											<th>별칭</th>
+											<th>계좌번호</th>
+											<th class="right">잔액</th>
+											<th>상태</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+
+						<!-- 카드조회 -->
+						<div class="rt-view" data-view="cards">
+							<div class="panel-toolbar">
+								<input id="cardSearch" type="search" placeholder="카드명/브랜드 검색">
+								<button id="cardRefresh" class="btn ghost">
+									<i class='bx bx-refresh'></i> 새로고침
+								</button>
+							</div>
+							<div class="card-grid" id="cardGrid"></div>
+						</div>
+
+						<!-- 간편비밀번호 -->
+						<div class="rt-view" data-view="pin">
+							<form id="formPin" class="rt-form">
+								<div class="grid-2">
+									<label>현재 비밀번호<input type="password" name="cur" placeholder="••••"></label> <label>새 비밀번호<input type="password" name="next" placeholder="••••"></label>
+								</div>
+								<div class="grid-2">
+									<label>새 비밀번호 확인<input type="password" name="next2" placeholder="••••"></label>
+									<div class="form-actions">
+										<button type="submit" class="btn primary">
+											<i class='bx bx-save'></i> 변경
+										</button>
+										<button type="reset" class="btn ghost">초기화</button>
+									</div>
+								</div>
+							</form>
+						</div>
+
+						<!-- 회원탈퇴 -->
+						<div class="rt-view" data-view="leave">
+							<p style="margin: .25rem 0 .75rem; color: var(--sub)">탈퇴 시 모든 데이터가 삭제됩니다. 진행하시겠습니까?</p>
+							<form id="formLeave" class="rt-form">
+								<label>사유(선택)<input type="text" name="reason" placeholder="사유를 입력하세요"></label>
+								<div class="form-actions" style="margin-top: .5rem">
+									<button type="submit" class="btn primary" style="background: #ef4444; border-color: #ef4444">
+										<i class='bx bxs-user-x'></i> 탈퇴 진행
+									</button>
+									<button type="button" class="btn ghost" data-action="cancel-leave">취소</button>
+								</div>
+							</form>
+						</div>
+
+						<!-- 로그아웃 -->
+						<div class="rt-view" data-view="logout">
+							<p style="margin: .25rem 0 .75rem; color: var(--sub)">현재 세션에서 로그아웃합니다.</p>
+							<div class="form-actions">
+								<button id="btnDoLogout" class="btn primary">
+									<i class='bx bx-log-out'></i> 로그아웃
+								</button>
+								<button class="btn ghost" data-action="cancel-logout">취소</button>
+							</div>
+						</div>
+					</div>
+					</div>
+				</section>
+			
+
+				<!-- 3) 최근 알림 (우측, 축소) -->
+				<div class="todo compact" id="notifSection">
+					<div class="head">
+						<h3>최근 알림</h3>
+					</div>
+					<ul class="todo-list" id="notifList">
+						<!-- JS 채움 -->
+					</ul>
+					<div class="todo-footer">
+						<a href="#/notifications" class="link-sm">전체 알림 보기</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- 섹션 스택 신설 합니당 -->
+
+			<!-- ==== SECTION STACK (Bank / Cards / Security) ==== -->
+			<section class="section-stack" id="mainSections">
+				<!-- Bank -->
+				<div class="section-view" data-section="bank">
+					<div class="section-head">
+						<h3>모으냥은행</h3>
+						<span class="sub">적금 · 투자 · 내 계좌</span>
+					</div>
+					<ul class="mini-kpis">
+						<li><div class="icon">
+								<i class="bx bxs-piggy-bank"></i>
+							</div>
+							<div class="meta">
+								<div class="label">적금 합계</div>
+								<div class="val" id="bk-sum-savings">₩ 0</div>
+							</div></li>
+						<li><div class="icon">
+								<i class="bx bxs-trending-up"></i>
+							</div>
+							<div class="meta">
+								<div class="label">투자 평가액</div>
+								<div class="val" id="bk-sum-invest">₩ 0</div>
+							</div></li>
+						<li><div class="icon">
+								<i class="bx bxs-bank"></i>
+							</div>
+							<div class="meta">
+								<div class="label">계좌 수</div>
+								<div class="val" id="bk-acc-count">0</div>
+							</div></li>
+					</ul>
+
+					<div class="section-grid cols-2">
+						<div class="panel">
+							<div class="panel-title">적금</div>
+							<div class="table-wrap">
+								<table class="table" id="tbl-savings">
+									<thead>
+										<tr>
+											<th>상품명</th>
+											<th class="right">금리</th>
+											<th class="right">잔액</th>
+											<th>만기</th>
+											<th>상태</th>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="panel">
+							<div class="panel-title">투자</div>
+							<div class="table-wrap">
+								<table class="table" id="tbl-invest">
+									<thead>
+										<tr>
+											<th>종목</th>
+											<th class="right">평가액</th>
+											<th class="right">손익</th>
+											<th class="right">수익률</th>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="panel">
+							<div class="panel-title">내 계좌</div>
+							<div class="table-wrap">
+								<table class="table" id="tbl-bank-accounts">
+									<thead>
+										<tr>
+											<th>별칭</th>
+											<th>계좌번호</th>
+											<th class="right">잔액</th>
+											<th>상태</th>
+										</tr>
+									</thead>
+									<tbody></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Cards -->
+				<div class="section-view" data-section="cards">
+					<div class="section-head">
+						<h3>카드</h3>
+						<span class="sub">내 카드 · 추천 카드 · 혜택</span>
+					</div>
+
+					<div class="panel">
+						<div class="panel-title">이번달 혜택 요약</div>
+						<div class="mini-kpis">
+							<li><div class="icon">
+									<i class="bx bxs-coin-stack"></i>
+								</div>
+								<div class="meta">
+									<div class="label">사용액</div>
+									<div class="val" id="benefit-spend">₩ 0</div>
+								</div></li>
+							<li><div class="icon">
+									<i class="bx bxs-gift"></i>
+								</div>
+								<div class="meta">
+									<div class="label">예상 혜택</div>
+									<div class="val" id="benefit-est">₩ 0</div>
+								</div></li>
+						</div>
+						<div class="progress">
+							<div class="bar" id="benefit-bar" style="width: 0%"></div>
+						</div>
+					</div>
+
+					<div class="panel">
+						<div class="panel-title">나의 카드</div>
+						<div id="my-card-grid" class="grid"></div>
+					</div>
+
+					<div class="panel">
+						<div class="panel-title">추천 카드</div>
+						<div id="reco-card-grid" class="grid"></div>
+					</div>
+				</div>
+
+				<!-- Security -->
+				<div class="section-view" data-section="security">
+					<div class="section-head">
+						<h3>보안</h3>
+						<span class="sub">최근 로그인 · 등록 기기</span>
+					</div>
+
+					<div class="panel">
+						<div class="panel-title">최근 로그인</div>
+						<div class="table-wrap">
+							<table class="table" id="tbl-logins">
+								<thead>
+									<tr>
+										<th>시간</th>
+										<th>IP</th>
+										<th>환경</th>
+										<th>상태</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+
+					<div class="panel">
+						<div class="panel-title">등록 기기</div>
+						<div class="table-wrap">
+							<table class="table" id="tbl-devices">
+								<thead>
+									<tr>
+										<th>기기명</th>
+										<th>브라우저/앱</th>
+										<th>등록일</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<!-- Settings -->
+				<div class="section-view" data-section="settings"></div>
+
+
+			</section>
+
+		</main>
+		<!-- /MAIN -->
+	</section>
+	<!-- /CONTENT -->
+	<!-- ✅ JS 분리: 아래 두 파일을 새로 추가 -->
+	<script type="module" src="/js/mypage-core.js"></script>
+	<script type="module" src="/js/mypage-panels.js"></script>
+
+	<!--   <script src="/js/mypage.js"></script> -->
+</body>
+</html>

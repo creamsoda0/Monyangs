@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/base}">
+<head>
+<meta charset="UTF-8" />
+<title layout:fragment="title">모으냥즈 | 뱅크 인덱스</title>
+
+<!-- 페이지 전용 CSS -->
+<link rel="stylesheet" th:href="@{/css/bank-index.css}" />
+<!-- 공용(헤더/푸터) 리소스: layout/base가 헤더/푸터를 포함한다면 그대로 사용해도 됨 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<script defer src="http://localhost:8810/js/theme.js"></script>
+</head>
+<body>
+	<!-- ✅ Header -->
+	<div id="header"></div>
+	<section layout:fragment="content">
+
+		<main class="bank-index">
+			<!-- Hero -->
+			<section class="nx-hero">
+				<div class="nx-hero__copy">
+					<p class="hello">어서오세요</p>
+					<h1 class="username" th:text="${loginId} + ' 님'">guest 님</h1>
+					<p class="lead">자산 스냅샷과 빠른 업무를 한 화면에서</p>
+					<!-- 
+					<div class="cta">
+						<a href="/bank/charge" class="btn btn-accent">충전하기</a>
+						<a href="/bank/transfer" class="btn btn-ghost">송금하기</a>
+					</div>
+					 -->
+				</div>
+				<!-- (아트 영역을 쓰려면 여기에 nx-hero__art 블록을 추가) -->
+			</section>
+			<!-- ✅ Hero 섹션 닫힘 -->
+
+			<!-- 메인 그리드 -->
+			<section class="nx-grid">
+
+				<!-- 냥코인 보유 -->
+				<article class="panel kpi">
+					<header class="panel-head">
+						<h3>냥코인 보유</h3>
+						<span class="pill">보유 현황</span>
+					</header>
+
+					<div class="kpi-main">
+						<span class="balance" th:if="${hasNyang}" th:attr="data-balance=${nyang.balance}" th:text="${#numbers.formatInteger(nyang.balance, 3, 'COMMA')} + ' 원'">0 원</span> <span class="empty-balance" th:if="${!hasNyang}"> 보유한 냥코인이 없습니다. </span>
+
+						<div class="sub" th:if="${hasNyang}" th:text="'코인 ID: ' + ${nyang.number}">코인 ID: -</div>
+					</div>
+
+					<div class="actions" th:if="${hasNyang}">
+						<a href="/bank/charge" class="btn btn-dark">충전하기</a>
+						<a href="/bank/transfer" class="btn btn-outline">송금하기</a>
+					</div>
+					<div class="actions" th:if="${!hasNyang}">
+						<a href="/register/product?id=100" class="btn btn-dark">모으냥즈 계좌 개설</a>
+						<a href="/bank/product/list" class="btn btn-outline">은행 상품 목록 보기</a>
+					</div>
+				</article>
+
+				<!-- 빠른 이동 -->
+				<aside class="panel quick">
+					<header class="panel-head">
+						<h3>빠른 이동</h3>
+					</header>
+					<nav class="quick-list" aria-label="빠른 이동">
+						<a class="q" href="/bank/account/list">
+							<i>💳</i><span>보유 계좌</span>
+						</a>
+						<a class="q" href="/bank/product/list">
+							<i>🏦</i><span>은행 상품</span>
+						</a>
+						<a class="q" href="/bank/recommend">
+							<i>✨</i><span>추천 상품</span>
+						</a>
+						<a class="q" href="/bank/history">
+							<i>📜</i><span>거래 내역</span>
+						</a>
+					</nav>
+				</aside>
+			</section>
+			<!-- nx-grid -->
+			<section class="empty-state" data-reveal>
+				<div class="bg-curve" aria-hidden="true"></div>
+
+				<img src="/img/nyang-empty.svg" alt="냥코인 없음" class="kitty" />
+
+				<div class="empty-copy">
+					<h3>아직 준비 중이에요</h3>
+					<p>곧 추천 상품과 미션이 열립니다. 먼저 저축 목표를 만들어볼까요?</p>
+					<div class="actions">
+						<a class="btn-primary" href="#">목표 만들기</a>
+						<a class="btn-ghost" href="#">가이드 보기</a>
+					</div>
+				</div>
+
+				<!-- 둥둥 떠다니는 코인 -->
+				<span class="coin" style="--i: 0;"></span> <span class="coin" style="--i: 1;"></span> <span class="coin" style="--i: 2;"></span>
+			</section>
+			<!-- ✅ footer -->
+			<div id="footer"></div>
+			<!-- 페이지 전용 JS -->
+			<script th:src="@{/js/bank-index.js}"></script>
+		</main>
+	</section>
+</body>
+</html>

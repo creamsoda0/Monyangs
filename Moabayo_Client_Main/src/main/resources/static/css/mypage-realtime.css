@@ -1,0 +1,183 @@
+/* ===========================
+   MyPage - Realtime Panel Only
+   (scope: #content main .realtime …)
+   =========================== */
+
+/* ------- 3컬럼 레이아웃 보정 ------- */
+.table-data.layout-3col{
+  align-items: stretch; /* 가운데 칼럼이 세로로 꽉 차도록 */
+  grid-template-columns: 320px minmax(520px,1fr) 360px; /* 우측 고정, 가운데 유동 */
+}
+
+/* 좌/우 패널 스티키 (선택) */
+.table-data.layout-3col > .order,
+.table-data.layout-3col > .todo.compact{
+  position: sticky;
+  top: 16px;
+}
+
+/* ------- 실시간 패널 컨테이너/스크롤 ------- */
+#content main .realtime{
+  background: var(--light) !important;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 56px - 36px - 24px - 120px); /* 프로젝트 여백에 맞게 조정 가능 */
+}
+
+/* 탭바 고정, 아래 패널만 스크롤 */
+#content main .realtime .rt-panels{
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* ------- 알림 패널 고정 높이 ------- */
+#content main .todo.compact{
+  height: 420px;             /* 원하는 값으로 고정 */
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+}
+#content main .todo.compact .todo-list{
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+/* ------- 폼/툴바 ------- */
+#content main .realtime .rt-form label{
+  display:flex; flex-direction:column; gap:.35rem;
+}
+#content main .realtime .rt-form input,
+#content main .realtime .panel-toolbar input{
+  width:100%;
+  padding:.5rem .7rem;
+  border:1px solid var(--line) !important;
+  border-radius:.5rem;
+  background:var(--light) !important;
+  color:var(--ink) !important;
+}
+#content main .realtime .panel-toolbar{
+  display:flex; gap:.5rem; margin-bottom:.5rem;
+}
+
+/* ------- 버튼 (범위+우선순위 확보) ------- */
+#content main .realtime .btn{
+  border:1px solid var(--line) !important;
+  border-radius:.5rem !important;
+  padding:.45rem .8rem !important;
+  cursor:pointer;
+  font-size:.875rem;
+  background:transparent !important;
+  color:var(--ink) !important;
+  transition:background .2s;
+}
+#content main .realtime .btn.primary{
+  background:var(--brand) !important;
+  color:#fff !important;
+  border-color:var(--brand) !important;
+}
+#content main .realtime .btn.primary:hover{ background:#675df1 !important; }
+#content main .realtime .btn.ghost:hover{ background:var(--grey) !important; }
+
+/* ------- 테이블 ------- */
+#content main .realtime .table-wrap{
+  overflow:auto;
+  border-radius:.6rem;
+  border:1px solid var(--line) !important;
+}
+#content main .realtime .table{ width:100%; border-collapse:collapse; }
+#content main .realtime .table thead th{
+  text-align:left; padding:.7rem .8rem; background:var(--grey) !important; font-weight:600;
+}
+#content main .realtime .table tbody td{
+  padding:.6rem .8rem; border-top:1px solid var(--line);
+}
+#content main .realtime .table .right{ text-align:right; }
+#content main .realtime .badge{
+  display:inline-block; padding:.15rem .5rem; border-radius:999px;
+  background:var(--grey); color:var(--sub); font-size:.75rem; font-weight:600;
+}
+
+/* ------- 카드 그리드 ------- */
+#content main .realtime .card-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(240px,1fr));
+  gap:.9rem;
+}
+#content main .realtime .card-tile{
+  border:1px solid var(--line) !important;
+  border-radius:.8rem;
+  padding:.9rem;
+  display:flex; gap:.8rem; align-items:center;
+  background:var(--light) !important;
+}
+#content main .realtime .card-tile .logo{
+  width:48px; height:30px; border-radius:.4rem;
+  background:var(--grey) !important;
+  display:grid; place-items:center; font-weight:700;
+}
+#content main .realtime .card-tile .meta{ flex:1; }
+#content main .realtime .card-tile .meta .name{ font-weight:700; }
+#content main .realtime .card-tile .meta .desc{ color:var(--sub); font-size:.875rem; }
+#content main .realtime .card-tile .actions{ display:flex; gap:.4rem; }
+#content main .realtime .card-tile .actions .btn{ padding:.35rem .6rem !important; font-size:.875rem; }
+
+
+/* --- 섹션 네비 --- */
+.section-nav{
+  display:flex; gap:.5rem; margin:16px 0 8px;
+}
+.section-nav button{
+  all:unset; appearance:none;
+  padding:.5rem .8rem; border:1px solid var(--line); border-radius:.6rem;
+  cursor:pointer; font:inherit; color:var(--ink); background:var(--light);
+}
+.section-nav button:hover{ background:var(--grey); }
+
+/* --- 3컬럼: 가운데 유동 / 오른쪽 고정 --- */
+.table-data.layout-3col{
+  align-items:stretch;
+  grid-template-columns: 320px minmax(520px,1fr) 360px; /* 우측 360px 고정 */
+}
+
+/* 좌/우 스티키(선택) */
+.table-data.layout-3col > .order,
+.table-data.layout-3col > .todo.compact{
+  position:sticky; top:16px;
+}
+
+/* 실시간: 세로 유동 + 내부 스크롤 */
+#content main .realtime{
+  display:flex; flex-direction:column;
+  min-height: calc(100vh - 56px - 36px - 24px - 120px);
+}
+#content main .realtime .rt-panels{
+  flex:1 1 auto; min-height:0; overflow:auto;
+}
+
+/* 알림: 가로·세로 고정 + 내부 스크롤 */
+#content main .todo.compact{
+  width:360px; max-width:360px; min-width:360px;   /* 가로 고정 */
+  height:420px;                                     /* 세로 고정 */
+  display:flex; flex-direction:column;
+}
+#content main .todo.compact .todo-list{
+  flex:1 1 auto; overflow:auto;
+}
+
+/* 반응형: 모바일 1컬럼일 때 알림 가로 풀폭 */
+@media (max-width:1200px){
+  #content main .todo.compact{
+    width:auto; max-width:none; min-width:0;
+  }
+}
+
+/* 실시간 컨테이너는 이미 설정됨 — 내부 뷰만 제어 */
+#content main .realtime .rt-views{
+  flex:1 1 auto; min-height:0; overflow:auto;
+}
+#content main .realtime .rt-view{ display:none; }
+#content main .realtime .rt-view.active{ display:block; }

@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+/* 페이지 전용(토큰만 사용) */
+.wrap {
+  max-width: 960px; margin: 0 auto; padding: 64px 20px;
+  display: grid; gap: 20px; align-items: start;
+}
+.success {
+  position: relative;
+  border: 1px solid var(--line); border-radius: 20px; background: var(--card);
+  box-shadow: var(--shadow); overflow: hidden;
+}
+.success__ribbon {
+  height: 140px;
+  background: linear-gradient(135deg, var(--brand), color-mix(in oklab, var(--brand) 55%, #00d4ff));
+  position: relative;
+}
+.success__badge {
+  position: absolute; left: 50%; bottom: -42px; transform: translateX(-50%);
+  width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--bg); box-shadow: var(--shadow);
+}
+.success__badge i { font-size: 34px; color: color-mix(in oklab, var(--brand) 70%, #ffcc00); }
+.success__body { padding: 72px 20px 24px; text-align: center; }
+.success__title { font-size: clamp(22px, 3vw, 28px); margin: 0 0 8px; }
+.success__desc { margin: 0 0 18px; color: var(--sub); }
+.success__name { color: var(--ink); font-weight: 800; }
+.panel {
+  margin: 0 auto; max-width: 760px;
+  border: 1px solid var(--line); border-radius: 16px; background: var(--muted);
+  padding: 16px 18px;
+}
+.next-steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; text-align: left; }
+.next-steps li { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+.next-steps li .bx { font-size: 18px; opacity: .9; }
+
+/* 버튼군: mainpage2.css의 .btn/.primary 규칙 재사용 */
+.actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+.btn.pill { border-radius: 999px; padding-inline: 18px; }
+
+/* 잔재미: 파우 패턴(부드럽게) */
+.paw-bg {
+  position: absolute; inset: 0; pointer-events: none; opacity: .15; mix-blend-mode: multiply;
+  background-image:
+    radial-gradient(10px 10px at 14% 28%, rgba(0,0,0,.035) 45%, transparent 46%),
+    radial-gradient(10px 10px at 18% 20%, rgba(0,0,0,.035) 45%, transparent 46%),
+    radial-gradient(10px 10px at 22% 30%, rgba(0,0,0,.035) 45%, transparent 46%),
+    radial-gradient(14px 16px at 20% 40%, rgba(0,0,0,.05) 45%, transparent 46%);
+  background-repeat: no-repeat; background-size: 240px 160px;
+}
+
+/* 반응형 */
+@media (max-width:640px){
+  .wrap{ padding: 44px 16px; }
+  .panel{ padding: 14px 14px; }
+  .next-steps{ gap: 6px; }
+}

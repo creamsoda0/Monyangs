@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sboot.moabayo.dao.LoginMapper">
+
+    <select id="findByLoginId" resultType="com.sboot.moabayo.vo.UserVO" parameterType="string">
+        SELECT 
+            user_id as userId,
+            login_id AS loginId,
+            password,
+            name,
+            phone,
+            email,
+            zip_code AS zipCode,
+            address,
+            address_detail AS addressDetail,
+            is_admin AS isAdmin
+        FROM users
+        WHERE login_id = #{loginId}
+    </select>
+
+</mapper>

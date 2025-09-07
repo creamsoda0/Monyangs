@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>모으냥즈 | 카드 갤러리 + 상태 패널</title>
+<!-- headr footer가 달리는 모든 페이지에 갖다 붙일것 -->
+<link rel="icon" href="http://localhost:8810/images/cat.ico" type="image/x-icon" />
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="http://localhost:8810/css/header-footer.css" />
+<script defer src="http://localhost:8810/js/token-exp-display.js"></script>
+<script defer src="http://localhost:8810/js/common.js"></script>
+<script defer src="http://localhost:8810/js/adminservice.js"></script>
+<script defer src="http://localhost:8810/js/bankservice.js"></script>
+<script defer src="http://localhost:8810/js/cardservice.js"></script>
+<script defer src="http://localhost:8810/js/transactionservice.js"></script>
+<!-- 이것도 같이 붙여야함 toggle switch 만들기 -->
+<link rel="stylesheet" href="http://localhost:8810/css/theme.css">
+<link rel="stylesheet" href="http://localhost:8810/css/toggle.css">
+<script defer src="http://localhost:8810/js/theme.js"></script>
+
+<link rel="stylesheet" href="/css/mycard.css" />
+</head>
+<body>
+	<div id="header"></div>
+	<canvas id="fireflies" aria-hidden="true"></canvas>
+
+	<header class="page-header sticker-center">
+		<h1 class="sticker-title">모으냥즈 카드 갤러리</h1>
+	</header>
+	<div class="spacer"></div>
+
+
+
+	<main class="layout">
+		<!-- 좌: 카드 갤러리 (사용자 제공 디자인 기반) -->
+		<section class="card__container" id="cardList" aria-label="카드 목록">
+			<!-- 1. 클래식 -->
+			<article class="card mobile" tabindex="0" style="--rot: -4deg; --img: url('https://images.unsplash.com/photo-1548855519-47c4c5662b91?q=80&amp;w=1400&amp;auto=format&amp;fit=crop');" data-title="Moa Classic" data-bank="Moa Bank" data-benefit="영화/커피 10% 캐시백" data-img="https://images.unsplash.com/photo-1548855519-47c4c5662b91?q=80&w=1400&auto=format&fit=crop" data-state="active" data-limit="633,000원 / 1,000,000원" data-point="8,220p · 다음 구간 +3%" data-next="09/05 (금) · 최소결제 150,000원">
+				<div class="meta">
+					<span>클래식</span><span class="pill">연 3.1%</span>
+				</div>
+			</article>
+
+			<!-- 2. 골드 -->
+			<article class="card mobile" tabindex="0" style="--rot: 3deg; --img: url('https://images.unsplash.com/photo-1523281410216-5a729f72c3f1?q=80&amp;w=1400&amp;auto=format&amp;fit=crop');" data-title="Moa Gold" data-bank="Moa Bank" data-benefit="마트 7% 적립, 주유 60원/L 즉시할인" data-img="https://images.unsplash.com/photo-1523281410216-5a729f72c3f1?q=80&w=1400&auto=format&fit=crop" data-state="active" data-limit="410,000원 / 800,000원" data-point="5,120p" data-next="09/07 (토) · 최소결제 100,000원">
+				<div class="meta">
+					<span>골드</span><span class="pill">연 3.6%</span>
+				</div>
+			</article>
+
+			<!-- 3. 민트 -->
+			<article class="card mobile" tabindex="0" style="--rot: -1deg; --img: url('https://images.unsplash.com/photo-1542089363-46eaad45e1a1?q=80&amp;w=1400&amp;auto=format&amp;fit=crop');" data-title="Moa Mint" data-bank="Moa Card" data-benefit="온라인 쇼핑 8% 적립" data-img="https://images.unsplash.com/photo-1542089363-46eaad45e1a1?q=80&w=1400&auto=format&fit=crop" data-state="frozen" data-limit="0원 / 500,000원" data-point="2,330p" data-next="정지 상태">
+				<div class="meta">
+					<span>민트</span><span class="pill">연 3.0%</span>
+				</div>
+			</article>
+
+			<!-- 4. 핑크 -->
+			<article class="card mobile" tabindex="0" style="--rot: -5deg; --img: url('http://localhost:8810/images/cat.png');" data-title="Moa Pink" data-bank="Moa Card" data-benefit="편의점/배달앱 10% 캐시백" data-img="http://localhost:8810/images/cat.png" data-state="lost" data-limit="-" data-point="-" data-next="분실 신고 완료">
+				<div class="meta">
+					<span>핑크</span><span class="pill">연 3.4%</span>
+				</div>
+			</article>
+
+			<!-- 5. 트래블 -->
+			<article class="card mobile" tabindex="0" style="--rot: -2deg; --img: url('https://images.unsplash.com/photo-1520975867597-0f4a5f4f04cd?q=80&amp;w=1400&amp;auto=format&amp;fit=crop');" data-title="Moa Travel" data-bank="Moa Bank" data-benefit="해외결제 수수료 50% 할인 + 공항라운지" data-img="https://images.unsplash.com/photo-1520975867597-0f4a5f4f04cd?q=80&w=1400&auto=format&fit=crop" data-state="active" data-limit="150,000원 / 2,000,000원" data-point="12,450p" data-next="09/12 (목) · 최소결제 200,000원">
+				<div class="meta">
+					<span>트래블</span><span class="pill">연 2.8%</span>
+				</div>
+			</article>
+
+			<!-- 6. 스튜던트 -->
+			<article class="card mobile" tabindex="0" style="--rot: 2deg; --img: url('https://images.unsplash.com/photo-1512308789568-42f1f5e8ee5f?q=80&amp;w=1400&amp;auto=format&amp;fit=crop');" data-title="Moa Student" data-bank="Moa Card" data-benefit="대중교통 15% 할인" data-img="https://images.unsplash.com/photo-1512308789568-42f1f5e8ee5f?q=80&w=1400&auto=format&fit=crop" data-state="active" data-limit="73,000원 / 300,000원" data-point="1,050p" data-next="09/03 (화) · 최소결제 50,000원">
+				<div class="meta">
+					<span>스튜던트</span><span class="pill">연 3.2%</span>
+				</div>
+			</article>
+
+			<!-- 7. 플러스 -->
+			<article class="card mobile" tabindex="0" style="--rot: 4deg; --img: url('https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&amp;w=1400&amp;auto=format&amp;fit=crop');" data-title="Moa Plus" data-bank="Moa Card" data-benefit="통신요금 7% 할인" data-img="https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=1400&auto=format&fit=crop" data-state="active" data-limit="0원 / 1,500,000원" data-point="9,800p" data-next="09/10 (화) · 최소결제 120,000원">
+				<div class="meta">
+					<span>플러스</span><span class="pill">연 3.3%</span>
+				</div>
+			</article>
+
+			<!-- .card__container 맨 마지막에 추가 -->
+			<article class="card mobile card--add" tabindex="0" aria-label="새 카드 추천으로 이동" data-route="/usercard/recommend" style="--rot: -2deg">
+				<div class="add-inner">
+					<div class="add-plus" aria-hidden="true"></div>
+					<div class="add-label">새 카드 추천</div>
+				</div>
+			</article>
+
+		</section>
+
+
+		<!-- 우: 상태 패널 -->
+		<aside class="detail" id="detailPanel" aria-live="polite">
+			<div class="cover" id="dCover"></div>
+			<h2 id="dTitle">카드를 선택하세요</h2>
+			<div class="sub" id="dBank">은행/발급사</div>
+
+			<div class="badges">
+				<span class="badge" id="dState">-</span>
+			</div>
+
+			<div class="kv">
+				<!-- 교체 (진행률바 포함) -->
+				<div class="box">
+					<strong>이번 달 한도</strong>
+					<div id="dLimit" class="mt6">-</div>
+
+					<!-- 진행률 바 -->
+					<div class="progress" aria-label="한도 사용률">
+						<div class="progress-track">
+							<div class="progress-bar" id="limitBar" style="width: 0%"></div>
+						</div>
+						<div class="progress-label" id="limitLabel">0%</div>
+					</div>
+				</div>
+				<div class="box">
+					<strong>낭포인트</strong>
+					<div id="dPoint">-</div>
+				</div>
+			</div>
+
+			<div class="box">
+				<strong>주요 혜택</strong>
+				<div id="dBenefit" class="mt6">-</div>
+			</div>
+
+			<div class="hr"></div>
+
+			<div class="status" id="stSelected">
+				<span class="dot"></span> 선택된 카드 없음
+			</div>
+			<div class="status" id="stFav">
+				<span class="dot"></span> 즐겨찾기: 꺼짐
+			</div>
+			<div class="status" id="stNext">
+				<span class="dot"></span> 다음 납부일: -
+			</div>
+
+			<div class="actions">
+				<button class="btn" id="btnFav">즐겨찾기</button>
+				<button class="btn" id="btnShare">공유</button>
+				<a class="btn btn-brand" id="btnManage" href="/usercard/manage">카드 관리로 이동</a>
+			</div>
+		</aside>
+	</main>
+	<div id="footer"></div>
+	<script src="/js/mycard.js"></script>
+
+</body>
+</html>
