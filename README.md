@@ -3,7 +3,7 @@
 # 
 
 # Spring Boot + MSA 구조로 구현한 금융/플래너 데모 서비스입니다.  
-
+<iframe width="762" height="1354" src="https://www.youtube.com/embed/XH5QBurZ9OU" title="Service Discovery using Netflix Eureka" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 # Eureka 기반의 서비스 디스커버리, OpenFeign을 통한 서비스 간 호출, JWT + Spring Security 인증/인가를 포함합니다.  
 
 # 모든 API는 `@RestController` 를 통해 JSON 형식으로 제공됩니다.
