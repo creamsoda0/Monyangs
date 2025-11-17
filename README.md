@@ -1,92 +1,67 @@
-# \# 🐾 모으냥즈 (MouNyangs)
+# 🐾 모으냥즈 (MouNyangs): 금융 데모 서비스 (MSA 기반)
 
-# Spring Boot + MSA 구조로 구현한 금융 데모 서비스입니다.  
-# Eureka 기반의 서비스 디스커버리, OpenFeign을 통한 서비스 간 호출, JWT + Spring Security 인증/인가를 포함합니다.  
-# 넷플릭스 Eureka-Server, OpenFeign 방식을 참고하였습니다.
-<p align="center">
-  <img src="./docs/neflixEureka.gif" width="800"/>
-</p>
+## 🌟 프로젝트 개요
 
+이 프로젝트는 **Spring Boot**와 **Microservice Architecture (MSA)**를 기반으로 구현한 금융 데모 서비스입니다. 현대적인 분산 시스템 환경을 구축하기 위해 **Netflix OSS 패턴**을 참고하여 **서비스 간 독립성, 확장성, 그리고 강력한 인증/인가 시스템** 구현에 중점을 두었습니다.
 
-# 모든 API는 `@RestController` 를 통해 JSON 형식으로 제공됩니다.
+모든 API는 `@RestController`를 통해 **JSON 형식의 RESTful API**로 제공됩니다.
 
-# 
+---
 
-# ---
+## 🚀 아키텍처 및 핵심 구현
 
-# 
+이 프로젝트는 MSA의 핵심 구성 요소를 도입하여 시스템의 견고함과 확장성을 확보했습니다.
 
-# \## 🚀 아키텍처
+### 1. 🏗️ MSA 구조 및 서비스 통신
 
-# 
+* **Service Discovery (Eureka Server):**
+    * 각 마이크로 서비스 인스턴스(Login, Planner 등)는 동적으로 **Eureka Server**에 자신의 위치를 등록합니다. 이를 통해 서비스 위치가 하드코딩되는 것을 방지하고, 유연한 인스턴스 확장 및 관리가 가능하도록 구현했습니다.
+* **Inter-Service Communication (OpenFeign):**
+    * 서비스 간의 데이터 교환이 필요한 경우, **선언적 REST 클라이언트**인 **OpenFeign**을 활용하여 간결하고 타입-세이프한 동기 통신을 구현했습니다.
+* **독립적인 서비스:**
+    * **Login Service**와 **Planner Service**를 독립적인 배포 단위로 분리하여, 각 서비스의 **수평적 확장** 및 **장애 격리(Fault Isolation)** 기반을 마련했습니다.
 
-# \- \*\*MSA 구조\*\*
+### 2. 🛡️ 보안 및 인증/인가 시스템
 
-# &nbsp; - 서비스별 독립 배포 가능
+* **JWT (JSON Web Token) 기반 인증:**
+    * 시스템의 **무상태성(Stateless)** 유지를 위해 JWT를 채택했습니다.
+    * 보안 강화를 위해 `Access Token`과 `Refresh Token`을 분리하여 관리하는 이중 토큰 전략을 구현했습니다.
+* **Spring Security 통합:**
+    * JWT 유효성 검사 로직을 커스텀 필터로 구현하고, 이를 **Spring Security의 필터 체인**에 통합하여 모든 엔드포인트에 대한 **인가(Authorization)** 처리를 일관성 있게 적용했습니다.
 
-# &nbsp; - Eureka를 통한 서비스 등록/탐색
+---
 
-# &nbsp; - OpenFeign으로 서비스 간 통신
+## 🔑 핵심 기술 요약
 
-# 
+| 기술 | 역할 | 면접 어필 포인트 |
+| :--- | :--- | :--- |
+| **Spring Boot** | 프레임워크 | MSA 구현에 최적화된 빠른 환경 구축 및 설정 관리 |
+| **Eureka-Server** | 서비스 디스커버리 | 동적 서비스 인스턴스 관리 및 유연성 확보 |
+| **OpenFeign** | 서비스 통신 | 간결하고 안정적인 서비스 간 통신 계층 구현 |
+| **JWT** | 인증 메커니즘 | 무상태(Stateless) 기반의 안전한 사용자 인증 구현 |
+| **Spring Security** | 인가/보안 | JWT 기반 필터 통합 및 엔드포인트 접근 제어 |
 
-# ---
+---
 
-# 
+## ⚙️ 실행 방법 (Placeholder)
 
-# \## 🔑 핵심 기술
+> **[참고]** 포트 번호가 정확하지 않더라도, 프로젝트의 실행 방법을 설명하는 섹션은 유지하는 것이 좋습니다. 실제 포트 번호로 업데이트해 주세요.
 
-# 
+### 요구사항
 
-# \- \*\*Eureka-Server\*\* : 서비스 디스커버리
-
-# \- \*\*OpenFeign\*\* : 서비스 간 REST 호출
-
-# \- \*\*JWT\*\* : Access/Refresh 토큰 기반 인증
-
-# \- \*\*Spring Security\*\* : 엔드포인트 보호 및 인증 처리
-
-# \- \*\*RestController\*\* : REST API 제공
-
-# 
-
-# ---
-
-# 
-
-# \## ⚙️ 실행 방법
-
-# 
-
-# \### 요구사항
-
-# \- JDK 21+
-
-# \- Maven 3.9+
-
-# \- 포트 사용:  
-
-# &nbsp; - Eureka-Server: 8200  
-
-# &nbsp; - Gateway: 8201  
-
-# &nbsp; - Login-Service: 8202  
-
-# &nbsp; - Planner-Service: 8888  
-
-# 
-
-# \### 실행 순서
-
-# 1\. `eureka-server` 실행  
-
-# &nbsp;  ```bash
-
-# &nbsp;  cd eureka-server
-
-# &nbsp;  mvn spring-boot:run
+* JDK 21+
+* Maven 3.9+
 
 
+### 실행 순서
 
+1.  `eureka-server` 실행 (가장 먼저 시작되어야 합니다.)
 
+2.  나머지 마이크로 서비스를 순차적으로 실행합니다.
+
+---
+## 💡 향후 개선 계획 (미완성 프로젝트에 대한 대처)
+
+현재 미완성 상태이지만, 프로젝트의 완성도를 높이기 위해  
+실질적인 은행시스템 구현을 계획하고 있습니다. 
 
